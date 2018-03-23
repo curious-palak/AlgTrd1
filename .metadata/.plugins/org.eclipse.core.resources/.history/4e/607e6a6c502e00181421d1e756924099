@@ -1,0 +1,11 @@
+package com.todo.User.controller;
+
+import org.springframework.http.ResponseEntity;
+
+public class LoginController {
+	
+	public ResponseEntity<String> LoginUser() {
+		
+	}
+
+}

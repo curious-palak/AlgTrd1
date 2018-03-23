@@ -1,0 +1,14 @@
+package com.ToDo.User.dao.daoImpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ToDo.User.dao.IUserDao;
+import com.ToDo.User.model.User;
+
+public class UserDaoImpl implements IUserDao {
+
+	@Override
+	public void saveUser(User user) {
+
+	}
+}

@@ -1,0 +1,17 @@
+package com.ToDo.User.service.serviceImpl;
+
+import com.ToDo.User.dao.IUserDao;
+import com.ToDo.User.dao.daoImpl.UserDaoImpl;
+import com.ToDo.User.model.User;
+import com.ToDo.User.service.IUserService;
+
+public class UserServiceImpl implements IUserService {
+
+	
+	private IUserDao userDao;
+
+	@Override
+	public void registerUser(User user) {
+
+	}
+}

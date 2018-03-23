@@ -1,0 +1,5 @@
+package com.ToDo.User.service;
+
+public class IUserService {
+
+}

@@ -1,0 +1,12 @@
+package com.todo.User.dao;
+
+import com.todo.User.model.User;
+
+public interface IUserDao {
+
+	public void saveUser(User user);
+
+	User get(int userId);
+
+	void deleteUser(int userId);
+}

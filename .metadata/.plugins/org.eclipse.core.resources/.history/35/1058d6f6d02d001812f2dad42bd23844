@@ -1,0 +1,29 @@
+package com.todo.User.dao;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.todo.User.dao.IUserDao;
+import com.todo.User.model.User;
+
+@Repository
+public class UserDaoImpl implements IUserDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+	Session session;
+
+	@Override
+	public void saveUser(User user) {
+		session = sessionFactory.openSession();
+		session.save(user);
+	}
+
+	@Override
+	public void deleteUser(User user) {
+Session
+	}
+
+}

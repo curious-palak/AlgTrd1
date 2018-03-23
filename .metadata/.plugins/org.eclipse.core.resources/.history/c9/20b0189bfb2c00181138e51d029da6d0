@@ -1,0 +1,6 @@
+package com.ToDo.User.service;
+
+public class IUserService {
+
+	//void registerUser();
+}

@@ -1,0 +1,14 @@
+package com.todo.User.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.todo.User.model.User;
+
+public class LoginController {
+	
+	public ResponseEntity<String> LoginUser(@RequestBody User user) {
+		
+	}
+
+}

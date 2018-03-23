@@ -1,0 +1,8 @@
+package com.todo.User.dao;
+
+import com.todo.User.model.User;
+
+public interface IUserDao {
+
+	void saveUser(User user);
+}
