@@ -1,33 +1,41 @@
 package com.todo.users.model;
 
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.validator.constraints.Email;
+
+import com.todo.notes.model.Notes;
 
 @Entity
 @Table(name = "ToDoRegistration")
 public class User {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="userId")
 	private int userId;
 
 	@Column
 	private String name;
 
-	@Email
+	@Column
 	private String email;
 
 	@Column
 	private String password;
 
 	@Column
-	private long mobileNo;
+	private String mobileNo;
+	
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL)
+	private Set<Notes> notes;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	public int getUserId() {
 		return userId;
 	}
@@ -60,17 +68,19 @@ public class User {
 		this.password = password;
 	}
 
-	public long getMobileNo() {
+	public String getMobileNo() {
 		return mobileNo;
 	}
 
-	public void setMobileNo(long mobileNo) {
+	public void setMobileNo(String mobileNo) {
 		this.mobileNo = mobileNo;
 	}
 
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", name=" + name + ", email=" + email + ", password=" + password
-				+ ", mobileNo=" + mobileNo + "]";
+	public Set<Notes> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(Set<Notes> notes) {
+		this.notes = notes;
 	}
 }

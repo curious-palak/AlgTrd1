@@ -1,8 +1,0 @@
-package com.todo.User.service;
-
-
-
-public interface IUserService {
-
-	void registerUser(UserServiceImpl user);
-}

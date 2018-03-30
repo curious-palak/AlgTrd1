@@ -4,8 +4,11 @@ import com.todo.users.model.User;
 
 public interface IUserDao {
 
-	public void saveUser(User user);
+	public User saveUser(User user);
 
 	public User fetchUser(User user);
 
+	public User getUserById(int userId);
+	
+	public User getUserByEmail(String email);
 }

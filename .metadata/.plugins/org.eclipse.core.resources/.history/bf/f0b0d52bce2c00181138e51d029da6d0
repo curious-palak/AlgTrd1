@@ -1,7 +1,0 @@
-package com.ToDo.User.model;
-
-@En
-public class User {
-	
-
-}

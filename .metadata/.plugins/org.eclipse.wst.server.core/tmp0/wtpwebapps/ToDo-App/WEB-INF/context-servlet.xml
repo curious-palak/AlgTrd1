@@ -9,7 +9,7 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- bean definitions here -->
-	<context:component-scan base-package="com.todo.User.controller" />
+	<context:component-scan base-package="com.todo" />
 	<mvc:annotation-driven />
 
 
@@ -26,7 +26,8 @@
 		<property name="dataSource" ref="myDataSource" />
 		<property name="annotatedClasses">
 			<list>
-				<value>com.todo.User.model.User</value>
+				<value>com.todo.users.model.User</value>
+				<value>com.todo.notes.model.Notes</value>
 			</list>
 		</property>
 
@@ -43,8 +44,31 @@
 		<property name="sessionFactory" ref="mySessionFactory"></property>
 	</bean>
 
-	<bean id="userDao" class="com.todo.User.dao.UserDaoImpl"></bean>
+	<bean id="userDao" class="com.todo.users.dao.UserDaoImpl"></bean>
 
-	<bean id="userService" class="com.todo.User.service.UserServiceImpl"></bean>
+	<bean id="userService" class="com.todo.users.service.UserServiceImpl"></bean>
 
+	<bean id="registrationValidation" class="com.todo.utility.RegistrationValidation"></bean>
+
+	<bean id="notesDao" class="com.todo.notes.dao.NotesDaoImpl"></bean>
+
+	<bean id="notesService" class="com.todo.notes.dao.NotesDaoImpl"></bean>
+
+	<!-- SETting default mail properties -->
+	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="25"></property>
+		<property name="username" value="bridgelabzsolutions@gmail.com" />
+		<property name="password" value="bridgelabz" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+                
+			</props>
+		</property>
+
+	</bean> -->
 </beans>

@@ -1,5 +1,0 @@
-package com.ToDo.User.service.serviceImpl;
-
-public class UserServiceImpl implements UserService{
-
-}

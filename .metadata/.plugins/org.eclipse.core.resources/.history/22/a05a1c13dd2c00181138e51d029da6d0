@@ -1,8 +1,0 @@
-package com.ToDo.User.service;
-
-import com.ToDo.User.model.User;
-
-public interface UserService {
-
-	void save(User user);
-}

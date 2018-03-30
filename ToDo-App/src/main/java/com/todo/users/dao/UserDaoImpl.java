@@ -1,13 +1,15 @@
 package com.todo.users.dao;
 
-import org.hibernate.Criteria;
+import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.todo.users.model.User;
 
 @Repository
@@ -19,10 +21,28 @@ public class UserDaoImpl implements IUserDao {
 	public Session session;
 
 	@Override
-	public void saveUser(User user) {
+	public User saveUser(User user) {
 
 		session = sessionFactory.openSession();
 		session.save(user);
+		return user;
+	}
+
+	@Override
+	public User getUserById(int userId) {
+		return (User) sessionFactory.openSession().get(User.class, userId);
+	}
+
+	@Override
+	public User getUserByEmail(String email) {
+		session=sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("email", email));
+		List<User> list = criteria.list();
+		return list.get(0);
+		
+		/*System.out.println("In dao");
+		return (User) sessionFactory.openSession().get(User.class,email);*/
 	}
 
 	@Override
