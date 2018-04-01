@@ -2,16 +2,22 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd      
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/mvc 
+   http://www.springframework.org/schema/mvc/spring-mvc.xsd      
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/tx 
+   http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- bean definitions here -->
 	<context:component-scan base-package="com.todo" />
 	<mvc:annotation-driven />
-
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -55,20 +61,17 @@
 	<bean id="notesService" class="com.todo.notes.dao.NotesDaoImpl"></bean>
 
 	<!-- SETting default mail properties -->
-	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="25"></property>
+	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+		<property name="host" value="smtp.gmail.com" /> 
+		<property name="port" value="25"></property> 
 		<property name="username" value="bridgelabzsolutions@gmail.com" />
-		<property name="password" value="bridgelabz" />
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.transport.protocol">smtp</prop>
-				<prop key="mail.smtp.auth">true</prop>
-                <prop key="mail.smtp.starttls.enable">true</prop>
-                <prop key="mail.debug">true</prop>
-                
-			</props>
-		</property>
-
+		<property name="password" value="bridgelabz" /> 
+		<property name="javaMailProperties"> 
+		<props> <prop key="mail.transport.protocol">smtp</prop>
+		<prop key="mail.smtp.auth">true</prop> 
+		<prop key="mail.smtp.starttls.enable">true</prop>
+		<prop key="mail.debug">true</prop> 
+		</props>
+		</property> 
 	</bean> -->
 </beans>
