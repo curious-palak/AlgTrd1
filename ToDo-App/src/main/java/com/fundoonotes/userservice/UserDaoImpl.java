@@ -38,9 +38,6 @@ public class UserDaoImpl implements IUserDao {
 		criteria.add(Restrictions.eq("email", email));
 		List<User> list = criteria.list();
 		return list.get(0);
-		
-		/*System.out.println("In dao");
-		return (User) sessionFactory.openSession().get(User.class,email);*/
 	}
 
 	@Override
@@ -60,4 +57,22 @@ public class UserDaoImpl implements IUserDao {
 		System.out.println(userFetch.getEmail() + " " + userFetch.getPassword());
 		return userFetch;
 	}
+
+   @Override
+   public User getUserByRandomId(String randomUUId)
+   {
+      Session session =sessionFactory.getCurrentSession();
+      Criteria criteria = session.createCriteria(User.class);
+      criteria.add(Restrictions.eq("randomUUId", randomUUId));
+      User user = (User) criteria.uniqueResult();     
+      return user;
+      }
+
+   @Override
+   public User activateStatus(User user)
+   {
+   Session session = sessionFactory.getCurrentSession();
+   session.update(user);
+   return user; 
+}
 }

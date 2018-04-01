@@ -4,69 +4,89 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.fundoonotes.utility.SendEmail;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements IUserService
+{
 
-	@Autowired
-	private IUserDao userDao;
+   @Autowired
+   private IUserDao userDao;
 
-	@Transactional
-	public void registerUser(User user, String url) {
+   @Transactional
+   public void registerUser(UserDTO userdto, String url)
+   {
 
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		user.setPassword(encoder.encode(user.getPassword()));
+      User userModel = new User(userdto);
 
-		String randomUUID = UUID.randomUUID().toString();
-		// System.out.println(randomUUID);
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      userModel.setPassword(encoder.encode(userModel.getPassword()));
 
-		User user1 = userDao.saveUser(user);
-		if (user1 != null) {
-			String to = user1.getEmail();
-			String subject = ("Link to confirm registration..");
-			String message = url + "/ConfirmRegistration/" + randomUUID;
-			SendEmail.sendEmail(to, subject, message);
-		}
-	}
+      String randomUUID = UUID.randomUUID().toString();
 
-	@Override
-	public User loginUser(User user) {
+      userModel.setRandomUUId(randomUUID);
 
-		return userDao.fetchUser(user);
-	}
+      User user1 = userDao.saveUser(userModel);
+      if (user1 != null) {
+         String to = user1.getEmail();
+         String subject = ("Link to confirm registration..");
+         String message = url + "/activateAccount/" + randomUUID;
+         SendEmail.sendEmail(to, subject, message);
+      }
+   }
 
-	@Override
-	public User getUserById(int userId) {
-		return userDao.getUserById(userId);
-	}
+   @Transactional
+   @Override
+   public void activateAccount(String randomUUId, HttpServletRequest request)
+   {
+      User user = userDao.getUserByRandomId(randomUUId);
+      user.setStatus(true);
+      User user2 = userDao.activateStatus(user);
+   }
 
-	public User getUserByEmail(String email) {
+   @Override
+   public UserDTO loginUser(UserDTO userDto)
+   {
 
-		return userDao.getUserByEmail(email);
+      User userPass = userDao.getUserByEmail(userDto.getEmail());
+      Boolean passwordMatch = BCrypt.checkpw(userDto.getPassword(), userPass.getPassword());
 
-	}
+      if (userDto.getEmail() == null && passwordMatch != true) {
+         return null;
+      }
 
-	@Override
-	public boolean forgotPass(String email, HttpServletRequest request) {
-		User userFetch = userDao.getUserByEmail(email);
-		if (userFetch != null) {
-			String req = request.getRequestURL().toString();
-			String url = req.substring(0, req.lastIndexOf("/")) + "/resetPassword/";
-			String mailTo = userFetch.getEmail();
-			String subject = "Link to Reset password";
-			String message = "Visit the link to reset your password  \n" + url;
-			SendEmail.sendEmail(mailTo, subject,message);
-			return true;
-		}
-		return false;
-	}
+      return userDto;
+   }
 
-	@Override
-	public void resetPassword(User user) {
+   @Override
+   public User getUserById(int userId)
+   {
 
-	}
+      return userDao.getUserById(userId);
+   }
+
+   @Override
+   public boolean forgotPass(String email, HttpServletRequest request)
+   {
+      User userFetch = userDao.getUserByEmail(email);
+      if (userFetch != null) {
+         String req = request.getRequestURL().toString();
+         String url = req.substring(0, req.lastIndexOf("/")) + "/resetPassword/";
+         String mailTo = userFetch.getEmail();
+         String subject = "Link to Reset password";
+         String message = "Visit the link to reset your password  \n" + url;
+         SendEmail.sendEmail(mailTo, subject, message);
+         return true;
+      }
+      return false;
+   }
+
+   @Override
+   public void resetPassword(User user)
+   {
+
+   }
 }

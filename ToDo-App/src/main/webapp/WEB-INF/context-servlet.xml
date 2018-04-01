@@ -15,7 +15,7 @@
    http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- bean definitions here -->
-	<context:component-scan base-package="com.todo" />
+	<context:component-scan base-package="com.fundoonotes" />
 	<mvc:annotation-driven />
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
@@ -32,8 +32,8 @@
 		<property name="dataSource" ref="myDataSource" />
 		<property name="annotatedClasses">
 			<list>
-				<value>com.todo.users.model.User</value>
-				<value>com.todo.notes.model.Notes</value>
+				<value>com.fundoonotes.userservice.User</value>
+				<value>com.fundoonotes.noteservice.Notes</value>
 			</list>
 		</property>
 
@@ -50,15 +50,15 @@
 		<property name="sessionFactory" ref="mySessionFactory"></property>
 	</bean>
 
-	<bean id="userDao" class="com.todo.users.dao.UserDaoImpl"></bean>
+	<bean id="userDao" class="com.fundoonotes.userservice.UserDaoImpl"></bean>
 
-	<bean id="userService" class="com.todo.users.service.UserServiceImpl"></bean>
+	<bean id="userService" class="com.fundoonotes.userservice.UserServiceImpl"></bean>
 
-	<bean id="registrationValidation" class="com.todo.utility.RegistrationValidation"></bean>
+	<bean id="registrationValidation" class="com.fundoonotes.utility.RegistrationValidation"></bean>
 
-	<bean id="notesDao" class="com.todo.notes.dao.NotesDaoImpl"></bean>
+	<bean id="notesDao" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
-	<bean id="notesService" class="com.todo.notes.dao.NotesDaoImpl"></bean>
+	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
 	<!-- SETting default mail properties -->
 	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 

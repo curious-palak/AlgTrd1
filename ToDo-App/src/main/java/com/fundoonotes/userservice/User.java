@@ -33,10 +33,26 @@ public class User {
 	@Column
 	private String mobileNo;
 	
+	@Column
+	private boolean status;
+	
+	@Column
+	private String randomUUId;
+	
 	@OneToMany(mappedBy="user",cascade=CascadeType.ALL)
 	private Set<Notes> notes;
 
-	public int getUserId() {
+	
+   public User(UserDTO userdto)
+   {
+     
+      this.name =userdto.getName();
+      this.email = userdto.getEmail();
+      this.password = userdto.getPassword();
+      this.mobileNo = userdto.getMobileNo();
+   }
+
+   public int getUserId() {
 		return userId;
 	}
 
@@ -83,4 +99,24 @@ public class User {
 	public void setNotes(Set<Notes> notes) {
 		this.notes = notes;
 	}
+
+   public boolean isStatus()
+   {
+      return status;
+   }
+
+   public void setStatus(boolean status)
+   {
+      this.status = status;
+   }
+
+   public String getRandomUUId()
+   {
+      return randomUUId;
+   }
+
+   public void setRandomUUId(String randomUUId)
+   {
+      this.randomUUId = randomUUId;
+   }
 }

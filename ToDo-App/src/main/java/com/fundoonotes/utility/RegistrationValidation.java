@@ -6,7 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.fundoonotes.userservice.User;
+import com.fundoonotes.userservice.UserDTO;
 
 @Component
 public class RegistrationValidation implements Validator {
@@ -23,27 +23,28 @@ public class RegistrationValidation implements Validator {
 	@Override
 	public boolean supports(Class<?> clazz) {
 
-		return clazz == User.class;
+		return clazz == UserDTO.class;
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
 
-		User user = (User) target;
-		if (user.getName()!=null && !NAME_REGEX.matcher(user.getName()).matches()) {
+	   UserDTO userdto = (UserDTO) target;
+	   
+		if (userdto.getName()!=null && !NAME_REGEX.matcher(userdto.getName()).matches()) {
 			errors.rejectValue("name", "User Name cannot be empty.. ");
 		}
 
-		if (user.getEmail() != null && !EMAIL_REGEX.matcher(user.getEmail()).matches()) {
+		if (userdto.getEmail() != null && !EMAIL_REGEX.matcher(userdto.getEmail()).matches()) {
 			errors.rejectValue("email", "Email is invalid..");
 		}
 
-		if (user.getPassword() != null && !PASSWORD_REGEX.matcher(user.getPassword()).matches()) {
+		if (userdto.getPassword() != null && !PASSWORD_REGEX.matcher(userdto.getPassword()).matches()) {
 			errors.reject("password",
 					"User Password cannot be empty contains letter and atleast 3digits..");
 		}
 
-		if (user.getMobileNo() != null && !MOBILE_REGEX.matcher(user.getMobileNo()).matches()) {
+		if (userdto.getMobileNo() != null && !MOBILE_REGEX.matcher(userdto.getMobileNo()).matches()) {
 			errors.reject("mobileNo", "Mobile number contains 10digits..");
 		}
 

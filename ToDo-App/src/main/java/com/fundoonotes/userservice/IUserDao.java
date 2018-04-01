@@ -9,4 +9,8 @@ public interface IUserDao {
 	public User getUserById(int userId);
 	
 	public User getUserByEmail(String email);
+
+   public User getUserByRandomId(String randomUUID);
+
+   public User activateStatus(User user);
 }

@@ -4,16 +4,17 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface IUserService {
 
-	void registerUser(User user,String url);
+	void registerUser(UserDTO user,String url);
 
-	User loginUser(User user);
+	UserDTO loginUser(UserDTO userDto);
 
 	public User getUserById(int userId);
 
-	User getUserByEmail(String email);
+	//User getUserByEmail(String email);
 
 	boolean forgotPass(String string, HttpServletRequest url);
 
 	void resetPassword(User user);
 
+   void activateAccount(String randomUUId, HttpServletRequest request);
 }
