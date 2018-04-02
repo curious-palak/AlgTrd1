@@ -6,6 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.hibernate.Query;
 
+/**
+ * Purpose:This class contains implementation of notesDao interface and contains
+ * methods to perform database operations.
+ * 
+ * @author SANA SHAIKH
+ * @since 21Mar 2018
+ */
 @Repository
 public class NotesDaoImpl implements INotesDao {
 

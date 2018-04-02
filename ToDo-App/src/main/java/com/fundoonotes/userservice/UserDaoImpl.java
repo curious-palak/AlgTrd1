@@ -1,7 +1,5 @@
 package com.fundoonotes.userservice;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,69 +8,101 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Purpose:This class contains implementation of userDao interface and contains
+ * methods to perform database operations.
+ * 
+ * @author SANA SHAIKH
+ * @since 21Mar 2018
+ */
 @Repository
-public class UserDaoImpl implements IUserDao {
+public class UserDaoImpl implements IUserDao
+{
 
-	@Autowired
-	private SessionFactory sessionFactory;
+   @Autowired
+   private SessionFactory sessionFactory;
 
-	public Session session;
+   public Session session;
 
-	@Override
-	public User saveUser(User user) {
+   @Override
+   public User saveUser(User user)
+   {
+      session = sessionFactory.openSession();
+      session.save(user);
+      return user;
+   }
 
-		session = sessionFactory.openSession();
-		session.save(user);
-		return user;
-	}
+   @Override
+   public User getUserById(int userId)
+   {
+      return (User) sessionFactory.openSession().get(User.class, userId);
+   }
 
-	@Override
-	public User getUserById(int userId) {
-		return (User) sessionFactory.openSession().get(User.class, userId);
-	}
+   @Override
+   public User getUserByEmail(String email)
+   {
+      session = sessionFactory.getCurrentSession();
 
-	@Override
-	public User getUserByEmail(String email) {
-		session=sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(User.class);
-		criteria.add(Restrictions.eq("email", email));
-		List<User> list = criteria.list();
-		return list.get(0);
-	}
+      Criteria criteria = session.createCriteria(User.class);
 
-	@Override
-	public User fetchUser(User user) {
+      criteria.add(Restrictions.eq("email", email));
+      User user2 = (User) criteria.uniqueResult();
 
-		session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(User.class);
-		Criterion emailFetch = Restrictions.eq("email", user.getEmail());
-		System.out.println(emailFetch);
-		Criterion passwordFetch = Restrictions.eq("password", user.getPassword());
-		System.out.println(passwordFetch);
+      return user2;
+   }
 
-		Criterion criterion = Restrictions.and(emailFetch, passwordFetch);
-		criteria.add(criterion);
+   @Override
+   public User fetchUser(User user)
+   {
 
-		User userFetch = (User) criteria.uniqueResult();
-		System.out.println(userFetch.getEmail() + " " + userFetch.getPassword());
-		return userFetch;
-	}
+      session = sessionFactory.openSession();
+      Criteria criteria = session.createCriteria(User.class);
+      Criterion emailFetch = Restrictions.eq("email", user.getEmail());
+
+      Criterion passwordFetch = Restrictions.eq("password", user.getPassword());
+
+      Criterion criterion = Restrictions.and(emailFetch, passwordFetch);
+      criteria.add(criterion);
+
+      User userFetch = (User) criteria.uniqueResult();
+
+      return userFetch;
+   }
 
    @Override
    public User getUserByRandomId(String randomUUId)
    {
-      Session session =sessionFactory.getCurrentSession();
+      session = sessionFactory.getCurrentSession();
       Criteria criteria = session.createCriteria(User.class);
       criteria.add(Restrictions.eq("randomUUId", randomUUId));
-      User user = (User) criteria.uniqueResult();     
+      User user = (User) criteria.uniqueResult();
       return user;
-      }
+   }
 
    @Override
    public User activateStatus(User user)
    {
-   Session session = sessionFactory.getCurrentSession();
-   session.update(user);
-   return user; 
-}
+      session = sessionFactory.getCurrentSession();
+      session.update(user);
+      return user;
+   }
+
+   @Override
+   public User fetchEmailByUUID(String randomUUId)
+   {
+      session = sessionFactory.getCurrentSession();
+      Criteria criteria = session.createCriteria(User.class);
+      criteria.add(Restrictions.eq("randomUUId", randomUUId));
+      User user = (User) criteria.uniqueResult();
+      return user;
+   }
+
+   @Override
+   public User updatePassword(User user)
+   {
+      session = sessionFactory.getCurrentSession();
+      session.update(user);
+      return user;
+
+   }
 }

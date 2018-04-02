@@ -8,6 +8,7 @@
 		<item value="1" key="dialogHeight"/>
 		<item value="100" key="dialogWidth"/>
 		<list key="textEntries">
+			<item value="1"/>
 			<item value="3"/>
 			<item value="1"/>
 			<item value="1"/>
@@ -16,6 +17,7 @@
 			<item value="1"/>
 		</list>
 		<list key="orderedElements">
+			<item value="search.in.help"/>
 			<item value="org.eclipse.ui.views.ResourceNavigator"/>
 			<item value="org.eclipse.wst.server.ui.ServersView"/>
 			<item value="org.eclipse.ui.console.ConsoleView"/>
@@ -24,6 +26,7 @@
 			<item value="org.eclipse.ui.navigator.ProjectExplorer"/>
 		</list>
 		<list key="orderedProviders">
+			<item value="org.eclipse.ui.actions"/>
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
@@ -32,6 +35,7 @@
 			<item value="org.eclipse.e4.ui.parts"/>
 		</list>
 		<list key="textArray">
+			<item value="debug"/>
 			<item value="naviga"/>
 			<item value="navi"/>
 			<item value="navigator"/>

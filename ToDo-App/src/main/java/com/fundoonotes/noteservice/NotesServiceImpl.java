@@ -1,16 +1,19 @@
 package com.fundoonotes.noteservice;
 
 import java.util.Date;
-
 import javax.transaction.Transactional;
-
-import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.fundoonotes.userservice.IUserDao;
 import com.fundoonotes.userservice.User;
 
+/**
+ * Purpose: This class contains implementation of notesService interface and
+ * contains business logic.
+ * 
+ * @author SANA SHAIKH
+ * @since 21Mar 2018
+ */
 @Service
 public class NotesServiceImpl implements INotesService {
 

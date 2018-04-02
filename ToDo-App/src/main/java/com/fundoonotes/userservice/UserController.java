@@ -1,7 +1,8 @@
 package com.fundoonotes.userservice;
 
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.utility.RegistrationValidation;
 
 /**
@@ -44,83 +46,172 @@ public class UserController
    @Autowired
    RegistrationValidation registrationValidation;
 
+   private static Logger logger = Logger.getLogger(UserController.class.getName());
+
+   CustomResponse response = new CustomResponse();
+
    /**
     * <p>
     * This rest API for new user registration With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
     * 
-    * @param user Object to be save
+    * @param userDto Object
+    * @param bindingResult binds the error message
+    * @param request
     * @return ResponseEntity with HTTP status and message.
     */
+
    @RequestMapping(value = "register", method = RequestMethod.POST)
-   public ResponseEntity<String> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
+   public ResponseEntity<CustomResponse> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
          HttpServletRequest request)
    {
 
       registrationValidation.validate(userDto, bindingResult);
       if (bindingResult.hasErrors()) {
 
-         return new ResponseEntity<String>("Invalid user details.", HttpStatus.CONFLICT);
+         response.setMessage("Invalid user details.");
+         response.setStatusCode(-1);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
       }
-      
+
       String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
       userService.registerUser(userDto, url);
 
-      return new ResponseEntity<String>("Successfully registered.", HttpStatus.OK);
-   }
-   
-   /**<p>
-    * This rest API for activating user account
-    * {@link RequestMapping @RequestMapping} .
-    * </p>
-    * 
-    * @param randomUUId
-    * @param request HttpServletRequest
-    * @return
-    */
-   @RequestMapping(value = "/activateAccount/{randomUUId}", method = RequestMethod.GET)
-   public ResponseEntity<Void> activateAccount(@PathVariable("randomUUId") String randomUUId,
-         HttpServletRequest request)
-   {
-      userService.activateAccount(randomUUId, request);
-      return new ResponseEntity<Void>(HttpStatus.OK);
+      response.setMessage("Successfully registered.");
+      response.setStatusCode(1);
+
+      logger.info("Successfully Registered..");
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
    /**
     * <p>
-    * This is simple login rest API where validate with valid existing user from
-    * DB.
+    * This rest API for activating user account
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
     * 
-    * @param user login
-    * @param resp HttpServletResponse
-    * @return Response Entity.
+    * @param randomUUId to get user
+    * @param request HttpServletRequest
+    * @return ResponseEntity with HTTP status and message.
+    */
+
+   @RequestMapping(value = "/activateAccount/{randomUUId}", method = RequestMethod.GET)
+   public ResponseEntity<CustomResponse> activateAccount(@PathVariable("randomUUId") String randomUUId,
+         HttpServletRequest request)
+   {
+      userService.activateAccount(randomUUId, request);
+
+      response.setMessage("Account activated successfully..");
+      response.setStatusCode(1);
+
+      logger.info("Account activated successfully..");
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+   }
+
+   /**
+    * <p>
+    * This is simple login rest API where validate user with valid existing user
+    * from DB.{@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * 
+    * @param userDto object to get login details
+    * @param request HttpServletRequest to get session
+    * @return Response Entity with HTTP status our custom message.
     */
    @RequestMapping(value = "login", method = RequestMethod.POST)
-   public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO, HttpServletRequest request)
+   public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request)
    {
 
-      
-         UserDTO userObject = userService.loginUser(userDTO);
-         if (userObject != null) 
-         {
-            
-            HttpSession session = request.getSession();
-            session.setAttribute("userId", userObject);
-            return new ResponseEntity<>("Login successfull..", HttpStatus.OK);
+      UserDTO userDetails = userService.loginUser(userDto);
+
+      if (userDetails != null) {
+         HttpSession session = request.getSession();
+         session.setAttribute("userId", userDetails);
+         response.setMessage("Login successfully");
+         response.setStatusCode(200);
+
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+      } else {
+         response.setMessage("Login failed..");
+         response.setStatusCode(400);
+
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+      }
+   }
+
+   /**
+    * <p>
+    * This is simple forgot password rest API where we get user by its email Id
+    * and send a link to reset password. {@link RequestMapping @RequestMapping}
+    * to mapped rest address.
+    * </p>
+    * 
+    * @param userDto
+    * @param request
+    * @return Response Entity with HTTP status and our custom message.
+    */
+   @RequestMapping(value = "forgetPassword", method = RequestMethod.POST)
+   public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request)
+   {
+      CustomResponse response = new CustomResponse();
+
+      if (userService.forgotPass(userDto, request) == true) {
+         response.setMessage("Link sent to your mail to reset password..");
+
+         response.setStatusCode(1);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+      } else {
+         response.setMessage("Enter a valid email ID,that is registered..");
+         response.setStatusCode(-1);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+      }
+   }
+
+   /**
+    * <p>
+    * This is simple API or resetting password
+    * </p>
+    * 
+    * @param randomUUId to get user details
+    * @param userDto object
+    * @return Response Entity with HTTP status and our custom message.
+    */
+   @RequestMapping(value = "/resetPassword/{randomUUId}", method = RequestMethod.POST)
+   public ResponseEntity<CustomResponse> resetPassword(@PathVariable("randomUUId") String randomUUId,
+         @RequestBody UserDTO userDto)
+   {
+      User userData = userService.getEmailByUUID(randomUUId);
+      if (userData != null) {
+
+         if (userService.resetPassword(userData, userDto) == true) {
+
+            response.setMessage("Password reset successfully");
+            response.setStatusCode(200);
+            return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+         } else {
+            response.setMessage("Somethng went wrong, try again...");
+            response.setStatusCode(409);
+            return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
          }
-         
-         return new ResponseEntity<String>("User Not Found..", HttpStatus.NOT_FOUND);
+
+      }
+
+      else {
+         response.setMessage("Mail Id not exist..");
+         response.setStatusCode(409);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+      }
    }
 
    /**
     * <p>
     * This is simple rest API to get a user by Id
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
     * 
     * @param userId
-    * @return
+    * @return Response Entity with HTTP status and message.
     */
    @RequestMapping(value = "getUser/{userId}", method = RequestMethod.GET)
    public ResponseEntity<User> getUser(@PathVariable("userId") int userId)
@@ -130,47 +221,4 @@ public class UserController
       User user = userService.getUserById(userId);
       return new ResponseEntity<User>(user, HttpStatus.OK);
    }
-
-   /**
-    * <p>
-    * This is simple forgot password rest API where we get user by its email Id
-    * and send a link to reset password.
-    * </p>
-    * 
-    * @param user
-    * @param req
-    * @return
-    */
-   @RequestMapping(value = "forgetPassword", method = RequestMethod.POST)
-   public ResponseEntity<?> forgotPassword(@RequestBody User user, HttpServletRequest request)
-   {
-      String user1 = user.getEmail();
-      String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
-      
-      try {
-         if (userService.forgotPass(user.getEmail(), request)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-         }
-
-      }
-      catch (Exception e) {
-         return new ResponseEntity<>(HttpStatus.CONFLICT);
-      }
-      return new ResponseEntity<>(HttpStatus.OK);
-   }
-
-   /**<p>This is simple API or resetting password
-    * </p>
-    * @param user
-    * @param request
-    * @return
-    */
-   @RequestMapping(value = "/resetPassword/{randomUUId}", method = RequestMethod.POST)
-   public ResponseEntity<String> resetPassword(@RequestBody User user, @PathVariable("randomUUId") String randomUUId, HttpServletRequest request)
-   {
-     //String email=userService.getUserByEmail(randomUUId);
-      userService.resetPassword(user);
-      return new ResponseEntity<>("Password reset successfully..", HttpStatus.OK);
-   }
-  
 }

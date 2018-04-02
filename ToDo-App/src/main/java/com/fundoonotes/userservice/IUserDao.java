@@ -1,16 +1,27 @@
 package com.fundoonotes.userservice;
 
-public interface IUserDao {
+/**
+ * Purpose: This is UserDao Interface,contains defined methods, and this layer
+ * responsible for interacting with Database.
+ * 
+ * @author SANA SHAIKH
+ * @since 21Mar 2018
+ */
+public interface IUserDao
+{
+   User saveUser(User user);
 
-	public User saveUser(User user);
+   User fetchUser(User user);
 
-	public User fetchUser(User user);
+   User getUserById(int userId);
 
-	public User getUserById(int userId);
-	
-	public User getUserByEmail(String email);
+   User getUserByEmail(String email);
 
-   public User getUserByRandomId(String randomUUID);
+   User getUserByRandomId(String randomUUID);
 
-   public User activateStatus(User user);
+   User activateStatus(User user);
+
+   User fetchEmailByUUID(String randomUUId);
+
+   User updatePassword(User user);
 }

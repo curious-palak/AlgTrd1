@@ -9,6 +9,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.fundoonotes.utility.SendEmail;
 
+/**
+ * Purpose: This class contains implementation of userService interface and
+ * contains business logic.
+ * 
+ * @author SANA SHAIKH
+ * @since 21Mar 2018
+ */
 @Service
 public class UserServiceImpl implements IUserService
 {
@@ -16,13 +23,14 @@ public class UserServiceImpl implements IUserService
    @Autowired
    private IUserDao userDao;
 
+   BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
    @Transactional
    public void registerUser(UserDTO userdto, String url)
    {
 
       User userModel = new User(userdto);
 
-      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
       userModel.setPassword(encoder.encode(userModel.getPassword()));
 
       String randomUUID = UUID.randomUUID().toString();
@@ -44,23 +52,37 @@ public class UserServiceImpl implements IUserService
    {
       User user = userDao.getUserByRandomId(randomUUId);
       user.setStatus(true);
-      User user2 = userDao.activateStatus(user);
+      User userUpdate = userDao.activateStatus(user);
    }
 
+   @Transactional
    @Override
    public UserDTO loginUser(UserDTO userDto)
    {
+      User user = new User();
+      user.setEmail(userDto.getEmail());
+      user.setPassword(userDto.getPassword());
 
-      User userPass = userDao.getUserByEmail(userDto.getEmail());
-      Boolean passwordMatch = BCrypt.checkpw(userDto.getPassword(), userPass.getPassword());
+      User userObject = userDao.getUserByEmail(userDto.getEmail());
 
-      if (userDto.getEmail() == null && passwordMatch != true) {
-         return null;
+      if (userObject != null && userObject.isStatus() == true
+            && BCrypt.checkpw(userDto.getPassword(), userObject.getPassword()) == true) {
+
+         return userDto;
+
       }
-
-      return userDto;
+      return null;
    }
 
+   @Transactional
+   @Override
+   public User getUserByEmail(User user)
+   {
+      User userFetch = userDao.getUserByEmail(user.getEmail());
+      return user;
+   }
+
+   @Transactional
    @Override
    public User getUserById(int userId)
    {
@@ -68,25 +90,52 @@ public class UserServiceImpl implements IUserService
       return userDao.getUserById(userId);
    }
 
+   @Transactional
    @Override
-   public boolean forgotPass(String email, HttpServletRequest request)
+   public boolean forgotPass(UserDTO userDto, HttpServletRequest request)
    {
-      User userFetch = userDao.getUserByEmail(email);
+
+      User userFetch = userDao.getUserByEmail(userDto.getEmail());
+
+      String randomUUID = userFetch.getRandomUUId();
+
       if (userFetch != null) {
+
          String req = request.getRequestURL().toString();
-         String url = req.substring(0, req.lastIndexOf("/")) + "/resetPassword/";
+         String url = req.substring(0, req.lastIndexOf("/")) + "/resetPassword/" + randomUUID;
          String mailTo = userFetch.getEmail();
          String subject = "Link to Reset password";
          String message = "Visit the link to reset your password  \n" + url;
+
          SendEmail.sendEmail(mailTo, subject, message);
+
          return true;
       }
       return false;
    }
 
+   @Transactional
    @Override
-   public void resetPassword(User user)
+   public User getEmailByUUID(String randomUUId)
    {
+      User userEmail = userDao.fetchEmailByUUID(randomUUId);
+      if (userEmail != null) {
+         return userEmail;
+      }
+      return null;
+   }
+
+   @Transactional
+   @Override
+   public boolean resetPassword(User user, UserDTO userDto)
+   {
+
+      String newPassword = userDto.getPassword();
+      user.setPassword(newPassword);
+
+      // user.setPassword(encoder.encode(userDto.getPassword()));
+      userDao.updatePassword(user);
+      return true;
 
    }
 }
