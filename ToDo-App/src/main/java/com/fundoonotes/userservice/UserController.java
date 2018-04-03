@@ -1,7 +1,6 @@
 package com.fundoonotes.userservice;
 
 import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.fundoonotes.exception.CustomResponse;
+import com.fundoonotes.exception.EmailAlreadyExistsException;
+import com.fundoonotes.exception.EmailIdNotExists;
+import com.fundoonotes.exception.IncorrectEmailException;
+import com.fundoonotes.exception.InvalidCredentialsException;
+import com.fundoonotes.exception.RegistrationValidationException;
 import com.fundoonotes.utility.RegistrationValidation;
 
 /**
@@ -36,6 +40,7 @@ import com.fundoonotes.utility.RegistrationValidation;
  * @since 21Mar 2018
  *
  */
+
 @RestController
 public class UserController
 {
@@ -53,7 +58,7 @@ public class UserController
    /**
     * <p>
     * This rest API for new user registration With
-    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * {@link RequestMapping @RequestMapping} to mapped rest address
     * </p>
     * 
     * @param userDto Object
@@ -66,23 +71,21 @@ public class UserController
    public ResponseEntity<CustomResponse> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
          HttpServletRequest request)
    {
-
       registrationValidation.validate(userDto, bindingResult);
+
       if (bindingResult.hasErrors()) {
 
-         response.setMessage("Invalid user details.");
-         response.setStatusCode(-1);
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
-      }
-
+         throw new RegistrationValidationException();
+      } 
+     
       String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
+      
       userService.registerUser(userDto, url);
-
       response.setMessage("Successfully registered.");
       response.setStatusCode(1);
-
       logger.info("Successfully Registered..");
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+      
    }
 
    /**
@@ -119,6 +122,7 @@ public class UserController
     * @param request HttpServletRequest to get session
     * @return Response Entity with HTTP status our custom message.
     */
+
    @RequestMapping(value = "login", method = RequestMethod.POST)
    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request)
    {
@@ -126,6 +130,7 @@ public class UserController
       UserDTO userDetails = userService.loginUser(userDto);
 
       if (userDetails != null) {
+
          HttpSession session = request.getSession();
          session.setAttribute("userId", userDetails);
          response.setMessage("Login successfully");
@@ -133,10 +138,7 @@ public class UserController
 
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
       } else {
-         response.setMessage("Login failed..");
-         response.setStatusCode(400);
-
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+         throw new InvalidCredentialsException();
       }
    }
 
@@ -151,6 +153,7 @@ public class UserController
     * @param request
     * @return Response Entity with HTTP status and our custom message.
     */
+
    @RequestMapping(value = "forgetPassword", method = RequestMethod.POST)
    public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request)
    {
@@ -162,9 +165,8 @@ public class UserController
          response.setStatusCode(1);
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
       } else {
-         response.setMessage("Enter a valid email ID,that is registered..");
-         response.setStatusCode(-1);
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+
+         throw new IncorrectEmailException();
       }
    }
 
@@ -177,6 +179,7 @@ public class UserController
     * @param userDto object
     * @return Response Entity with HTTP status and our custom message.
     */
+
    @RequestMapping(value = "/resetPassword/{randomUUId}", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> resetPassword(@PathVariable("randomUUId") String randomUUId,
          @RequestBody UserDTO userDto)
@@ -190,17 +193,11 @@ public class UserController
             response.setStatusCode(200);
             return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
          } else {
-            response.setMessage("Somethng went wrong, try again...");
-            response.setStatusCode(409);
-            return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+            throw new RuntimeException();
          }
 
-      }
-
-      else {
-         response.setMessage("Mail Id not exist..");
-         response.setStatusCode(409);
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+      } else {
+         throw new EmailIdNotExists();
       }
    }
 
@@ -213,6 +210,7 @@ public class UserController
     * @param userId
     * @return Response Entity with HTTP status and message.
     */
+
    @RequestMapping(value = "getUser/{userId}", method = RequestMethod.GET)
    public ResponseEntity<User> getUser(@PathVariable("userId") int userId)
    {

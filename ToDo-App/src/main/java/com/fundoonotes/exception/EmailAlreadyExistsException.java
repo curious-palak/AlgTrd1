@@ -6,6 +6,8 @@ package com.fundoonotes.exception;
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
+
+//@ResponseStatus(value=HttpStatus.RESET_CONTENT) 
 public class EmailAlreadyExistsException extends RuntimeException
 {
 

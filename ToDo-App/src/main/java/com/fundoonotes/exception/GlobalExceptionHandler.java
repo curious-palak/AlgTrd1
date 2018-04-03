@@ -1,5 +1,7 @@
 package com.fundoonotes.exception;
 
+import javax.validation.ValidationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,19 +23,51 @@ public class GlobalExceptionHandler
 {
 
    CustomResponse response = new CustomResponse();
-   
+
    @ExceptionHandler(value = EmailAlreadyExistsException.class)
    public ResponseEntity<CustomResponse> emailAlreadyExistsExceptionHandler(EmailAlreadyExistsException e)
    {
-      
+
       response.setMessage("Email already exist..");
-      return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+      response.setStatusCode(201);
+      return new ResponseEntity<>(response, HttpStatus.CREATED);
+   }
+   
+   public ResponseEntity<CustomResponse> emailIdNotExists(EmailIdNotExists e)
+   {
+      response.setMessage("Email Id not exists");
+      response.setStatusCode(404);
+      return new ResponseEntity<CustomResponse>(response,HttpStatus.NOT_FOUND);
    }
 
+   @ExceptionHandler(value=InvalidCredentialsException.class)
+   public ResponseEntity<CustomResponse> invalidCredentials(InvalidCredentialsException e)
+   {
+      response.setMessage("Invalid Login Credentials..");
+      response.setStatusCode(409);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
+
+   }
+   
+   @ExceptionHandler(value=RegistrationValidationException.class)
+   public ResponseEntity<CustomResponse> ValidationException(RegistrationValidationException e)
+   {
+      response.setMessage("User Validation Error..");
+      response.setStatusCode(400);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
+   }
+   
+   @ExceptionHandler(value=IncorrectEmailException.class)
+   public ResponseEntity< CustomResponse> incorrectDataException(IncorrectEmailException e)
+   {
+      response.setMessage("Enter a valid email ID,that is registered..");
+      response.setStatusCode(403);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.FORBIDDEN);
+   }
    @ExceptionHandler(value = DatabaseException.class)
    public ResponseEntity<CustomResponse> databaseExceptionHandler(DatabaseException e)
    {
-      
+
       response.setMessage("DataBAse exception..");
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
    }
@@ -42,8 +76,9 @@ public class GlobalExceptionHandler
    public ResponseEntity<CustomResponse> runtimeHandler(RuntimeException e)
    {
 
-      response.setMessage("Something went wrong..");
+      response.setMessage("Something went wrong,try again later");
       response.setStatusCode(-1);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
    }
+
 }

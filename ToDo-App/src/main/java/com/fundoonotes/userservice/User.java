@@ -16,19 +16,16 @@ import com.fundoonotes.noteservice.Notes;
  * setters/getters and constructor.
  * 
  * {@link Entity @Entity}, @Entity annotation to the User class, which marks
- * this class as an entity bean. 
- * {@link Table @Table}, @Table annotation allow
+ * this class as an entity bean. {@link Table @Table}, @Table annotation allow
  * you to specify the details of the table that will be used to persist the
- * entity in database. 
- * {@link Id @Id} @Id annotation will automatically
+ * entity in database. {@link Id @Id} @Id annotation will automatically
  * determine the most appropriate primary key
  * {@link GeneratedValue @GeneratedValue} @GeneratedValue annotation, which
  * takes parameter strategy and here i am using AUTO to generate Id
- * automatically 
- * {@link Column @Column} @Column annotation is used to specify
+ * automatically {@link Column @Column} @Column annotation is used to specify
  * the details of the column to which a field or property will be mapped.
- * {@link OneToMany @OneToMany} @One-to-Many mapping implemented using a
- * Set java collection that does not contain any duplicate element.
+ * {@link OneToMany @OneToMany} @One-to-Many mapping implemented using a Set
+ * java collection that does not contain any duplicate element.
  * 
  * @author SANA SHAIKH
  * @since 21Mar 2018
@@ -47,7 +44,7 @@ public class User
    @Column
    private String name;
 
-   @Column
+   @Column(unique = true)
    private String email;
 
    @Column

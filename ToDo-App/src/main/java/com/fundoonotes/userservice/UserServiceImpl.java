@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.fundoonotes.exception.CustomResponse;
+import com.fundoonotes.exception.EmailAlreadyExistsException;
 import com.fundoonotes.utility.SendEmail;
 
 /**
@@ -25,11 +27,16 @@ public class UserServiceImpl implements IUserService
 
    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+   CustomResponse response = new CustomResponse();
+
    @Transactional
    public void registerUser(UserDTO userdto, String url)
    {
-
       User userModel = new User(userdto);
+
+      if (userModel.getEmail() == userdto.getEmail()) {
+         throw new EmailAlreadyExistsException();
+      }
 
       userModel.setPassword(encoder.encode(userModel.getPassword()));
 

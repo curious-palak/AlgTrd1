@@ -11,7 +11,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-/**Purpose: This class is to send Email using java mail API
+/**
+ * Purpose: This class is to send Email using java mail API
+ * 
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
@@ -57,31 +59,6 @@ public class SendEmail
       }
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
  * @Autowired private static MailSender mailSender;

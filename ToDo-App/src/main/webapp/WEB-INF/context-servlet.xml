@@ -60,7 +60,69 @@
 
 	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
-	<!-- SETting default mail properties -->
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- SETting default mail properties -->
 	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
 		<property name="host" value="smtp.gmail.com" /> 
 		<property name="port" value="25"></property> 
@@ -74,4 +136,3 @@
 		</props>
 		</property> 
 	</bean> -->
-</beans>
