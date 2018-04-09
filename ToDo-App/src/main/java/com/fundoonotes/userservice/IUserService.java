@@ -13,7 +13,7 @@ public interface IUserService
 {
    void registerUser(UserDTO user, String url);
 
-   UserDTO loginUser(UserDTO userDto);
+   String loginUser(UserDTO userDto);
 
    User getUserById(int userId);
 

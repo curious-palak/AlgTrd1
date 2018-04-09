@@ -74,8 +74,8 @@ public class GlobalExceptionHandler
 
    @ExceptionHandler(value = RuntimeException.class)
    public ResponseEntity<CustomResponse> runtimeHandler(RuntimeException e)
-   {
-
+   {  
+      e.printStackTrace();
       response.setMessage("Something went wrong,try again later");
       response.setStatusCode(-1);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);

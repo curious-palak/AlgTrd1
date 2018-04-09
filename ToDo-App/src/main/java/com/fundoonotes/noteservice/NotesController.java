@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.userservice.User;
+import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
  * <p>
@@ -39,6 +42,8 @@ public class NotesController
 
    @Autowired
    INotesService notesService;
+   
+   CustomResponse response = new CustomResponse();
 
    /**
     * <p>
@@ -50,13 +55,16 @@ public class NotesController
     * @param request
     * @return ResponseEntity with HTTP status and message.
     */
-   @PostMapping(value = "notes")
-   public ResponseEntity<String> notesAdd(@RequestBody Notes notes, HttpServletRequest request)
+   @PostMapping(value = "createnotes")
+   public ResponseEntity<CustomResponse> notesAdd(@RequestBody Notes notes, HttpServletRequest request)
    {
+      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
-      User user = (User) request.getSession().getAttribute("userId");
-      notesService.createNote(notes, user);
-      return new ResponseEntity<>("Added note successfully..", HttpStatus.OK);
+      //User user = (User) request.getSession().getAttribute("userId");
+      notesService.createNote(notes, userId);
+      response.setMessage("Added note successfully..");
+      response.setStatusCode(200);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
    /**

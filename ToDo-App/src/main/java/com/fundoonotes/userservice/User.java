@@ -58,13 +58,15 @@ public class User
 
    @Column
    private String randomUUId;
+   
+   @Column
+   private String token;
 
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
    private Set<Notes> notes;
 
    public User(UserDTO userdto)
    {
-
       this.name = userdto.getName();
       this.email = userdto.getEmail();
       this.password = userdto.getPassword();
@@ -154,5 +156,15 @@ public class User
    public void setRandomUUId(String randomUUId)
    {
       this.randomUUId = randomUUId;
+   }
+
+   public String getToken()
+   {
+      return token;
+   }
+
+   public void setToken(String token)
+   {
+      this.token = token;
    }
 }

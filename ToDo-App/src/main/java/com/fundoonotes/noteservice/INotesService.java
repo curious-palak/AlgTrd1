@@ -1,7 +1,5 @@
 package com.fundoonotes.noteservice;
 
-import com.fundoonotes.userservice.User;
-
 /**
  * Purpose: This is NotesService Interface,contains defined methods, This layer
  * interact with controller.
@@ -18,7 +16,7 @@ public interface INotesService
 
    void updateNotes(int noteId, Notes notes);
 
-   void createNote(Notes notes, User user);
+   void createNote(Notes notes, int userId);
 
    Notes getNotesById(int noteId);
 }

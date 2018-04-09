@@ -25,10 +25,13 @@ public class NotesServiceImpl implements INotesService {
 
 	@Transactional
 	@Override
-	public void createNote(Notes notes, User user) {
+	public void createNote(Notes notes, int userId) {
 
 		Date date = new Date();
 		notes.setDate(date);
+		
+		User user = new User();
+      user.setUserId(userId);
 		notes.setUser(user);
 		notesDao.createNotes(notes);
 	}

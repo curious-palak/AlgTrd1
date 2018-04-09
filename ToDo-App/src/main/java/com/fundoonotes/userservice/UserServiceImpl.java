@@ -1,6 +1,7 @@
 package com.fundoonotes.userservice;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmailAlreadyExistsException;
+import com.fundoonotes.utility.JwtTokenUtility;
 import com.fundoonotes.utility.SendEmail;
 
 /**
@@ -28,15 +30,17 @@ public class UserServiceImpl implements IUserService
    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
    CustomResponse response = new CustomResponse();
+   
+   private static Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
    @Transactional
    public void registerUser(UserDTO userdto, String url)
    {
       User userModel = new User(userdto);
 
-      if (userModel.getEmail() == userdto.getEmail()) {
+      /*if (userModel.getEmail() == userdto.getEmail()) {
          throw new EmailAlreadyExistsException();
-      }
+      }*/
 
       userModel.setPassword(encoder.encode(userModel.getPassword()));
 
@@ -64,7 +68,7 @@ public class UserServiceImpl implements IUserService
 
    @Transactional
    @Override
-   public UserDTO loginUser(UserDTO userDto)
+   public String loginUser(UserDTO userDto)
    {
       User user = new User();
       user.setEmail(userDto.getEmail());
@@ -73,10 +77,13 @@ public class UserServiceImpl implements IUserService
       User userObject = userDao.getUserByEmail(userDto.getEmail());
 
       if (userObject != null && userObject.isStatus() == true
-            && BCrypt.checkpw(userDto.getPassword(), userObject.getPassword()) == true) {
-
-         return userDto;
-
+            && BCrypt.checkpw(user.getPassword(), userObject.getPassword())) 
+      {
+         int id = userObject.getUserId();
+         String token = JwtTokenUtility.generateToken(id);
+         
+         logger.info("Token generated->>" + token);
+         return token;
       }
       return null;
    }
@@ -115,7 +122,6 @@ public class UserServiceImpl implements IUserService
          String message = "Visit the link to reset your password  \n" + url;
 
          SendEmail.sendEmail(mailTo, subject, message);
-
          return true;
       }
       return false;
@@ -140,7 +146,7 @@ public class UserServiceImpl implements IUserService
       String newPassword = userDto.getPassword();
       user.setPassword(newPassword);
 
-      // user.setPassword(encoder.encode(userDto.getPassword()));
+      //user.setPassword(encoder.encode(userDto.getPassword())); --for reset password encryption
       userDao.updatePassword(user);
       return true;
 

@@ -2,18 +2,23 @@ package com.fundoonotes.userservice;
 
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.fundoonotes.exception.CustomResponse;
-import com.fundoonotes.exception.EmailAlreadyExistsException;
 import com.fundoonotes.exception.EmailIdNotExists;
 import com.fundoonotes.exception.IncorrectEmailException;
 import com.fundoonotes.exception.InvalidCredentialsException;
@@ -40,8 +45,9 @@ import com.fundoonotes.utility.RegistrationValidation;
  * @since 21Mar 2018
  *
  */
-
+/* @CrossOrigin(origins = "http://localhost:4200") */
 @RestController
+/* @RequestMapping({"/api"}) */
 public class UserController
 {
 
@@ -53,7 +59,11 @@ public class UserController
 
    private static Logger logger = Logger.getLogger(UserController.class.getName());
 
-   CustomResponse response = new CustomResponse();
+   //Scope is request
+   //@Qualifier("customResponse")  // if bean id different than variable name
+   //@Autowired
+   
+   private CustomResponse customResponse = new CustomResponse();
 
    /**
     * <p>
@@ -67,7 +77,8 @@ public class UserController
     * @return ResponseEntity with HTTP status and message.
     */
 
-   @RequestMapping(value = "register", method = RequestMethod.POST)
+   @PostMapping(value = "register")
+   // @RequestMapping(value = "register", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
          HttpServletRequest request)
    {
@@ -76,19 +87,18 @@ public class UserController
       if (bindingResult.hasErrors()) {
 
          throw new RegistrationValidationException();
-      } 
-     
+      }
+
       String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
-      
+
       userService.registerUser(userDto, url);
-      response.setMessage("Successfully registered.");
-      response.setStatusCode(1);
+      customResponse.setMessage("Successfully registered.");
+      customResponse.setStatusCode(1);
       logger.info("Successfully Registered..");
-      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
-      
+      return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
    }
 
-   /**
+   /**  
     * <p>
     * This rest API for activating user account
     * {@link RequestMapping @RequestMapping} to mapped rest address.
@@ -105,11 +115,11 @@ public class UserController
    {
       userService.activateAccount(randomUUId, request);
 
-      response.setMessage("Account activated successfully..");
-      response.setStatusCode(1);
+      customResponse.setMessage("Account activated successfully..");
+      customResponse.setStatusCode(1);
 
       logger.info("Account activated successfully..");
-      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+      return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
    }
 
    /**
@@ -124,22 +134,18 @@ public class UserController
     */
 
    @RequestMapping(value = "login", method = RequestMethod.POST)
-   public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request)
+   public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request,
+         HttpServletResponse resp)
    {
-
-      UserDTO userDetails = userService.loginUser(userDto);
-
-      if (userDetails != null) {
-
-         HttpSession session = request.getSession();
-         session.setAttribute("userId", userDetails);
-         response.setMessage("Login successfully");
-         response.setStatusCode(200);
-
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+      String token = userService.loginUser(userDto);
+      if (token != null) {
+         resp.setHeader("Authorization", token);
+         customResponse.setMessage("Login successfully");
+         customResponse.setStatusCode(200);
+         return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
       } else {
          throw new InvalidCredentialsException();
-      }
+      } 
    }
 
    /**
@@ -165,7 +171,6 @@ public class UserController
          response.setStatusCode(1);
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
       } else {
-
          throw new IncorrectEmailException();
       }
    }
@@ -182,16 +187,17 @@ public class UserController
 
    @RequestMapping(value = "/resetPassword/{randomUUId}", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> resetPassword(@PathVariable("randomUUId") String randomUUId,
-         @RequestBody UserDTO userDto)
+         @RequestBody UserDTO userDto,HttpServletRequest request)
    {
+      
       User userData = userService.getEmailByUUID(randomUUId);
       if (userData != null) {
 
          if (userService.resetPassword(userData, userDto) == true) {
 
-            response.setMessage("Password reset successfully");
-            response.setStatusCode(200);
-            return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+            customResponse.setMessage("Password reset successfully");
+            customResponse.setStatusCode(200);
+            return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
          } else {
             throw new RuntimeException();
          }
@@ -214,7 +220,7 @@ public class UserController
    @RequestMapping(value = "getUser/{userId}", method = RequestMethod.GET)
    public ResponseEntity<User> getUser(@PathVariable("userId") int userId)
    {
-
+      
       System.out.println(userId);
       User user = userService.getUserById(userId);
       return new ResponseEntity<User>(user, HttpStatus.OK);

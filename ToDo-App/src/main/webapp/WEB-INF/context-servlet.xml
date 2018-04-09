@@ -16,9 +16,21 @@
 
 	<!-- bean definitions here -->
 	<context:component-scan base-package="com.fundoonotes" />
-	<mvc:annotation-driven />
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<mvc:annotation-driven/>
 
+<!-- 	Not wrking
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="myObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+	</mvc:annotation-driven>
+	<bean id="myObjectMapper" class="com.fundoonotes.bean.util.MyObjectMapper"></bean>
+ -->
+ 
+ 	<tx:annotation-driven transaction-manager="transactionManager" />
+ 	
 	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -58,7 +70,7 @@
 
 	<bean id="notesDao" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
-	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
+	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"> </bean>
 
 </beans>
 
