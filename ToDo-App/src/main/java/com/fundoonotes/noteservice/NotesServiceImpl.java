@@ -14,44 +14,50 @@ import com.fundoonotes.userservice.User;
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
+
 @Service
-public class NotesServiceImpl implements INotesService {
+public class NotesServiceImpl implements INotesService
+{
 
-	@Autowired
-	INotesDao notesDao;
+   @Autowired
+   INotesDao notesDao;
 
-	@Autowired
-	IUserDao userDao;
+   @Autowired
+   IUserDao userDao;
 
-	@Transactional
-	@Override
-	public void createNote(Notes notes, int userId) {
+   @Transactional
+   @Override
+   public void createNote(Notes notes, int userId)
+   {
+      Date date = new Date();
+      notes.setDate(date);
 
-		Date date = new Date();
-		notes.setDate(date);
-		
-		User user = new User();
+      User user = new User();
       user.setUserId(userId);
-		notes.setUser(user);
-		notesDao.createNotes(notes);
-	}
+      notes.setUser(user);
+      notesDao.createNotes(notes);
+   }
 
-	@Transactional
-	@Override
-	public void deleteNotes(int noteId) {
-		notesDao.deleteNotes(noteId);
-	}
+   @Transactional
+   @Override
+   public void deleteNotes(int noteId, int userId)
+   {
+      Notes notes = notesDao.getNotesById(noteId);
+      notesDao.deleteNotes(noteId);
+   }
 
-	@Transactional
-	@Override
-	public void updateNotes(int noteId, Notes notes) {
-		// System.out.println(noteId);
-		notesDao.updateNotes(noteId, notes);
-	}
+   @Transactional
+   @Override
+   public void updateNotes(int noteId, Notes notes, int userId)
+   {
+      // System.out.println(noteId);
+      notesDao.updateNotes(noteId, notes);
+   }
 
-	@Override
-	public Notes getNotesById(int noteId) {
+   @Override
+   public Notes getNotesById(int noteId)
+   {
 
-		return notesDao.getNotesById(noteId);
-	}
+      return notesDao.getNotesById(noteId);
+   }
 }

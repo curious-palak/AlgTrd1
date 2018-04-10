@@ -59,10 +59,10 @@ public class UserController
 
    private static Logger logger = Logger.getLogger(UserController.class.getName());
 
-   //Scope is request
-   //@Qualifier("customResponse")  // if bean id different than variable name
-   //@Autowired
-   
+   // Scope is request
+   // @Qualifier("customResponse") // if bean id different than variable name
+   // @Autowired
+
    private CustomResponse customResponse = new CustomResponse();
 
    /**
@@ -82,6 +82,7 @@ public class UserController
    public ResponseEntity<CustomResponse> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
          HttpServletRequest request)
    {
+      logger.info("In register after filter...");
       registrationValidation.validate(userDto, bindingResult);
 
       if (bindingResult.hasErrors()) {
@@ -98,7 +99,7 @@ public class UserController
       return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
    }
 
-   /**  
+   /**
     * <p>
     * This rest API for activating user account
     * {@link RequestMapping @RequestMapping} to mapped rest address.
@@ -145,7 +146,7 @@ public class UserController
          return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
       } else {
          throw new InvalidCredentialsException();
-      } 
+      }
    }
 
    /**
@@ -187,9 +188,9 @@ public class UserController
 
    @RequestMapping(value = "/resetPassword/{randomUUId}", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> resetPassword(@PathVariable("randomUUId") String randomUUId,
-         @RequestBody UserDTO userDto,HttpServletRequest request)
+         @RequestBody UserDTO userDto, HttpServletRequest request)
    {
-      
+
       User userData = userService.getEmailByUUID(randomUUId);
       if (userData != null) {
 
@@ -220,7 +221,7 @@ public class UserController
    @RequestMapping(value = "getUser/{userId}", method = RequestMethod.GET)
    public ResponseEntity<User> getUser(@PathVariable("userId") int userId)
    {
-      
+
       System.out.println(userId);
       User user = userService.getUserById(userId);
       return new ResponseEntity<User>(user, HttpStatus.OK);

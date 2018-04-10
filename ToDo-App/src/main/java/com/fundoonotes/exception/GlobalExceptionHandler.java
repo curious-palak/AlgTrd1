@@ -4,6 +4,7 @@ import javax.validation.ValidationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
+
 @ControllerAdvice
 public class GlobalExceptionHandler
 {
@@ -33,6 +35,7 @@ public class GlobalExceptionHandler
       return new ResponseEntity<>(response, HttpStatus.CREATED);
    }
    
+   @ExceptionHandler(value=EmailIdNotExists.class)
    public ResponseEntity<CustomResponse> emailIdNotExists(EmailIdNotExists e)
    {
       response.setMessage("Email Id not exists");
@@ -64,14 +67,26 @@ public class GlobalExceptionHandler
       response.setStatusCode(403);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.FORBIDDEN);
    }
+   
    @ExceptionHandler(value = DatabaseException.class)
    public ResponseEntity<CustomResponse> databaseExceptionHandler(DatabaseException e)
    {
 
       response.setMessage("DataBAse exception..");
+      response.setStatusCode(409);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
    }
 
+  @ExceptionHandler(value=EmptyToken.class)
+   public ResponseEntity<CustomResponse> unAccessibleToken(EmptyToken e)
+   {
+      
+      response.setMessage("Token not accessible please,enter a token to add notes");
+      response.setStatusCode(410);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
+   }
+
+   
    @ExceptionHandler(value = RuntimeException.class)
    public ResponseEntity<CustomResponse> runtimeHandler(RuntimeException e)
    {  
@@ -80,5 +95,4 @@ public class GlobalExceptionHandler
       response.setStatusCode(-1);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
    }
-
 }

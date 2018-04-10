@@ -1,5 +1,7 @@
 package com.fundoonotes.noteservice;
 
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fundoonotes.exception.CustomResponse;
+import com.fundoonotes.exception.EmptyToken;
 import com.fundoonotes.userservice.User;
+import com.fundoonotes.userservice.UserController;
 import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
@@ -42,8 +46,10 @@ public class NotesController
 
    @Autowired
    INotesService notesService;
-   
+
    CustomResponse response = new CustomResponse();
+
+   private static Logger logger = Logger.getLogger(NotesController.class.getName());
 
    /**
     * <p>
@@ -58,13 +64,19 @@ public class NotesController
    @PostMapping(value = "createnotes")
    public ResponseEntity<CustomResponse> notesAdd(@RequestBody Notes notes, HttpServletRequest request)
    {
-      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
-      //User user = (User) request.getSession().getAttribute("userId");
+      // User user = (User) request.getSession().getAttribute("userId");
+
+      if (request.getHeader("Authorization").isEmpty()) {
+         throw new EmptyToken();
+      }
+
       notesService.createNote(notes, userId);
       response.setMessage("Added note successfully..");
       response.setStatusCode(200);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+
    }
 
    /**
@@ -76,12 +88,14 @@ public class NotesController
     * @param noteId
     * @return ResponseEntity with HTTP status and message.
     */
-   @DeleteMapping(value = "deleteNotes/{noteId}")
-   public ResponseEntity<String> notesDelete(@PathVariable("noteId") int noteId)
+   @DeleteMapping(value = "deletenotes/{noteId}")
+   public ResponseEntity<CustomResponse> notesDelete(@PathVariable("noteId") int noteId, HttpServletRequest request)
    {
-
-      notesService.deleteNotes(noteId);
-      return new ResponseEntity<String>("Note deleted..", HttpStatus.OK);
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      notesService.deleteNotes(noteId, userId);
+      response.setMessage("Note deleted..");
+      response.setStatusCode(200);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
    /**
@@ -92,12 +106,15 @@ public class NotesController
     * @param notes
     * @return ResponseEntity with HTTP status and message.
     */
-   @RequestMapping(value = "updateNotes/{noteId}", method = RequestMethod.PUT)
-   public ResponseEntity<?> notesUpdate(@PathVariable("noteId") int noteId, @RequestBody Notes notes)
+   @RequestMapping(value = "updatenotes/{noteId}", method = RequestMethod.PUT)
+   public ResponseEntity<?> notesUpdate(@PathVariable("noteId") int noteId, @RequestBody Notes notes,
+         HttpServletRequest request)
    {
-      notesService.updateNotes(noteId, notes);
-      return new ResponseEntity<>("Notes updated successfully.", HttpStatus.OK);
-
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      notesService.updateNotes(noteId, notes, userId);
+      response.setMessage("Notes updated successfully.");
+      response.setStatusCode(200);
+      return new ResponseEntity<>(response, HttpStatus.OK);
    }
 
    /**
@@ -107,11 +124,12 @@ public class NotesController
     * @param noteId
     * @return ResponseEntity with HTTP status and message.
     */
-   @RequestMapping(value = "getNotes/{noteId}", method = RequestMethod.GET)
+   @RequestMapping(value = "getnotes/{noteId}", method = RequestMethod.GET)
    public ResponseEntity<Notes> getNotes(@PathVariable("noteId") int noteId)
    {
 
       Notes notes = notesService.getNotesById(noteId);
+      logger.info("Notes retrived successfully..");
       return new ResponseEntity<Notes>(notes, HttpStatus.OK);
    }
 }
