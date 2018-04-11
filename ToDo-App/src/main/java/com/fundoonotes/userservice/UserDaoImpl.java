@@ -27,7 +27,7 @@ public class UserDaoImpl implements IUserDao
    @Override
    public User saveUser(User user)
    {
-      session = sessionFactory.openSession();
+      session = sessionFactory.getCurrentSession();
       session.save(user);
       return user;
    }
@@ -35,7 +35,7 @@ public class UserDaoImpl implements IUserDao
    @Override
    public User getUserById(int userId)
    {
-      return (User) sessionFactory.openSession().get(User.class, userId);
+      return (User) sessionFactory.getCurrentSession().get(User.class, userId);
    }
 
    @Override
@@ -55,7 +55,7 @@ public class UserDaoImpl implements IUserDao
    public User fetchUser(User user)
    {
 
-      session = sessionFactory.openSession();
+      session = sessionFactory.getCurrentSession();
       Criteria criteria = session.createCriteria(User.class);
       Criterion emailFetch = Restrictions.eq("email", user.getEmail());
 
@@ -103,6 +103,5 @@ public class UserDaoImpl implements IUserDao
       session = sessionFactory.getCurrentSession();
       session.update(user);
       return user;
-
    }
 }

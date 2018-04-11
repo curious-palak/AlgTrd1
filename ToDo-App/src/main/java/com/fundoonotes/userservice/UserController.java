@@ -4,20 +4,15 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmailIdNotExists;
 import com.fundoonotes.exception.IncorrectEmailException;
@@ -45,9 +40,8 @@ import com.fundoonotes.utility.RegistrationValidation;
  * @since 21Mar 2018
  *
  */
-/* @CrossOrigin(origins = "http://localhost:4200") */
+
 @RestController
-/* @RequestMapping({"/api"}) */
 public class UserController
 {
 
@@ -78,9 +72,8 @@ public class UserController
     */
 
    @PostMapping(value = "register")
-   // @RequestMapping(value = "register", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
-         HttpServletRequest request)
+         HttpServletRequest request, HttpServletResponse response)
    {
       logger.info("In register after filter...");
       registrationValidation.validate(userDto, bindingResult);
@@ -91,11 +84,14 @@ public class UserController
       }
 
       String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
-
-      userService.registerUser(userDto, url);
+      String token = userService.registerUser(userDto, url);
+      
+      if (token != null) {
+         response.setHeader("Authorization", token);
+         logger.info("Successfully Registered..");
+      }
       customResponse.setMessage("Successfully registered.");
       customResponse.setStatusCode(1);
-      logger.info("Successfully Registered..");
       return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
    }
 
@@ -110,11 +106,12 @@ public class UserController
     * @return ResponseEntity with HTTP status and message.
     */
 
-   @RequestMapping(value = "/activateAccount/{randomUUId}", method = RequestMethod.GET)
-   public ResponseEntity<CustomResponse> activateAccount(@PathVariable("randomUUId") String randomUUId,
+   @RequestMapping(value = "/activateaccount/{token:.+}", method = RequestMethod.GET)
+   public ResponseEntity<CustomResponse> activateAccount(@PathVariable("token") String token,
          HttpServletRequest request)
    {
-      userService.activateAccount(randomUUId, request);
+
+      userService.activateAccount(token, request);
 
       customResponse.setMessage("Account activated successfully..");
       customResponse.setStatusCode(1);
@@ -138,7 +135,9 @@ public class UserController
    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request,
          HttpServletResponse resp)
    {
+      logger.info("In login after CORS filter");
       String token = userService.loginUser(userDto);
+      
       if (token != null) {
          resp.setHeader("Authorization", token);
          customResponse.setMessage("Login successfully");
@@ -161,16 +160,15 @@ public class UserController
     * @return Response Entity with HTTP status and our custom message.
     */
 
-   @RequestMapping(value = "forgetPassword", method = RequestMethod.POST)
+   @RequestMapping(value = "forgetpassword", method = RequestMethod.POST)
    public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request)
    {
-      CustomResponse response = new CustomResponse();
-
       if (userService.forgotPass(userDto, request) == true) {
-         response.setMessage("Link sent to your mail to reset password..");
-
-         response.setStatusCode(1);
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+         
+         customResponse.setMessage("Link sent to your mail to reset password..");
+         customResponse.setStatusCode(1);
+         return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
+         
       } else {
          throw new IncorrectEmailException();
       }
@@ -186,12 +184,11 @@ public class UserController
     * @return Response Entity with HTTP status and our custom message.
     */
 
-   @RequestMapping(value = "/resetPassword/{randomUUId}", method = RequestMethod.POST)
-   public ResponseEntity<CustomResponse> resetPassword(@PathVariable("randomUUId") String randomUUId,
+   @RequestMapping(value = "/resetpassword/{token:.+}", method = RequestMethod.POST)
+   public ResponseEntity<CustomResponse> resetPassword(@PathVariable("token") String token,
          @RequestBody UserDTO userDto, HttpServletRequest request)
    {
-
-      User userData = userService.getEmailByUUID(randomUUId);
+      User userData = userService.getEmailByToken(token);
       if (userData != null) {
 
          if (userService.resetPassword(userData, userDto) == true) {
@@ -218,10 +215,9 @@ public class UserController
     * @return Response Entity with HTTP status and message.
     */
 
-   @RequestMapping(value = "getUser/{userId}", method = RequestMethod.GET)
+   @RequestMapping(value = "getuser/{userId}", method = RequestMethod.GET)
    public ResponseEntity<User> getUser(@PathVariable("userId") int userId)
    {
-
       System.out.println(userId);
       User user = userService.getUserById(userId);
       return new ResponseEntity<User>(user, HttpStatus.OK);

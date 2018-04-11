@@ -66,8 +66,6 @@ public class NotesController
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
-      // User user = (User) request.getSession().getAttribute("userId");
-
       if (request.getHeader("Authorization").isEmpty()) {
          throw new EmptyToken();
       }

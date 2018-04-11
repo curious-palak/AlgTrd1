@@ -17,24 +17,16 @@
 	<context:component-scan base-package="com.fundoonotes" />
 	<mvc:annotation-driven />
 
-	<!-- Not working
-	 <mvc:annotation-driven> <mvc:message-converters> 
-	 <bean 
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
-		<property name="objectMapper" ref="myObjectMapper" /> 
-		</bean> 
-		</mvc:message-converters> 
-		</mvc:annotation-driven> 
-		<bean id="myObjectMapper" class="com.fundoonotes.bean.util.MyObjectMapper"></bean> -->
-
 	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<context:property-placeholder location="classpath:development.properties" />
 
 	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/toDo_db" />
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
 	</bean>
 
 	<bean id="mySessionFactory"
@@ -55,6 +47,7 @@
 			</props>
 		</property>
 	</bean>
+
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="mySessionFactory"></property>
@@ -68,11 +61,9 @@
 
 	<bean id="notesDao" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
-	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl">
-	</bean>
+	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
-	<bean id="corsFilter" class="com.fundoonotes.utility.CorsFilter">
-	</bean>
+	<bean id="corsFilter" class="com.fundoonotes.utility.CorsFilter"></bean>
 
 </beans>
 
@@ -89,6 +80,16 @@
 
 
 
+
+
+
+
+
+
+
+<!-- Not working <mvc:annotation-driven> <mvc:message-converters> <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
+	<property name="objectMapper" ref="myObjectMapper" /> </bean> </mvc:message-converters> 
+	</mvc:annotation-driven> <bean id="myObjectMapper" class="com.fundoonotes.bean.util.MyObjectMapper"></bean> -->
 
 
 

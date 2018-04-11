@@ -1,6 +1,5 @@
 package com.fundoonotes.userservice;
 
-import java.util.UUID;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -9,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.fundoonotes.exception.CustomResponse;
-import com.fundoonotes.exception.EmailAlreadyExistsException;
 import com.fundoonotes.utility.JwtTokenUtility;
 import com.fundoonotes.utility.SendEmail;
 
@@ -30,38 +28,43 @@ public class UserServiceImpl implements IUserService
    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
    CustomResponse response = new CustomResponse();
-   
+
    private static Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
    @Transactional
-   public void registerUser(UserDTO userdto, String url)
+   public String registerUser(UserDTO userdto, String url)
    {
       User userModel = new User(userdto);
 
-      /*if (userModel.getEmail() == userdto.getEmail()) {
-         throw new EmailAlreadyExistsException();
-      }*/
+      /*
+       * if (userModel.getEmail() == userdto.getEmail()) { throw new
+       * EmailAlreadyExistsException(); }
+       */
 
       userModel.setPassword(encoder.encode(userModel.getPassword()));
 
-      String randomUUID = UUID.randomUUID().toString();
+      User userDb = userDao.saveUser(userModel);
+      if (userDb != null) {
+         int id = userDb.getUserId();
+         String token = JwtTokenUtility.generateToken(id);
+         logger.info("Token generated->>" + token);
 
-      userModel.setRandomUUId(randomUUID);
-
-      User user1 = userDao.saveUser(userModel);
-      if (user1 != null) {
-         String to = user1.getEmail();
+         String to = userDb.getEmail();
          String subject = ("Link to confirm registration..");
-         String message = url + "/activateAccount/" + randomUUID;
+         String message = url + "/activateaccount/" + token;
          SendEmail.sendEmail(to, subject, message);
       }
+      return null;
    }
 
    @Transactional
    @Override
-   public void activateAccount(String randomUUId, HttpServletRequest request)
+   public void activateAccount(String token, HttpServletRequest request)
    {
-      User user = userDao.getUserByRandomId(randomUUId);
+      logger.info("Get token to activate account->>" + token);
+      int id = JwtTokenUtility.verifyToken(token);
+      
+      User user = userDao.getUserById(id);
       user.setStatus(true);
       User userUpdate = userDao.activateStatus(user);
    }
@@ -70,6 +73,7 @@ public class UserServiceImpl implements IUserService
    @Override
    public String loginUser(UserDTO userDto)
    {
+      logger.info("In login user Service..");
       User user = new User();
       user.setEmail(userDto.getEmail());
       user.setPassword(userDto.getPassword());
@@ -77,11 +81,10 @@ public class UserServiceImpl implements IUserService
       User userObject = userDao.getUserByEmail(userDto.getEmail());
 
       if (userObject != null && userObject.isStatus() == true
-            && BCrypt.checkpw(user.getPassword(), userObject.getPassword())) 
-      {
+            && BCrypt.checkpw(user.getPassword(), userObject.getPassword())) {
          int id = userObject.getUserId();
          String token = JwtTokenUtility.generateToken(id);
-         
+
          logger.info("Token generated->>" + token);
          return token;
       }
@@ -108,15 +111,18 @@ public class UserServiceImpl implements IUserService
    @Override
    public boolean forgotPass(UserDTO userDto, HttpServletRequest request)
    {
-
       User userFetch = userDao.getUserByEmail(userDto.getEmail());
 
-      String randomUUID = userFetch.getRandomUUId();
+      int userId = userFetch.getUserId();
+      logger.info("userID->>" + userId);
+
+      String token = JwtTokenUtility.generateToken(userId);
+      logger.info("token->>" + token);
 
       if (userFetch != null) {
 
          String req = request.getRequestURL().toString();
-         String url = req.substring(0, req.lastIndexOf("/")) + "/resetPassword/" + randomUUID;
+         String url = req.substring(0, req.lastIndexOf("/")) + "/resetpassword/" + token;
          String mailTo = userFetch.getEmail();
          String subject = "Link to Reset password";
          String message = "Visit the link to reset your password  \n" + url;
@@ -129,11 +135,15 @@ public class UserServiceImpl implements IUserService
 
    @Transactional
    @Override
-   public User getEmailByUUID(String randomUUId)
+   public User getEmailByToken(String token)
    {
-      User userEmail = userDao.fetchEmailByUUID(randomUUId);
-      if (userEmail != null) {
-         return userEmail;
+      int id = JwtTokenUtility.verifyToken(token);
+      logger.info("Getting user Id by token->>" + id);
+
+      User user = userDao.getUserById(id);
+
+      if (user != null) {
+         return user;
       }
       return null;
    }
@@ -146,9 +156,8 @@ public class UserServiceImpl implements IUserService
       String newPassword = userDto.getPassword();
       user.setPassword(newPassword);
 
-      //user.setPassword(encoder.encode(userDto.getPassword())); --for reset password encryption
+      // user.setPassword(encoder.encode(userDto.getPassword())); --for reset password encryption
       userDao.updatePassword(user);
       return true;
-
    }
 }

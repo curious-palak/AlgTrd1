@@ -40,10 +40,10 @@ public class SendEmail
       Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
          protected PasswordAuthentication getPasswordAuthentication()
          {
-
             return new PasswordAuthentication(user, password);
          }
       });
+      
       try {
          MimeMessage message1 = new MimeMessage(session);
          message1.setFrom(new InternetAddress(user));
@@ -59,6 +59,25 @@ public class SendEmail
       }
    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
  * @Autowired private static MailSender mailSender;

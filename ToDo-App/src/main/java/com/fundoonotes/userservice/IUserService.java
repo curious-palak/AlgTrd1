@@ -11,19 +11,19 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IUserService
 {
-   void registerUser(UserDTO user, String url);
+   String registerUser(UserDTO user,String url);
 
    String loginUser(UserDTO userDto);
 
    User getUserById(int userId);
 
-   void activateAccount(String randomUUId, HttpServletRequest request);
+   void activateAccount(String token, HttpServletRequest request);
 
    User getUserByEmail(User user);
 
    boolean forgotPass(UserDTO userDto, HttpServletRequest request);
 
-   User getEmailByUUID(String randomUUId);
+   User getEmailByToken(String token);
 
    boolean resetPassword(User user, UserDTO userDTO);
 }
