@@ -65,7 +65,8 @@ public class NotesController
    public ResponseEntity<CustomResponse> notesAdd(@RequestBody Notes notes, HttpServletRequest request)
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-
+      System.out.println("token->>"+request.getHeader("Authorization"));
+      
       if (request.getHeader("Authorization").isEmpty()) {
          throw new EmptyToken();
       }
