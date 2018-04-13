@@ -33,11 +33,11 @@ public class UserDaoImpl implements IUserDao
    }
 
    @Override
-   public User getUserById(int userId)
+   public User getUserById(int id)
    {
-      return (User) sessionFactory.getCurrentSession().get(User.class, userId);
+      return (User) sessionFactory.getCurrentSession().get(User.class, id);
    }
-
+   
    @Override
    public User getUserByEmail(String email)
    {

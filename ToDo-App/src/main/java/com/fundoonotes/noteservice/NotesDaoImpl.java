@@ -2,8 +2,14 @@ package com.fundoonotes.noteservice;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import com.fundoonotes.userservice.User;
+
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 
 /**
@@ -63,9 +69,15 @@ public class NotesDaoImpl implements INotesDao {
 		return true;
 	}
 
-	@Override
-	public Notes getNotesById(int noteId) {
-		
-		return (Notes) sessionFactory.openSession().get(Notes.class, noteId);
-	}
+   @Override
+   public List<Notes> getNotes(User user)
+   {
+      session = sessionFactory.getCurrentSession();
+   
+      Criteria criteria = session.createCriteria(Notes.class);
+      criteria.add(Restrictions.eq("user", user)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+      List<Notes> notes = criteria.list();
+      return notes;
+   }
+   
 }

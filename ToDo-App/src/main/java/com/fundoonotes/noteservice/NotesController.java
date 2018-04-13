@@ -1,5 +1,6 @@
 package com.fundoonotes.noteservice;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,12 +63,12 @@ public class NotesController
     * @param request
     * @return ResponseEntity with HTTP status and message.
     */
-   @PostMapping(value = "createnotes")
+   @PutMapping(value = "createnotes")
    public ResponseEntity<CustomResponse> notesAdd(@RequestBody Notes notes, HttpServletRequest request)
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      System.out.println("token->>"+request.getHeader("Authorization"));
-      
+      System.out.println("token->>" + request.getHeader("Authorization"));
+
       if (request.getHeader("Authorization").isEmpty()) {
          throw new EmptyToken();
       }
@@ -110,6 +112,7 @@ public class NotesController
          HttpServletRequest request)
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      
       notesService.updateNotes(noteId, notes, userId);
       response.setMessage("Notes updated successfully.");
       response.setStatusCode(200);
@@ -123,12 +126,21 @@ public class NotesController
     * @param noteId
     * @return ResponseEntity with HTTP status and message.
     */
-   @RequestMapping(value = "getnotes/{noteId}", method = RequestMethod.GET)
-   public ResponseEntity<Notes> getNotes(@PathVariable("noteId") int noteId)
+   @RequestMapping(value = "getnotes", method = RequestMethod.GET)
+   public ResponseEntity<List<Notes>> getNotes(HttpServletRequest request)
    {
+      int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      System.out.println("token->>" + request.getHeader("Authorization"));
 
-      Notes notes = notesService.getNotesById(noteId);
-      logger.info("Notes retrived successfully..");
-      return new ResponseEntity<Notes>(notes, HttpStatus.OK);
+      List<Notes> notes = (List<Notes>) notesService.getNotes(id);
+      
+      if (notes.size() != 0) {
+
+         return new ResponseEntity<List<Notes>>(notes, HttpStatus.OK);
+      }
+      else {
+         return new ResponseEntity<List<Notes>>(notes, HttpStatus.NO_CONTENT);
+      }
+
    }
 }

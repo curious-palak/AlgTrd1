@@ -1,5 +1,9 @@
 package com.fundoonotes.noteservice;
 
+import java.util.List;
+
+import com.fundoonotes.userservice.User;
+
 /**
  * Purpose: This is NotesDao Interface,contains defined methods, and this layer
  * responsible for interacting with Database.
@@ -15,5 +19,9 @@ public interface INotesDao {
 	
 	boolean updateNotes(int noteId,Notes notes);
 
-	Notes getNotesById(int noteId);
+	//Notes getNotesById(int noteId);
+
+	List<Notes> getNotes(User user);
+   
+   //List<Notes> getNotesById(User user);
 }

@@ -13,7 +13,7 @@ public interface IUserDao
 
    User fetchUser(User user);
 
-   User getUserById(int userId);
+   User getUserById(int id);
 
    User getUserByEmail(String email);
 

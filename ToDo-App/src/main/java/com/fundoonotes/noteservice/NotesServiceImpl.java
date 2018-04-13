@@ -1,6 +1,8 @@
 package com.fundoonotes.noteservice;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class NotesServiceImpl implements INotesService
    @Override
    public void deleteNotes(int noteId, int userId)
    {
-      Notes notes = notesDao.getNotesById(noteId);
+     //Notes notes = notesDao.getNotesById(noteId);
       notesDao.deleteNotes(noteId);
    }
 
@@ -54,10 +56,12 @@ public class NotesServiceImpl implements INotesService
       notesDao.updateNotes(noteId, notes);
    }
 
+   @Transactional
    @Override
-   public Notes getNotesById(int noteId)
+   public List<Notes> getNotes(int id)
    {
-
-      return notesDao.getNotesById(noteId);
+      User user=userDao.getUserById(id);
+     return notesDao.getNotes(user);
    }
+   
 }

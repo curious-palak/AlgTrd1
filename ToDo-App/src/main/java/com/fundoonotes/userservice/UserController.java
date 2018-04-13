@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -131,7 +132,7 @@ public class UserController
     * @return Response Entity with HTTP status our custom message.
     */
 
-   @RequestMapping(value = "login", method = RequestMethod.POST)
+   @RequestMapping(value = "login", method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request,
          HttpServletResponse resp)
    {

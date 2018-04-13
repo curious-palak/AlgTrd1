@@ -2,12 +2,10 @@ package com.fundoonotes.utility;
 
 import java.io.IOException;
 import java.util.logging.Logger;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class CorsFilter extends OncePerRequestFilter
@@ -23,6 +21,7 @@ public class CorsFilter extends OncePerRequestFilter
       response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
       response.addHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept, X-Requested-With");
       response.addHeader("Access-Control-Allow-Headers", "Authorization");
+      response.addHeader("Access-Control-Expose-Headers", "Authorization, Content-Type");
       response.addHeader("Access-Control-Max-Age", "3600");
 
       logger.info("In CORS filter...");
