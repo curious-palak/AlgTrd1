@@ -1,7 +1,5 @@
 package com.fundoonotes.userservice;
 
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import com.fundoonotes.noteservice.Notes;
+
 
 /**
  * Purpose: This is User model class contains fields related to user with
@@ -35,7 +33,6 @@ import com.fundoonotes.noteservice.Notes;
 @Table(name = "ToDoRegistration")
 public class User
 {
-
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
    @Column(name = "userId")
@@ -59,11 +56,9 @@ public class User
    @Column
    private String randomUUId;
    
-   @Column
-   private String token;
-
-   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-   private Set<Notes> notes;
+   /*@JsonIgnore
+   @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
+   private Set<Notes> notes;*/
 
    public User(UserDTO userdto)
    {
@@ -75,7 +70,7 @@ public class User
 
    public User()
    {
-      // TODO Auto-generated constructor stub
+      //TODO Auto-generated constructor stub
    }
 
    public int getUserId()
@@ -128,7 +123,7 @@ public class User
       this.mobileNo = mobileNo;
    }
 
-   public Set<Notes> getNotes()
+/*   public Set<Notes> getNotes()
    {
       return notes;
    }
@@ -136,7 +131,7 @@ public class User
    public void setNotes(Set<Notes> notes)
    {
       this.notes = notes;
-   }
+   }*/
 
    public boolean isStatus()
    {
@@ -158,13 +153,4 @@ public class User
       this.randomUUId = randomUUId;
    }
 
-   public String getToken()
-   {
-      return token;
-   }
-
-   public void setToken(String token)
-   {
-      this.token = token;
-   }
 }

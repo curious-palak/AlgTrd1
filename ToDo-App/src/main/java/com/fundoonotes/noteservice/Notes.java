@@ -2,8 +2,10 @@ package com.fundoonotes.noteservice;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +32,10 @@ public class Notes {
 	@Column
 	private Date date;
 	
-	@ManyToOne
+	@Column
+	private boolean trash;
+	
+	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.DETACH)
 	@JoinColumn(name="userId")
 	private User user;
 
@@ -73,4 +78,14 @@ public class Notes {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+   public boolean isTrash()
+   {
+      return trash;
+   }
+
+   public void setTrash(boolean trash)
+   {
+      this.trash = trash;
+   }
 }

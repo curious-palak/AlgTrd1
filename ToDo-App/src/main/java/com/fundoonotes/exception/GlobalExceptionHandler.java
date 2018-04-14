@@ -34,16 +34,16 @@ public class GlobalExceptionHandler
       response.setStatusCode(201);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
    }
-   
-   @ExceptionHandler(value=EmailIdNotExists.class)
+
+   @ExceptionHandler(value = EmailIdNotExists.class)
    public ResponseEntity<CustomResponse> emailIdNotExists(EmailIdNotExists e)
    {
       response.setMessage("Email Id not exists");
       response.setStatusCode(404);
-      return new ResponseEntity<CustomResponse>(response,HttpStatus.NOT_FOUND);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.NOT_FOUND);
    }
 
-   @ExceptionHandler(value=InvalidCredentialsException.class)
+   @ExceptionHandler(value = InvalidCredentialsException.class)
    public ResponseEntity<CustomResponse> invalidCredentials(InvalidCredentialsException e)
    {
       response.setMessage("Invalid Login Credentials..");
@@ -51,23 +51,23 @@ public class GlobalExceptionHandler
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
 
    }
-   
-   @ExceptionHandler(value=RegistrationValidationException.class)
+
+   @ExceptionHandler(value = RegistrationValidationException.class)
    public ResponseEntity<CustomResponse> ValidationException(RegistrationValidationException e)
    {
       response.setMessage("User Validation Error..");
       response.setStatusCode(400);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
    }
-   
-   @ExceptionHandler(value=IncorrectEmailException.class)
-   public ResponseEntity< CustomResponse> incorrectDataException(IncorrectEmailException e)
+
+   @ExceptionHandler(value = IncorrectEmailException.class)
+   public ResponseEntity<CustomResponse> incorrectDataException(IncorrectEmailException e)
    {
       response.setMessage("Enter a valid email ID,that is registered..");
       response.setStatusCode(403);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.FORBIDDEN);
    }
-   
+
    @ExceptionHandler(value = DatabaseException.class)
    public ResponseEntity<CustomResponse> databaseExceptionHandler(DatabaseException e)
    {
@@ -77,19 +77,27 @@ public class GlobalExceptionHandler
       return new ResponseEntity<CustomResponse>(response, HttpStatus.CONFLICT);
    }
 
-  @ExceptionHandler(value=EmptyToken.class)
+   @ExceptionHandler(value = EmptyToken.class)
    public ResponseEntity<CustomResponse> unAccessibleToken(EmptyToken e)
    {
-      
+
       response.setMessage("Token not accessible please,enter a token to add notes");
       response.setStatusCode(410);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
    }
 
-   
+   @ExceptionHandler(value = UnAuthorizedAccess.class)
+   public ResponseEntity<CustomResponse> unauthorizedAccess(UnAuthorizedAccess e)
+   {
+      response.setMessage("UnAuthorized Access..");
+      response.setStatusCode(410);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
+
+   }
+
    @ExceptionHandler(value = RuntimeException.class)
    public ResponseEntity<CustomResponse> runtimeHandler(RuntimeException e)
-   {  
+   {
       e.printStackTrace();
       response.setMessage("Something went wrong,try again later");
       response.setStatusCode(-1);

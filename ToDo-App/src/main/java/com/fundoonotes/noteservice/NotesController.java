@@ -2,15 +2,16 @@ package com.fundoonotes.noteservice;
 
 import java.util.List;
 import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmptyToken;
-import com.fundoonotes.userservice.User;
-import com.fundoonotes.userservice.UserController;
 import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
@@ -89,10 +88,12 @@ public class NotesController
     * @param noteId
     * @return ResponseEntity with HTTP status and message.
     */
-   @DeleteMapping(value = "deletenotes/{noteId}")
-   public ResponseEntity<CustomResponse> notesDelete(@PathVariable("noteId") int noteId, HttpServletRequest request)
+   @DeleteMapping(value = "deletenotes/{token:.+}")
+   public ResponseEntity<CustomResponse> notesDelete(@PathVariable("noteId") int noteId,HttpServletRequest request)
    {
-      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      System.out.println("In delete controllerr.."+userId);
+      
       notesService.deleteNotes(noteId, userId);
       response.setMessage("Note deleted..");
       response.setStatusCode(200);
@@ -139,6 +140,8 @@ public class NotesController
          return new ResponseEntity<List<Notes>>(notes, HttpStatus.OK);
       }
       else {
+         response.setMessage("No content  available of notes..");
+         response.setStatusCode(204);
          return new ResponseEntity<List<Notes>>(notes, HttpStatus.NO_CONTENT);
       }
 

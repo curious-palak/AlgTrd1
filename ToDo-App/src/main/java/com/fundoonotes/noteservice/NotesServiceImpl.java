@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fundoonotes.exception.UnAuthorizedAccess;
 import com.fundoonotes.userservice.IUserDao;
 import com.fundoonotes.userservice.User;
 
@@ -44,15 +46,21 @@ public class NotesServiceImpl implements INotesService
    @Override
    public void deleteNotes(int noteId, int userId)
    {
-     //Notes notes = notesDao.getNotesById(noteId);
+      System.out.println("In delete service..");
+      User user=userDao.getUserById(userId);
+      
+      Notes note=notesDao.getNoteById(noteId);
+      if(user.getUserId()!=note.getUser().getUserId()) {
+         throw new UnAuthorizedAccess();
+      }
       notesDao.deleteNotes(noteId);
    }
-
+   
    @Transactional
    @Override
    public void updateNotes(int noteId, Notes notes, int userId)
    {
-      // System.out.println(noteId);
+      //System.out.println(noteId);
       notesDao.updateNotes(noteId, notes);
    }
 
@@ -60,8 +68,10 @@ public class NotesServiceImpl implements INotesService
    @Override
    public List<Notes> getNotes(int id)
    {
-      User user=userDao.getUserById(id);
-     return notesDao.getNotes(user);
+      User user = new User();
+      user.setUserId(id);
+      //userDao.getUserById(id);
+      return notesDao.getNotes(user);
    }
-   
+
 }

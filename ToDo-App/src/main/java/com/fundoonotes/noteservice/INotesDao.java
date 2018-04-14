@@ -22,6 +22,10 @@ public interface INotesDao {
 	//Notes getNotesById(int noteId);
 
 	List<Notes> getNotes(User user);
+
+   Notes getNote(int id);
+
+   Notes getNoteById(int noteId);
    
    //List<Notes> getNotesById(User user);
 }

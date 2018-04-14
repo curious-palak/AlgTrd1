@@ -20,7 +20,7 @@ public class JwtTokenUtility
       Date startDate = new Date(currentTime);
 
       /*Token active One hour from now*/
-      Date expireDate = new Date(currentTime + 60 * 60 * 1000);
+      Date expireDate = new Date(currentTime + 24 * 60 * 60 * 1000);
 
       /*Let's set the JWT Claim*/
       JwtBuilder builder = Jwts.builder().setId(Integer.toString(id)).signWith(signatureAlgorithm, key)

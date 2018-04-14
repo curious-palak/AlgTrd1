@@ -54,7 +54,6 @@ public class UserDaoImpl implements IUserDao
    @Override
    public User fetchUser(User user)
    {
-
       session = sessionFactory.getCurrentSession();
       Criteria criteria = session.createCriteria(User.class);
       Criterion emailFetch = Restrictions.eq("email", user.getEmail());
