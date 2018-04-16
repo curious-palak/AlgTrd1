@@ -37,7 +37,7 @@ public class NotesDaoImpl implements INotesDao
       session.save(notes);
       return true;
    }
-
+   
    @Override
    public boolean deleteNotes(int noteId)
    {
@@ -59,15 +59,16 @@ public class NotesDaoImpl implements INotesDao
    public boolean updateNotes(int noteId, Notes notes)
    {
       session = sessionFactory.openSession();
-      try {
-         String updateNotes = "update Notes set title= :title where noteId= :noteId";
-         Query query = session.createQuery(updateNotes);
-         query.setParameter("noteId", noteId);
 
+      try {
+         String updateNotes = "update Notes set title= :title, inTrash=:inTrash where noteId= :noteId";
+         Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
-         /*
-          * System.out.println(noteId); System.out.println(notes.getTitle());
-          */
+         query.setParameter("inTrash", notes.getInTrash());
+         query.setParameter("noteId", noteId);
+         
+         System.out.println(notes.getTitle()+"....."+notes.getDescription()+"....."+notes.getInTrash());
+          
          query.executeUpdate();
 
       } catch (Exception e) {
@@ -93,7 +94,6 @@ public class NotesDaoImpl implements INotesDao
    public Notes getNote(int id)
    {
       session = sessionFactory.getCurrentSession();
-
       Criteria criteria = session.createCriteria(Notes.class);
       criteria.add(Restrictions.idEq(id));
       Notes notes = (Notes) criteria.uniqueResult();
@@ -105,6 +105,6 @@ public class NotesDaoImpl implements INotesDao
    {
       System.out.println("In delete Dao...");
       return (Notes) sessionFactory.getCurrentSession().get(Notes.class, noteId);
-     
+
    }
 }

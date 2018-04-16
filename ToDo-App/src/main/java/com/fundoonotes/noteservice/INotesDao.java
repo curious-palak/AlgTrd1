@@ -15,7 +15,7 @@ public interface INotesDao {
 
 	boolean createNotes(Notes notes);
 	
-	boolean deleteNotes(int noteId);
+	//boolean deleteNotes(Notes noteId);
 	
 	boolean updateNotes(int noteId,Notes notes);
 
@@ -26,6 +26,8 @@ public interface INotesDao {
    Notes getNote(int id);
 
    Notes getNoteById(int noteId);
+
+   boolean deleteNotes(int noteId);
    
    //List<Notes> getNotesById(User user);
 }

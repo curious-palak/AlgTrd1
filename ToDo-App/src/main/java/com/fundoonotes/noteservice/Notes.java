@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoonotes.userservice.User;
 
 @Entity
@@ -33,9 +34,25 @@ public class Notes {
 	private Date date;
 	
 	@Column
-	private boolean trash;
+	private Boolean inTrash;
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.DETACH)
+	@Column
+	private boolean isPin;
+	
+	@Column
+	private boolean isArchive;
+
+   public Boolean getInTrash()
+   {
+      return inTrash;
+   }
+
+   public void setInTrash(Boolean inTrash)
+   {
+      this.inTrash = inTrash;
+   }
+
+   @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
 	@JoinColumn(name="userId")
 	private User user;
 
@@ -79,13 +96,23 @@ public class Notes {
 		this.user = user;
 	}
 
-   public boolean isTrash()
+   public boolean isPin()
    {
-      return trash;
+      return isPin;
    }
 
-   public void setTrash(boolean trash)
+   public void setPin(boolean isPin)
    {
-      this.trash = trash;
+      this.isPin = isPin;
+   }
+
+   public boolean isArchive()
+   {
+      return isArchive;
+   }
+
+   public void setArchive(boolean isArchive)
+   {
+      this.isArchive = isArchive;
    }
 }
