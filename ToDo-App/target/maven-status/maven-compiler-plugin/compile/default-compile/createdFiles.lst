@@ -9,6 +9,7 @@ com/fundoonotes/utility/CorsFilter.class
 com/fundoonotes/utility/RegistrationValidation.class
 com/fundoonotes/userservice/IUserService.class
 com/fundoonotes/exception/InvalidCredentialsException.class
+com/fundoonotes/exception/UnAuthorizedAccess.class
 com/fundoonotes/exception/DatabaseException.class
 com/fundoonotes/userservice/IUserDao.class
 com/fundoonotes/exception/RegistrationValidationException.class

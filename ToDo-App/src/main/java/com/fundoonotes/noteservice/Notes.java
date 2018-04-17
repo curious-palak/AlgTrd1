@@ -34,25 +34,15 @@ public class Notes {
 	private Date date;
 	
 	@Column
-	private Boolean inTrash;
+	private Boolean inTrash=false;
 	
 	@Column
-	private boolean isPin;
+	private Boolean isPin;
 	
 	@Column
-	private boolean isArchive;
+	private Boolean isArchive=false;
 
-   public Boolean getInTrash()
-   {
-      return inTrash;
-   }
-
-   public void setInTrash(Boolean inTrash)
-   {
-      this.inTrash = inTrash;
-   }
-
-   @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
+   @ManyToOne(cascade=CascadeType.DETACH)
 	@JoinColumn(name="userId")
 	private User user;
 
@@ -95,23 +85,32 @@ public class Notes {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public Boolean getInTrash()
+   {
+      return inTrash;
+   }
 
-   public boolean isPin()
+   public void setInTrash(Boolean inTrash)
+   {
+      this.inTrash = inTrash;
+   }
+
+   public Boolean getIsPin()
    {
       return isPin;
    }
 
-   public void setPin(boolean isPin)
+   public void setIsPin(Boolean isPin)
    {
       this.isPin = isPin;
    }
 
-   public boolean isArchive()
+   public Boolean getIsArchive()
    {
       return isArchive;
    }
 
-   public void setArchive(boolean isArchive)
+   public void setIsArchive(Boolean isArchive)
    {
       this.isArchive = isArchive;
    }

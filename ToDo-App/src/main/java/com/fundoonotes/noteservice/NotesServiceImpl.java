@@ -39,6 +39,7 @@ public class NotesServiceImpl implements INotesService
       User user = new User();
       user.setUserId(userId);
       notes.setUser(user);
+      System.out.println("Notes->>"+notes.getInTrash()+".."+notes.getTitle()+".."+notes.getDescription());
       notesDao.createNotes(notes);
    }
 
@@ -62,7 +63,7 @@ public class NotesServiceImpl implements INotesService
    @Override
    public void updateNotes(int noteId, Notes notes, int userId)
    {
-      //System.out.println(noteId);
+      System.out.println(noteId);
       notesDao.updateNotes(noteId, notes);
    }
 

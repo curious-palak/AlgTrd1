@@ -24,3 +24,4 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/RegistrationValidation.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/CustomResponse.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/User.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/UnAuthorizedAccess.java

@@ -32,8 +32,7 @@ public class NotesDaoImpl implements INotesDao
    @Override
    public boolean createNotes(Notes notes)
    {
-
-      session = sessionFactory.openSession();
+      session = sessionFactory.getCurrentSession();
       session.save(notes);
       return true;
    }
@@ -42,7 +41,7 @@ public class NotesDaoImpl implements INotesDao
    public boolean deleteNotes(int noteId)
    {
 
-      session = sessionFactory.openSession();
+      session = sessionFactory.getCurrentSession();
       try {
          String deleteNote = "delete from Notes where noteId=:noteId";
          Query query = session.createQuery(deleteNote);
@@ -58,16 +57,17 @@ public class NotesDaoImpl implements INotesDao
    @Override
    public boolean updateNotes(int noteId, Notes notes)
    {
-      session = sessionFactory.openSession();
+      session = sessionFactory.getCurrentSession();
 
       try {
-         String updateNotes = "update Notes set title= :title, inTrash=:inTrash where noteId= :noteId";
+         String updateNotes = "update Notes set title= :title, inTrash=:inTrash, isArchive=:isArchive where noteId= :noteId";
          Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
          query.setParameter("inTrash", notes.getInTrash());
          query.setParameter("noteId", noteId);
+         query.setParameter("isArchive", notes.getIsArchive());
          
-         System.out.println(notes.getTitle()+"....."+notes.getDescription()+"....."+notes.getInTrash());
+         System.out.println(notes.getTitle()+"....."+notes.getDescription()+"....."+notes.getInTrash()+"..."+notes.getIsArchive());
           
          query.executeUpdate();
 
