@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -87,14 +88,13 @@ public class NotesController
     * @return ResponseEntity with HTTP status and message.
     */
 
-   @PostMapping(value = "deletenotes",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "deletenotes")
    public ResponseEntity<CustomResponse> notesDelete(@RequestBody Notes note,HttpServletRequest request)
    {
-      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      System.out.println("In delete controllerr.."+userId);
+      int id=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      System.out.println("In delete controllerr.."+id);
       
-      int noteId=note.getnoteId();
-      notesService.deleteNotes(noteId, userId);
+      notesService.deleteNotes(note, id);
       response.setMessage("Note deleted..");
       response.setStatusCode(200);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);

@@ -37,7 +37,7 @@ public class Notes {
 	private Boolean inTrash=false;
 	
 	@Column
-	private Boolean isPin;
+	private Boolean isPin=false;
 	
 	@Column
 	private Boolean isArchive=false;

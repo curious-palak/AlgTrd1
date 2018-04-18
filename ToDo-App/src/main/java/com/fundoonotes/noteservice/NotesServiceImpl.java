@@ -45,19 +45,17 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public void deleteNotes(int noteId, int userId)
+   public boolean deleteNotes(Notes note, int userId)
    {
       System.out.println("In delete service..");
-      User user=userDao.getUserById(userId);
       
-      Notes note=notesDao.getNoteById(noteId);
-      if(user.getUserId()!=note.getUser().getUserId()) {
-         throw new UnAuthorizedAccess();
+      //Notes note=notesDao.getNoteById(noteId);
+      if(userId == note.getUser().getUserId()) {
+        return notesDao.deleteNotes(note.getnoteId());
       }
-      notesDao.deleteNotes(noteId);
+      return false;
    }
-  
-
+ 
    
    @Transactional
    @Override

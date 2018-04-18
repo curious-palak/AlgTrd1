@@ -20,5 +20,5 @@ public interface INotesService
 
    void updateNotes(int noteId, Notes notes, int userId);
 
-   void deleteNotes(int noteId, int userId);
+   boolean deleteNotes(Notes note, int id);
 }
