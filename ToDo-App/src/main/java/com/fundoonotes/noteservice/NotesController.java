@@ -91,7 +91,8 @@ public class NotesController
    @PostMapping(value = "deletenotes")
    public ResponseEntity<CustomResponse> notesDelete(@RequestBody Notes note,HttpServletRequest request)
    {
-      int id=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      
       System.out.println("In delete controllerr.."+id);
       
       notesService.deleteNotes(note, id);

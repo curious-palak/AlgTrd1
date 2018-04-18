@@ -60,15 +60,16 @@ public class NotesDaoImpl implements INotesDao
       session = sessionFactory.getCurrentSession();
 
       try {
-         String updateNotes = "update Notes set title= :title, inTrash=:inTrash, isArchive=:isArchive, isPin=:isPin where noteId= :noteId";
+         String updateNotes = "update Notes set title= :title, inTrash=:inTrash, isArchive=:isArchive, isPin=:isPin,color=:color where noteId= :noteId";
          Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
          query.setParameter("inTrash", notes.getInTrash());
          query.setParameter("noteId", noteId);
          query.setParameter("isArchive", notes.getIsArchive());
          query.setParameter("isPin", notes.getIsPin());
+         query.setParameter("color", notes.getColor());
          
-         System.out.println("Title->>"+notes.getTitle()+"Desc.->>"+notes.getDescription()+"In Trash->>"+notes.getInTrash()+"IsArchiev->>"+notes.getIsArchive()+"IsPin->>"+notes.getIsPin());
+         System.out.println("Title->>"+notes.getTitle()+"Desc.->>"+notes.getDescription()+"In Trash->>"+notes.getInTrash()+"IsArchiev->>"+notes.getIsArchive()+"IsPin->>"+notes.getIsPin()+"color->>"+notes.getColor());
           
          query.executeUpdate();
 

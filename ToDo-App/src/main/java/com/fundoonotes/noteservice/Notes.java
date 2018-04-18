@@ -41,6 +41,9 @@ public class Notes {
 	
 	@Column
 	private Boolean isArchive=false;
+	
+	@Column
+	private String color;
 
    @ManyToOne(cascade=CascadeType.DETACH)
 	@JoinColumn(name="userId")
@@ -113,5 +116,15 @@ public class Notes {
    public void setIsArchive(Boolean isArchive)
    {
       this.isArchive = isArchive;
+   }
+
+   public String getColor()
+   {
+      return color;
+   }
+
+   public void setColor(String color)
+   {
+      this.color = color;
    }
 }

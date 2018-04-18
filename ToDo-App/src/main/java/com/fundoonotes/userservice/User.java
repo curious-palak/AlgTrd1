@@ -53,9 +53,6 @@ public class User
    @Column
    private boolean status;
 
-   @Column
-   private String randomUUId;
-   
    /*@JsonIgnore
    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
    private Set<Notes> notes;*/
@@ -141,16 +138,6 @@ public class User
    public void setStatus(boolean status)
    {
       this.status = status;
-   }
-
-   public String getRandomUUId()
-   {
-      return randomUUId;
-   }
-
-   public void setRandomUUId(String randomUUId)
-   {
-      this.randomUUId = randomUUId;
    }
 
 }
