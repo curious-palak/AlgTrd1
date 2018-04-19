@@ -1,20 +1,17 @@
 package com.fundoonotes.noteservice;
+import com.fundoonotes.userservice.User;
 
 import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fundoonotes.userservice.User;
 
 @Entity
 @Table(name = "ToDoNotes")
@@ -44,6 +41,9 @@ public class Notes {
 	
 	@Column
 	private String color;
+	
+	@Column
+	private Date reminder;
 
    @ManyToOne(cascade=CascadeType.DETACH)
 	@JoinColumn(name="userId")
@@ -126,5 +126,15 @@ public class Notes {
    public void setColor(String color)
    {
       this.color = color;
+   }
+
+   public Date getReminder()
+   {
+      return reminder;
+   }
+
+   public void setReminder(Date reminder)
+   {
+      this.reminder = reminder;
    }
 }

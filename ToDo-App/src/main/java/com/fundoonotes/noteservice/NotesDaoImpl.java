@@ -60,7 +60,10 @@ public class NotesDaoImpl implements INotesDao
       session = sessionFactory.getCurrentSession();
 
       try {
-         String updateNotes = "update Notes set title= :title, inTrash=:inTrash, isArchive=:isArchive, isPin=:isPin,color=:color where noteId= :noteId";
+         String updateNotes = "update Notes set title= :title, inTrash=:inTrash, "
+                                + "isArchive=:isArchive, isPin=:isPin,color=:color,"
+                                + " reminder=:reminder where noteId= :noteId";
+         
          Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
          query.setParameter("inTrash", notes.getInTrash());
@@ -68,8 +71,11 @@ public class NotesDaoImpl implements INotesDao
          query.setParameter("isArchive", notes.getIsArchive());
          query.setParameter("isPin", notes.getIsPin());
          query.setParameter("color", notes.getColor());
+         query.setParameter("reminder", notes.getReminder());
          
-         System.out.println("Title->>"+notes.getTitle()+"Desc.->>"+notes.getDescription()+"In Trash->>"+notes.getInTrash()+"IsArchiev->>"+notes.getIsArchive()+"IsPin->>"+notes.getIsPin()+"color->>"+notes.getColor());
+         System.out.println("Title->>"+notes.getTitle()+"Desc.->>"+notes.getDescription()
+                            +"In Trash->>"+notes.getInTrash()+"IsArchiev->>"+notes.getIsArchive()
+                            +"IsPin->>"+notes.getIsPin()+"color->>"+notes.getColor()+"reminder->>"+notes.getReminder());
           
          query.executeUpdate();
 
