@@ -75,4 +75,26 @@ public class NotesServiceImpl implements INotesService
       return notesDao.getNotes(user);
    }
 
+   @Transactional
+   @Override
+   public void createLabel(Label label,int userId)
+   {
+      System.out.println("In label service..");
+      User user = new User();
+      user.setUserId(userId);
+      label.setUser(user);
+    
+      System.out.println("labels->>"+user.getUserId()+" "+label.getLabelTitle());
+      notesDao.createLabel(label); 
+   }
+
+   @Transactional
+   @Override
+   public List<Label> getLabel(int userId)
+   {
+      User user = new User();
+      user.setUserId(userId);
+     
+      return notesDao.getLabel(user);
+   }
 }

@@ -28,6 +28,10 @@ public interface INotesDao {
    Notes getNoteById(int noteId);
 
    boolean deleteNotes(int noteId);
+
+   void createLabel(Label label);
+
+   List<Label> getLabel(User user);
    
    //List<Notes> getNotesById(User user);
 }

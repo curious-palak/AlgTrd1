@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,7 @@ import com.fundoonotes.exception.EmptyToken;
 import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
+ * ii
  * <p>
  * This is a Rest Controller for Notes With
  * {@link RestController @RestController}, we have added all general purpose
@@ -89,19 +91,18 @@ public class NotesController
     */
 
    @PostMapping(value = "deletenotes")
-   public ResponseEntity<CustomResponse> notesDelete(@RequestBody Notes note,HttpServletRequest request)
+   public ResponseEntity<CustomResponse> notesDelete(@RequestBody Notes note, HttpServletRequest request)
    {
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      
-      System.out.println("In delete controllerr.."+id);
-      
+
+      System.out.println("In delete controllerr.." + id);
+
       notesService.deleteNotes(note, id);
       response.setMessage("Note deleted..");
       response.setStatusCode(200);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
-   
    /**
     * This rest API is for Updating notes by note Id
     * {@link RequestMapping @RequestMapping} to mapped rest address.
@@ -111,12 +112,11 @@ public class NotesController
     * @return ResponseEntity with HTTP status and message.
     */
    @RequestMapping(value = "updatenotes", method = RequestMethod.PUT)
-   public ResponseEntity<?> notesUpdate(@RequestBody Notes notes,
-         HttpServletRequest request)
+   public ResponseEntity<?> notesUpdate(@RequestBody Notes notes, HttpServletRequest request)
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      int noteId=notes.getnoteId();
-      
+      int noteId = notes.getnoteId();
+
       notesService.updateNotes(noteId, notes, userId);
       response.setMessage("Notes updated successfully.");
       response.setStatusCode(200);
@@ -146,6 +146,45 @@ public class NotesController
          response.setStatusCode(204);
          return new ResponseEntity<List<Notes>>(notes, HttpStatus.NO_CONTENT);
       }
-
    }
+
+   /* APIs for Label Controller.. */
+   @PostMapping(value = "createlabel")
+   public ResponseEntity<CustomResponse> createLabel(@RequestBody Label label, HttpServletRequest request)
+   {
+
+      System.out.println("In label Controller..");
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
+      if (request.getHeader("Authorization").isEmpty()) {
+         throw new EmptyToken();
+      }
+
+      notesService.createLabel(label,userId);
+      response.setMessage("LAbel Created Successfully..");
+      response.setStatusCode(100);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.ACCEPTED);
+   }
+   
+   @RequestMapping(value = "getlabels", method = RequestMethod.GET)
+   public ResponseEntity<List<Label>> getLabels(HttpServletRequest request)
+   {
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      System.out.println("token->>" + request.getHeader("Authorization"));
+
+      List<Label> labels = notesService.getLabel(userId);
+
+      if (labels.size() != 0) {
+         for (int i = 0; i < labels.size(); i++) {
+            System.out.println(labels.get(i).getLabelTitle());
+         }
+            
+         return new ResponseEntity<List<Label>>(labels, HttpStatus.OK);
+      } else {
+         response.setMessage("No labels available..");
+         response.setStatusCode(204);
+         return new ResponseEntity<List<Label>>(labels, HttpStatus.NO_CONTENT);
+      }
+   }
+   
 }

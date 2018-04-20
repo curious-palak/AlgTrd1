@@ -2,14 +2,18 @@ package com.fundoonotes.noteservice;
 import com.fundoonotes.userservice.User;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -48,7 +52,11 @@ public class Notes {
    @ManyToOne(cascade=CascadeType.DETACH)
 	@JoinColumn(name="userId")
 	private User user;
-
+   
+  /* @ManyToMany(targetEntity = Notes.class)
+   @JoinTable(name="Label", joinColumns=@JoinColumn(name="noteId"), inverseJoinColumns=@JoinColumn(name="labelId"))
+   private Set<Label> label;*/
+   
 	public int getnoteId() {
 		return noteId;
 	}

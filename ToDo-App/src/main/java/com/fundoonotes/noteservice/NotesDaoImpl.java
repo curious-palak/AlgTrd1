@@ -73,9 +73,9 @@ public class NotesDaoImpl implements INotesDao
          query.setParameter("color", notes.getColor());
          query.setParameter("reminder", notes.getReminder());
          
-         System.out.println("Title->>"+notes.getTitle()+"Desc.->>"+notes.getDescription()
-                            +"In Trash->>"+notes.getInTrash()+"IsArchiev->>"+notes.getIsArchive()
-                            +"IsPin->>"+notes.getIsPin()+"color->>"+notes.getColor()+"reminder->>"+notes.getReminder());
+         System.out.println("Title->>"+notes.getTitle()+".."+"Desc.->>"+notes.getDescription()+".."
+                            +"In Trash->>"+notes.getInTrash()+".."+"IsArchiev->>"+notes.getIsArchive()+".."
+                            +"IsPin->>"+notes.getIsPin()+".."+"color->>"+notes.getColor()+".."+"reminder->>"+notes.getReminder()+"..");
           
          query.executeUpdate();
 
@@ -114,5 +114,27 @@ public class NotesDaoImpl implements INotesDao
       System.out.println("In delete Dao...");
       return (Notes) sessionFactory.getCurrentSession().get(Notes.class, noteId);
 
+   }
+
+   @Override
+   public void createLabel(Label label)
+   {
+     System.out.println("In label dao..");
+     session= sessionFactory.getCurrentSession();
+     session.save(label);
+   
+   }
+
+   @Override
+   public List<Label> getLabel(User user)
+   {
+      session = sessionFactory.getCurrentSession();
+
+      Criteria criteria = session.createCriteria(Label.class);
+      criteria.createAlias("user", "u", JoinType.INNER_JOIN);
+      criteria.add(Restrictions.eq("u.userId", user.getUserId())).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+      List<Label> label = criteria.list();
+      return label;
    }
 }
