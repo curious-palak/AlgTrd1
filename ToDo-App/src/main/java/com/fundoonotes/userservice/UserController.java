@@ -185,7 +185,7 @@ public class UserController
     * @return Response Entity with HTTP status and our custom message.
     */
 
-   @RequestMapping(value = "/resetpassword/{token:.+}", method = RequestMethod.POST)
+   @RequestMapping(value = "/validateforresetpassword/{token:.+}", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> resetPassword(@PathVariable("token") String token,
          @RequestBody UserDTO userDto, HttpServletRequest request)
    {
