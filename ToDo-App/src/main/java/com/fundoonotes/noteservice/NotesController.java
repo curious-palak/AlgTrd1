@@ -95,8 +95,6 @@ public class NotesController
    {
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
-      System.out.println("In delete controllerr.." + id);
-
       notesService.deleteNotes(note, id);
       response.setMessage("Note deleted..");
       response.setStatusCode(200);
@@ -149,7 +147,7 @@ public class NotesController
    }
 
    /* APIs for Label Controller.. */
-   @PostMapping(value = "createlabel")
+   @PutMapping(value = "createlabel")
    public ResponseEntity<CustomResponse> createLabel(@RequestBody Label label, HttpServletRequest request)
    {
 
@@ -187,4 +185,29 @@ public class NotesController
       }
    }
    
+   @PostMapping(value="deletelabel")
+   public ResponseEntity<CustomResponse> deleteLabel(@RequestBody Label label, HttpServletRequest request){
+      
+      int id= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      System.out.println("In delete controllerr.." + id);
+      
+      notesService.deleteLabel(label,id);
+      response.setMessage("Label deleted successfully..");
+      response.setStatusCode(100);
+      return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);  
+   }
+   
+   @RequestMapping(value = "updatelabel", method = RequestMethod.PUT)
+   public ResponseEntity<?> updateLabel(@RequestBody Label label, HttpServletRequest request)
+   {
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      int labelId = label.getLabelId();
+
+      notesService.updateLabel(labelId, label, userId);
+      response.setMessage("Notes updated successfully.");
+      response.setStatusCode(200);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+   }
+
+  
 }

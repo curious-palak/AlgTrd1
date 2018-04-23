@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,6 @@ public class NotesServiceImpl implements INotesService
       }
       return false;
    }
- 
    
    @Transactional
    @Override
@@ -95,5 +95,24 @@ public class NotesServiceImpl implements INotesService
       user.setUserId(userId);
      
       return notesDao.getLabel(user);
+   }
+   
+   @Transactional
+   @Override
+   public boolean deleteLabel(Label label, int id)
+   {
+      System.out.println("In delete LAbel service...");
+     if(id == label.getUser().getUserId()) {
+        return notesDao.deleteLabel(label.getLabelId());
+     }
+     return false;
+   }
+
+   @Transactional
+   @Override
+   public void updateLabel(int labelId, Label label, int userId)
+   {
+      System.out.println(labelId);
+      notesDao.updateLabel(labelId, label);
    }
 }

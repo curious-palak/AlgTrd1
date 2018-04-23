@@ -7,6 +7,15 @@ public class LabelDto
    private int labelId;
    private String labelTitle;
    private User user;
+   
+   public int getLabelId()
+   {
+      return labelId;
+   }
+   public void setLabelId(int labelId)
+   {
+      this.labelId = labelId;
+   }
    public String getLabelTitle()
    {
       return labelTitle;

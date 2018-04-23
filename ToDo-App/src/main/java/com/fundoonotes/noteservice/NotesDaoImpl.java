@@ -137,4 +137,25 @@ public class NotesDaoImpl implements INotesDao
       List<Label> label = criteria.list();
       return label;
    }
+   
+   @Override
+   public boolean deleteLabel(int labelId)
+   {
+      session= sessionFactory.getCurrentSession();
+      String deleteNote="delete from Label where labelId=:labelId";
+      Query query= session.createQuery(deleteNote);
+      query.setParameter("labelId", labelId);
+      query.executeUpdate();
+      return true;
+   }
+
+   @Override
+   public void updateLabel(int labelId, Label label)
+   {
+     session= sessionFactory.getCurrentSession();
+     String updateLabel = "update Label set labelTitle= :labelTitle";
+     Query query=session.createQuery(updateLabel);
+     query.setParameter("labelTitle", label.getLabelTitle());
+     query.executeUpdate();
+   }
 }

@@ -30,13 +30,22 @@ public class Label
    @Column
    private String labelTitle;
    
-   @JsonIgnore
    @ManyToOne(cascade=CascadeType.DETACH)
    @JoinColumn(name="userId")
    private User user;
    
    /*@ManyToMany(mappedBy = "label")
    private Set<Notes> note;*/
+
+   public int getLabelId()
+   {
+      return labelId;
+   }
+
+   public void setLabelId(int labelId)
+   {
+      this.labelId = labelId;
+   }
 
    public String getLabelTitle()
    {
@@ -57,15 +66,4 @@ public class Label
    {
       this.user = user;
    }
-
-   /* public Set<Notes> getNote()
-   {
-      return note;
-   }
-
-   public void setNote(Set<Notes> note)
-   {
-      this.note = note;
-   }*/
-
 }

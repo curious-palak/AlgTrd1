@@ -12,6 +12,7 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/EmailAlreadyExistsException.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/GlobalExceptionHandler.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/SendEmail.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Label.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/EmailIdNotExists.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Notes.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/UserController.java
@@ -24,4 +25,5 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/RegistrationValidation.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/CustomResponse.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/User.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/LabelDto.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/UnAuthorizedAccess.java

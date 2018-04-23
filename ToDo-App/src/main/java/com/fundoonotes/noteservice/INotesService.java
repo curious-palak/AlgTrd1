@@ -49,4 +49,13 @@ public interface INotesService
     * @return
     */
    List<Label> getLabel(int userId);
+
+   /**For deleting label
+    * @param label
+    * @param id
+    * @return 
+    */
+   boolean deleteLabel(Label label, int id);
+
+   void updateLabel(int labelId, Label label, int userId);
 }
