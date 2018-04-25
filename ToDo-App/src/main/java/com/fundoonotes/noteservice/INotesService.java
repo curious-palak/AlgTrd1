@@ -16,27 +16,27 @@ public interface INotesService
     * @param notes
     * @param userId
     */
-   void createNote(Notes notes, int userId);
+   void createNote(Note notes, int userId);
    
    /**For fetching the notes
     * @param id
     * @return
     */
-   List<Notes> getNotes(int id);
+   List<Note> getNotes(int id);
 
    /**For updating the notes
     * @param noteId
     * @param notes
     * @param userId
     */
-   void updateNotes(int noteId, Notes notes, int userId);
+   void updateNotes(int noteId, Note notes, int userId);
 
    /**For deleting the notes
     * @param note
     * @param id
     * @return
     */
-   boolean deleteNotes(Notes note, int id);
+   boolean deleteNotes(Note note, int id);
 
    /**For creating notes labels
     * @param label
@@ -57,5 +57,19 @@ public interface INotesService
     */
    boolean deleteLabel(Label label, int id);
 
+   /**For updating label
+    * @param labelId
+    * @param label
+    * @param userId
+    */
    void updateLabel(int labelId, Label label, int userId);
+
+   
+   /**For adding note on label
+    * @param noteId
+    * @param labelId
+    */
+   void addLabelOnNote(int noteId, int labelId);
+
+   boolean deleteLabelOnNote(int noteId, int labelId);
 }

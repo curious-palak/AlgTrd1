@@ -1,4 +1,5 @@
 package com.fundoonotes.noteservice;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoonotes.userservice.User;
 
 import java.util.Date;
@@ -19,7 +20,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ToDoNotes")
-public class Notes {
+public class Note {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,9 +54,10 @@ public class Notes {
 	@JoinColumn(name="userId")
 	private User user;
    
-  /* @ManyToMany(targetEntity = Notes.class)
+   @JsonIgnore
+   @ManyToMany(targetEntity = Note.class)
    @JoinTable(name="Label", joinColumns=@JoinColumn(name="noteId"), inverseJoinColumns=@JoinColumn(name="labelId"))
-   private Set<Label> label;*/
+   private Set<Label> label;
    
 	public int getnoteId() {
 		return noteId;
@@ -144,5 +146,15 @@ public class Notes {
    public void setReminder(Date reminder)
    {
       this.reminder = reminder;
+   }
+
+   public Set<Label> getLabel()
+   {
+      return label;
+   }
+
+   public void setLabel(Set<Label> label)
+   {
+      this.label = label;
    }
 }

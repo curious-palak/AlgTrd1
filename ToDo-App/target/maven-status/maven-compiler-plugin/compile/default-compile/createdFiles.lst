@@ -1,5 +1,6 @@
 com/fundoonotes/noteservice/NotesController.class
 com/fundoonotes/noteservice/INotesService.class
+com/fundoonotes/noteservice/Note.class
 com/fundoonotes/userservice/UserDTO.class
 com/fundoonotes/exception/CustomResponse.class
 com/fundoonotes/userservice/UserController.class
@@ -15,7 +16,6 @@ com/fundoonotes/noteservice/Label.class
 com/fundoonotes/exception/DatabaseException.class
 com/fundoonotes/userservice/IUserDao.class
 com/fundoonotes/exception/RegistrationValidationException.class
-com/fundoonotes/noteservice/Notes.class
 com/fundoonotes/userservice/User.class
 com/fundoonotes/exception/GlobalExceptionHandler.class
 com/fundoonotes/exception/EmptyToken.class

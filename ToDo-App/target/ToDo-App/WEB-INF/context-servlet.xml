@@ -36,7 +36,7 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>com.fundoonotes.userservice.User</value>
-				<value>com.fundoonotes.noteservice.Notes</value>
+				<value>com.fundoonotes.noteservice.Note</value>
 				<value>com.fundoonotes.noteservice.Label</value>
 			</list>
 		</property>

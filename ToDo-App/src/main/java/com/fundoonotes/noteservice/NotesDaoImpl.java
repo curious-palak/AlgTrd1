@@ -30,7 +30,7 @@ public class NotesDaoImpl implements INotesDao
    public Session session;
 
    @Override
-   public boolean createNotes(Notes notes)
+   public boolean createNotes(Note notes)
    {
       session = sessionFactory.getCurrentSession();
       session.save(notes);
@@ -43,7 +43,7 @@ public class NotesDaoImpl implements INotesDao
 
       session = sessionFactory.getCurrentSession();
       try {
-         String deleteNote = "delete from Notes where noteId=:noteId";
+         String deleteNote = "delete from Note where noteId=:noteId";
          Query query = session.createQuery(deleteNote);
          query.setParameter("noteId", noteId);
          query.executeUpdate();
@@ -55,13 +55,13 @@ public class NotesDaoImpl implements INotesDao
    }
 
    @Override
-   public boolean updateNotes(int noteId, Notes notes)
+   public boolean updateNotes(int noteId, Note notes)
    {
       session = sessionFactory.getCurrentSession();
 
       try {
-         String updateNotes = "update Notes set title= :title, inTrash=:inTrash, "
-                                + "isArchive=:isArchive, isPin=:isPin,color=:color,"
+         String updateNotes = "update Note set title= :title, inTrash=:inTrash, "
+                                + "isArchive=:isArchive, isPin=:isPin, color=:color,"
                                 + " reminder=:reminder where noteId= :noteId";
          
          Query query = session.createQuery(updateNotes);
@@ -72,10 +72,12 @@ public class NotesDaoImpl implements INotesDao
          query.setParameter("isPin", notes.getIsPin());
          query.setParameter("color", notes.getColor());
          query.setParameter("reminder", notes.getReminder());
+         /*query.setParameter("label", notes.getLabel());*/   
          
          System.out.println("Title->>"+notes.getTitle()+".."+"Desc.->>"+notes.getDescription()+".."
                             +"In Trash->>"+notes.getInTrash()+".."+"IsArchiev->>"+notes.getIsArchive()+".."
-                            +"IsPin->>"+notes.getIsPin()+".."+"color->>"+notes.getColor()+".."+"reminder->>"+notes.getReminder()+"..");
+                            +"IsPin->>"+notes.getIsPin()+".."+"color->>"+notes.getColor()+".."+
+                            "reminder->>"+notes.getReminder()+"..");
           
          query.executeUpdate();
 
@@ -86,34 +88,33 @@ public class NotesDaoImpl implements INotesDao
    }
 
    @Override
-   public List<Notes> getNotes(User user)
+   public List<Note> getNotes(User user)
    {
       session = sessionFactory.getCurrentSession();
 
-      Criteria criteria = session.createCriteria(Notes.class);
+      Criteria criteria = session.createCriteria(Note.class);
       criteria.createAlias("user", "u", JoinType.INNER_JOIN);
       criteria.add(Restrictions.eq("u.userId", user.getUserId())).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-      List<Notes> notes = criteria.list();
+      List<Note> notes = criteria.list();
       return notes;
    }
 
    @Override
-   public Notes getNote(int id)
+   public Note getNote(int id)
    {
       session = sessionFactory.getCurrentSession();
-      Criteria criteria = session.createCriteria(Notes.class);
+      Criteria criteria = session.createCriteria(Note.class);
       criteria.add(Restrictions.idEq(id));
-      Notes notes = (Notes) criteria.uniqueResult();
+      Note notes = (Note) criteria.uniqueResult();
       return notes;
    }
 
    @Override
-   public Notes getNoteById(int noteId)
+   public Note getNoteById(int noteId)
    {
       System.out.println("In delete Dao...");
-      return (Notes) sessionFactory.getCurrentSession().get(Notes.class, noteId);
-
+      return (Note) sessionFactory.getCurrentSession().get(Note.class, noteId);
    }
 
    @Override
@@ -157,5 +158,12 @@ public class NotesDaoImpl implements INotesDao
      Query query=session.createQuery(updateLabel);
      query.setParameter("labelTitle", label.getLabelTitle());
      query.executeUpdate();
+   }
+
+   @Override
+   public Label getLabelById(int labelId)
+   {
+      System.out.println("In Label Dao..");
+      return (Label) sessionFactory.getCurrentSession().get(Label.class, labelId);
    }
 }

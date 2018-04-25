@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -64,7 +65,7 @@ public class NotesController
     * @return ResponseEntity with HTTP status and message.
     */
    @PutMapping(value = "createnotes")
-   public ResponseEntity<CustomResponse> notesAdd(@RequestBody Notes notes, HttpServletRequest request)
+   public ResponseEntity<CustomResponse> notesAdd(@RequestBody Note notes, HttpServletRequest request)
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       logger.info("token->>" + request.getHeader("Authorization"));
@@ -91,7 +92,7 @@ public class NotesController
     */
 
    @PostMapping(value = "deletenotes")
-   public ResponseEntity<CustomResponse> notesDelete(@RequestBody Notes note, HttpServletRequest request)
+   public ResponseEntity<CustomResponse> notesDelete(@RequestBody Note note, HttpServletRequest request)
    {
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
@@ -110,7 +111,7 @@ public class NotesController
     * @return ResponseEntity with HTTP status and message.
     */
    @RequestMapping(value = "updatenotes", method = RequestMethod.PUT)
-   public ResponseEntity<?> notesUpdate(@RequestBody Notes notes, HttpServletRequest request)
+   public ResponseEntity<?> notesUpdate(@RequestBody Note notes, HttpServletRequest request)
    {
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       int noteId = notes.getnoteId();
@@ -129,20 +130,20 @@ public class NotesController
     * @return ResponseEntity with HTTP status and message.
     */
    @RequestMapping(value = "getnotes", method = RequestMethod.GET)
-   public ResponseEntity<List<Notes>> getNotes(HttpServletRequest request)
+   public ResponseEntity<List<Note>> getNotes(HttpServletRequest request)
    {
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       System.out.println("token->>" + request.getHeader("Authorization"));
 
-      List<Notes> notes = (List<Notes>) notesService.getNotes(id);
+      List<Note> notes = (List<Note>) notesService.getNotes(id);
 
       if (notes.size() != 0) {
 
-         return new ResponseEntity<List<Notes>>(notes, HttpStatus.OK);
+         return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
       } else {
          response.setMessage("No content  available of notes..");
          response.setStatusCode(204);
-         return new ResponseEntity<List<Notes>>(notes, HttpStatus.NO_CONTENT);
+         return new ResponseEntity<List<Note>>(notes, HttpStatus.NO_CONTENT);
       }
    }
 
@@ -208,6 +209,25 @@ public class NotesController
       response.setStatusCode(200);
       return new ResponseEntity<>(response, HttpStatus.OK);
    }
-
-  
+   
+   @PutMapping(value="/addremovelabel/{noteId}/{labelId}/{status}")
+   public ResponseEntity<CustomResponse> addRemoveLabel(@PathVariable("noteId") int noteId,
+                                                         @PathVariable("labelId") int labelId,
+                                                           @PathVariable("status") boolean status){
+      
+      if(status) {
+         notesService.addLabelOnNote(noteId,labelId);
+         response.setMessage("Added label on notes..");
+         response.setStatusCode(100);
+         return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);
+      }
+      else if(!status) {
+         //deleting label
+         notesService.deleteLabelOnNote(noteId,labelId);
+         response.setMessage("Removed label on notes..");
+         response.setStatusCode(100);
+         return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);
+      }
+      return null;
+   }
 }

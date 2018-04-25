@@ -34,8 +34,9 @@ public class Label
    @JoinColumn(name="userId")
    private User user;
    
-   /*@ManyToMany(mappedBy = "label")
-   private Set<Notes> note;*/
+   @JsonIgnore
+   @ManyToMany(mappedBy = "label")
+   private Set<Note> note;
 
    public int getLabelId()
    {
@@ -65,5 +66,15 @@ public class Label
    public void setUser(User user)
    {
       this.user = user;
+   }
+
+   public Set<Note> getNote()
+   {
+      return note;
+   }
+
+   public void setNote(Set<Note> note)
+   {
+      this.note = note;
    }
 }

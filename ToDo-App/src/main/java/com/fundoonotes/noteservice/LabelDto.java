@@ -1,13 +1,19 @@
 package com.fundoonotes.noteservice;
 
-import com.fundoonotes.userservice.User;
-
 public class LabelDto   
 {  
+   private boolean status;
    private int labelId;
-   private String labelTitle;
-   private User user;
+   private int noteId;
    
+   public boolean isStatus()
+   {
+      return status;
+   }
+   public void setStatus(boolean status)
+   {
+      this.status = status;
+   }
    public int getLabelId()
    {
       return labelId;
@@ -16,20 +22,12 @@ public class LabelDto
    {
       this.labelId = labelId;
    }
-   public String getLabelTitle()
+   public int getNoteId()
    {
-      return labelTitle;
+      return noteId;
    }
-   public void setLabelTitle(String labelTitle)
+   public void setNoteId(int noteId)
    {
-      this.labelTitle = labelTitle;
-   }
-   public User getUser()
-   {
-      return user;
-   }
-   public void setUser(User user)
-   {
-      this.user = user;
+      this.noteId = noteId;
    }
 }

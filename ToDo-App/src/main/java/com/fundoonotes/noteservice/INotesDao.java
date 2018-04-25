@@ -17,7 +17,7 @@ public interface INotesDao {
 	 * @param notes
 	 * @return
 	 */
-	boolean createNotes(Notes notes);
+	boolean createNotes(Note notes);
 	
 	//boolean deleteNotes(Notes noteId);
 	
@@ -26,7 +26,7 @@ public interface INotesDao {
 	 * @param notes
 	 * @return
 	 */
-	boolean updateNotes(int noteId,Notes notes);
+	boolean updateNotes(int noteId,Note notes);
 
 	//Notes getNotesById(int noteId);
 
@@ -34,19 +34,19 @@ public interface INotesDao {
 	 * @param user
 	 * @return
 	 */
-	List<Notes> getNotes(User user);
+	List<Note> getNotes(User user);
 
    /**
     * @param id
     * @return
     */
-   Notes getNote(int id);
+   Note getNote(int id);
 
    /**for fetching notes by Id
     * @param noteId
     * @return
     */
-   Notes getNoteById(int noteId);
+   Note getNoteById(int noteId);
 
    /**For deleting notes by Id
     * @param noteId
@@ -72,6 +72,8 @@ public interface INotesDao {
    boolean deleteLabel(int labelId);
 
    void updateLabel(int labelId, Label label);
+
+   Label getLabelById(int labelId);
    
    //List<Notes> getNotesById(User user);
 }

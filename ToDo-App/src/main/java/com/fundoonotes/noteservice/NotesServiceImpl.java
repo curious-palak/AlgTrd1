@@ -2,6 +2,7 @@ package com.fundoonotes.noteservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -31,7 +32,7 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public void createNote(Notes notes, int userId)
+   public void createNote(Note notes, int userId)
    {
       Date date = new Date();
       notes.setDate(date);
@@ -45,7 +46,7 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public boolean deleteNotes(Notes note, int userId)
+   public boolean deleteNotes(Note note, int userId)
    {
       System.out.println("In delete service..");
       
@@ -58,7 +59,7 @@ public class NotesServiceImpl implements INotesService
    
    @Transactional
    @Override
-   public void updateNotes(int noteId, Notes notes, int userId)
+   public void updateNotes(int noteId, Note notes, int userId)
    {
       System.out.println(noteId);
       notesDao.updateNotes(noteId, notes);
@@ -66,7 +67,7 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public List<Notes> getNotes(int id)
+   public List<Note> getNotes(int id)
    {
       User user = new User();
       user.setUserId(id);
@@ -114,5 +115,25 @@ public class NotesServiceImpl implements INotesService
    {
       System.out.println(labelId);
       notesDao.updateLabel(labelId, label);
+   }
+
+   @Transactional
+   @Override
+   public void addLabelOnNote(int noteId, int labelId)
+   {
+     Note note=notesDao.getNoteById(noteId);
+     Label label=notesDao.getLabelById(labelId);
+     note.getLabel().add(label);
+     notesDao.updateNotes(noteId, note);
+   }
+
+   @Transactional
+   @Override
+   public boolean deleteLabelOnNote(int noteId, int labelId)
+   {
+     System.out.println("In delete label note..");
+     Note note=notesDao.getNoteById(noteId);
+  
+   return false;  
    }
 }

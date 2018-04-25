@@ -14,7 +14,7 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/SendEmail.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Label.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/EmailIdNotExists.java
-/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Notes.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Note.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/UserController.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/INotesDao.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesController.java
