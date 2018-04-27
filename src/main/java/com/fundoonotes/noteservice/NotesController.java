@@ -144,8 +144,17 @@ public class NotesController
          return new ResponseEntity<List<Note>>(notes, HttpStatus.NO_CONTENT);
       }
    }
-
+   
    /* APIs for Label Controller.. */
+   /**
+    *<p>
+    * This rest API for creating labels With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param label
+    * @param request
+    * @return
+    */
    @PutMapping(value = "createlabel")
    public ResponseEntity<CustomResponse> createLabel(@RequestBody Label label, HttpServletRequest request)
    {
