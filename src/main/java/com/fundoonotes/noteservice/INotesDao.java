@@ -76,6 +76,6 @@ public interface INotesDao {
    Label getLabelById(int labelId);
    
    //List<Notes> getNotesById(User user);
-   
-   boolean saveCollaborator(Collaborator collaborator);
+
+   boolean createCollaborator(Collaborator collaborator);
 }

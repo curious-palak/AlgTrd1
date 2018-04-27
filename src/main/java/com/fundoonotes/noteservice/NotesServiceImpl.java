@@ -141,13 +141,14 @@ public class NotesServiceImpl implements INotesService
    @Override
    public void createCollaborator(Collaborator collaborator, int userId)
    {
-
-      System.out.println(collaborator.getOwner()+""+collaborator.getSharedUser());
-     
-      User user = userDao.getUserByEmail(collaborator.getSharedUser().getEmail());
-      System.out.println(user.getEmail() + " " + user.getUserId());
-      collaborator.setSharedUser(user);
+      User user = new User();
+      user.setUserId(userId);
+      collaborator.setOwner(user);
       
-      notesDao.saveCollaborator(collaborator);
+      user = userDao.getUserByEmail(collaborator.getSharedUser().getEmail());
+      System.out.println("Email"+collaborator.getSharedUser());
+      //collaborator.setSharedUser(user);
+      
+      notesDao.createCollaborator(collaborator);
    }
 }

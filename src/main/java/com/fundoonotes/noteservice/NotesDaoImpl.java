@@ -168,7 +168,7 @@ public class NotesDaoImpl implements INotesDao
    }
    
    @Override
-   public boolean saveCollaborator(Collaborator collaborator) {
+   public boolean createCollaborator(Collaborator collaborator) {
       Session session = sessionFactory.getCurrentSession();
       session.save(collaborator);
       return true;

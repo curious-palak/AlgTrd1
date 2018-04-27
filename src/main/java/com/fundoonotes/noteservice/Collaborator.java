@@ -28,7 +28,6 @@ public class Collaborator
    @JoinColumn(name = "sharedUser",unique= true)
    private User sharedUser;
 
-   @JsonIgnore
    @ManyToOne
    @JoinColumn(name="noteId",nullable=false)
    private Note note;

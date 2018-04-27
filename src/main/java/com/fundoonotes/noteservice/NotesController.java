@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmptyToken;
+import com.fundoonotes.userservice.User;
 import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
@@ -242,10 +243,7 @@ public class NotesController
    
    @PutMapping(value = "addCollaborator")
    public ResponseEntity<CustomResponse> createCollaborator(@RequestBody Collaborator collaborator, HttpServletRequest request) {
-
-     System.out.println("Checkkking->"+collaborator.getCollaboratorId()+" "+collaborator.getOwner()+collaborator.getNote());
        
-
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
                logger.info("token->>" + request.getHeader("Authorization"));
          
