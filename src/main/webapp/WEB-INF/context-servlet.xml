@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/mvc 
+   http://www.springframework.org/schema/mvc/spring-mvc.xsd      
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/tx 
+   http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- bean definitions here -->
+	<context:component-scan base-package="com.fundoonotes" />
+	<mvc:annotation-driven />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<context:property-placeholder location="classpath:development.properties" />
+
+	<bean id="myDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+
+	<bean id="mySessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.fundoonotes.userservice.User</value>
+				<value>com.fundoonotes.noteservice.Note</value>
+				<value>com.fundoonotes.noteservice.Label</value>
+				<value>com.fundoonotes.noteservice.Collaborator</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect"> org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory"></property>
+	</bean>
+
+	<bean id="userDao" class="com.fundoonotes.userservice.UserDaoImpl"></bean>
+
+	<bean id="userService" class="com.fundoonotes.userservice.UserServiceImpl"></bean>
+
+	<bean id="registrationValidation" class="com.fundoonotes.utility.RegistrationValidation"></bean>
+
+	<bean id="notesDao" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
+
+	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
+
+	<bean id="corsFilter" class="com.fundoonotes.utility.CorsFilter"></bean>
+
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Not working <mvc:annotation-driven> <mvc:message-converters> <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
+	<property name="objectMapper" ref="myObjectMapper" /> </bean> </mvc:message-converters> 
+	</mvc:annotation-driven> <bean id="myObjectMapper" class="com.fundoonotes.bean.util.MyObjectMapper"></bean> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- SETting default mail properties -->
+<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+	<property name="host" value="smtp.gmail.com" /> <property name="port" value="25"></property> 
+	<property name="username" value="bridgelabzsolutions@gmail.com" /> <property 
+	name="password" value="bridgelabz" /> <property name="javaMailProperties"> 
+	<props> <prop key="mail.transport.protocol">smtp</prop> <prop key="mail.smtp.auth">true</prop> 
+	<prop key="mail.smtp.starttls.enable">true</prop> <prop key="mail.debug">true</prop> 
+	</props> </property> </bean> -->
