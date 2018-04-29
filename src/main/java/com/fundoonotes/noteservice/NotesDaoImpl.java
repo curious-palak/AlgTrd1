@@ -2,6 +2,7 @@ package com.fundoonotes.noteservice;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,9 +170,26 @@ public class NotesDaoImpl implements INotesDao
    
    @Override
    public boolean createCollaborator(Collaborator collaborator) {
-      Session session = sessionFactory.getCurrentSession();
+      session = sessionFactory.getCurrentSession();
       session.save(collaborator);
       return true;
+   }
+
+   @Override
+   public List<User> getCollaborator(Note note) {
+      
+      session = sessionFactory.getCurrentSession();
+      Criteria criteria = session.createCriteria(Collaborator.class);
+      criteria.setProjection(Projections.property("sharedUser")).add(Restrictions.eq("note", note));
+      List<User> collaborator = criteria.list();
+      return collaborator;
+   }
+
+   @Override
+   public void getLabelByNoteId(int getnoteId)
+   {
+     
+      
    }
 
 }

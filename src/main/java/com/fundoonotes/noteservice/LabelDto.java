@@ -1,33 +1,35 @@
 package com.fundoonotes.noteservice;
 
-public class LabelDto   
-{  
-   private boolean status;
+public class LabelDto
+{
+
    private int labelId;
-   private int noteId;
-   
-   public boolean isStatus()
+   private String labelTitle;
+
+   public LabelDto(Label labelObj)
    {
-      return status;
+      this.labelId = labelObj.getLabelId();
+      this.labelTitle = labelObj.getLabelTitle();
    }
-   public void setStatus(boolean status)
+
+   public String getLabelTitle()
    {
-      this.status = status;
+      return labelTitle;
    }
+
+   public void setLabelTitle(String labelTitle)
+   {
+      this.labelTitle = labelTitle;
+   }
+
    public int getLabelId()
    {
       return labelId;
    }
+
    public void setLabelId(int labelId)
    {
       this.labelId = labelId;
    }
-   public int getNoteId()
-   {
-      return noteId;
-   }
-   public void setNoteId(int noteId)
-   {
-      this.noteId = noteId;
-   }
+
 }

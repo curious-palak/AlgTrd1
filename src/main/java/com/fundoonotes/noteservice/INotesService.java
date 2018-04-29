@@ -2,6 +2,8 @@ package com.fundoonotes.noteservice;
 
 import java.util.List;
 
+import com.fundoonotes.userservice.User;
+
 /**
  * Purpose: This is NotesService Interface,contains defined methods, This layer
  * interact with controller.
@@ -22,7 +24,7 @@ public interface INotesService
     * @param id
     * @return
     */
-   List<Note> getNotes(int id);
+   List<NoteDto> getNotes(int id);
 
    /**For updating the notes
     * @param noteId
@@ -73,5 +75,7 @@ public interface INotesService
 
    boolean deleteLabelOnNote(int noteId, int labelId);
 
-   void createCollaborator(Collaborator collaborator, int userId);
+   void createCollaborator(CollaboratorDTO collaboratorDto, int userId);
+
+   List<User> getCollaborator(Note note);
 }

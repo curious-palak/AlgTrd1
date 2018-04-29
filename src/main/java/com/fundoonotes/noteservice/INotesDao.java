@@ -78,4 +78,8 @@ public interface INotesDao {
    //List<Notes> getNotesById(User user);
 
    boolean createCollaborator(Collaborator collaborator);
+
+   List<User> getCollaborator(Note note);
+
+   void getLabelByNoteId(int getnoteId);
 }

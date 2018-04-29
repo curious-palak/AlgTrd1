@@ -38,6 +38,7 @@
 				<value>com.fundoonotes.userservice.User</value>
 				<value>com.fundoonotes.noteservice.Note</value>
 				<value>com.fundoonotes.noteservice.Label</value>
+				<value>com.fundoonotes.noteservice.Collaborator</value>
 			</list>
 		</property>
 

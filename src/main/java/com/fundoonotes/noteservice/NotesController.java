@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -128,30 +129,34 @@ public class NotesController
     * @param noteId
     * @return ResponseEntity with HTTP status and message.
     */
-   @RequestMapping(value = "getnotes", method = RequestMethod.GET)
-   public ResponseEntity<List<Note>> getNotes(HttpServletRequest request)
+   @RequestMapping(value = "getnotes", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<?> getNotes(HttpServletRequest request)
    {
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       System.out.println("token->>" + request.getHeader("Authorization"));
 
-      List<Note> notes = (List<Note>) notesService.getNotes(id);
+      List<NoteDto> noteDto = notesService.getNotes(id);
 
-      if (notes.size() != 0) {
-
-         return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
+      if (noteDto.size() != 0) {
+         
+         response.setMessage("Notes fetched successfully..");
+         response.setStatusCode(200);
+         return new ResponseEntity<List>(noteDto, HttpStatus.OK);
+         
       } else {
          response.setMessage("No content  available of notes..");
          response.setStatusCode(204);
-         return new ResponseEntity<List<Note>>(notes, HttpStatus.NO_CONTENT);
+         return new ResponseEntity(HttpStatus.NO_CONTENT);
       }
    }
-   
+
    /* APIs for Label Controller.. */
    /**
-    *<p>
+    * <p>
     * This rest API for creating labels With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param label
     * @param request
     * @return
@@ -167,12 +172,12 @@ public class NotesController
          throw new EmptyToken();
       }
 
-      notesService.createLabel(label,userId);
+      notesService.createLabel(label, userId);
       response.setMessage("LAbel Created Successfully..");
       response.setStatusCode(100);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.ACCEPTED);
    }
-   
+
    @RequestMapping(value = "getlabels", method = RequestMethod.GET)
    public ResponseEntity<List<Label>> getLabels(HttpServletRequest request)
    {
@@ -185,7 +190,7 @@ public class NotesController
          for (int i = 0; i < labels.size(); i++) {
             System.out.println(labels.get(i).getLabelTitle());
          }
-            
+
          return new ResponseEntity<List<Label>>(labels, HttpStatus.OK);
       } else {
          response.setMessage("No labels available..");
@@ -193,19 +198,20 @@ public class NotesController
          return new ResponseEntity<List<Label>>(labels, HttpStatus.NO_CONTENT);
       }
    }
-   
-   @PostMapping(value="deletelabel")
-   public ResponseEntity<CustomResponse> deleteLabel(@RequestBody Label label, HttpServletRequest request){
-      
-      int id= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
+   @PostMapping(value = "deletelabel")
+   public ResponseEntity<CustomResponse> deleteLabel(@RequestBody Label label, HttpServletRequest request)
+   {
+
+      int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       System.out.println("In delete controllerr.." + id);
-      
-      notesService.deleteLabel(label,id);
+
+      notesService.deleteLabel(label, id);
       response.setMessage("Label deleted successfully..");
       response.setStatusCode(100);
-      return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);  
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
-   
+
    @RequestMapping(value = "updatelabel", method = RequestMethod.PUT)
    public ResponseEntity<?> updateLabel(@RequestBody Label label, HttpServletRequest request)
    {
@@ -217,43 +223,61 @@ public class NotesController
       response.setStatusCode(200);
       return new ResponseEntity<>(response, HttpStatus.OK);
    }
-   
-   @PutMapping(value="/addremovelabel/{noteId}/{labelId}/{status}")
+
+   @PutMapping(value = "/addremovelabel/{noteId}/{labelId}/{status}")
    public ResponseEntity<CustomResponse> addRemoveLabel(@PathVariable("noteId") int noteId,
-                                                         @PathVariable("labelId") int labelId,
-                                                           @PathVariable("status") boolean status){
-      
-      if(status) {
-         notesService.addLabelOnNote(noteId,labelId);
+         @PathVariable("labelId") int labelId, @PathVariable("status") boolean status)
+   {
+
+      if (status) {
+         notesService.addLabelOnNote(noteId, labelId);
          response.setMessage("Added label on notes..");
          response.setStatusCode(100);
-         return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);
-      }
-      else if(!status) {
-         //deleting label
-         notesService.deleteLabelOnNote(noteId,labelId);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+      } else if (!status) {
+         // deleting label
+         notesService.deleteLabelOnNote(noteId, labelId);
          response.setMessage("Removed label on notes..");
          response.setStatusCode(100);
-         return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
       }
       return null;
    }
-   
-    /**Collaborator Api's*/
-   
+
+   /** Collaborator Api's */
+
    @PutMapping(value = "addCollaborator")
-   public ResponseEntity<CustomResponse> createCollaborator(@RequestBody Collaborator collaborator, HttpServletRequest request) {
-       
+   public ResponseEntity<CustomResponse> createCollaborator(@RequestBody CollaboratorDTO collaboratorDto,
+         HttpServletRequest request)
+   {
+
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-               logger.info("token->>" + request.getHeader("Authorization"));
-         
+      logger.info("token->>" + request.getHeader("Authorization"));
+
+      System.out.println("Fetched details->> " + collaboratorDto.getEmail() + ".." + collaboratorDto.getNoteId());
+
       if (request.getHeader("Authorization").isEmpty()) {
-                throw new EmptyToken();
-             }
-      
-      notesService.createCollaborator(collaborator, userId);
+         throw new EmptyToken();
+      }
+
+      notesService.createCollaborator(collaboratorDto, userId);
       response.setMessage("Collaborator added successfully..");
       response.setStatusCode(200);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+   }
+
+   @RequestMapping(value = "getcollaborator", method = RequestMethod.POST)
+   public ResponseEntity<List<User>> getCollaborator(@RequestBody Note note, HttpServletRequest request)
+   {
+
+      List<User> users = notesService.getCollaborator(note);
+      if (users.size() != 0) {
+         for (int i = 0; i < users.size(); i++) {
+            System.out.println(users.get(i).getEmail());
+         }
+         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+      } else {
+         return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+      }
    }
 }

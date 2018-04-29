@@ -1,5 +1,6 @@
 package com.fundoonotes.noteservice;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -67,12 +68,21 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public List<Note> getNotes(int id)
+   public List<NoteDto> getNotes(int id)
    {
-      User user = new User();
-      user.setUserId(id);
-      // userDao.getUserById(id);
-      return notesDao.getNotes(user);
+      User user = userDao.getUserById(id);
+      //user.setUserId(id);
+      
+      List<Note> note=notesDao.getNotes(user);
+      List<NoteDto> noteDto=new ArrayList<NoteDto>();
+      
+      for(Note noteObject: note) {
+  
+         NoteDto noteDtObject=new NoteDto(noteObject);
+         noteDto.add(noteDtObject);
+      }
+      return noteDto;
+      
    }
 
    @Transactional
@@ -139,16 +149,21 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public void createCollaborator(Collaborator collaborator, int userId)
+   public void createCollaborator(CollaboratorDTO collaboratorDto, int userId)
    {
-      User user = new User();
-      user.setUserId(userId);
-      collaborator.setOwner(user);
+    
+      Collaborator collaborator=new Collaborator();
+      collaborator.setOwner(userDao.getUserById(userId));
       
-      user = userDao.getUserByEmail(collaborator.getSharedUser().getEmail());
-      System.out.println("Email"+collaborator.getSharedUser());
-      //collaborator.setSharedUser(user);
+      collaborator.setSharedUser(userDao.getUserByEmail(collaboratorDto.getEmail()));
+      collaborator.setNote(notesDao.getNoteById(collaboratorDto.getNoteId()));
       
       notesDao.createCollaborator(collaborator);
+   }
+
+   @Transactional
+   @Override
+   public List<User> getCollaborator(Note note) {
+      return notesDao.getCollaborator(note);
    }
 }
