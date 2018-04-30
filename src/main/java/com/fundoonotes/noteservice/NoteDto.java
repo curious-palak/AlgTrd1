@@ -17,6 +17,7 @@ public class NoteDto
    private String color;
    private Date reminder;
    private List<LabelDto> labels = new ArrayList();
+   private List<CollaboratorDtoRes> collaborators = new ArrayList();
 
    public NoteDto(Note noteObj)
    {
@@ -30,8 +31,12 @@ public class NoteDto
       this.color = noteObj.getColor();
       this.reminder = noteObj.getReminder();
 
-      for (Label l : noteObj.getLabel()) {
-         labels.add(new LabelDto(l));
+      for (Label labelObj : noteObj.getLabel()) {
+         labels.add(new LabelDto(labelObj));
+      }
+
+      for (Collaborator collObj : noteObj.getCollaborators()) {
+         collaborators.add(new CollaboratorDtoRes(collObj));
       }
    }
 
@@ -134,4 +139,15 @@ public class NoteDto
    {
       this.labels = labels;
    }
+
+   public List<CollaboratorDtoRes> getCollaborators()
+   {
+      return collaborators;
+   }
+
+   public void setCollaborators(List<CollaboratorDtoRes> collaborators)
+   {
+      this.collaborators = collaborators;
+   }
+
 }

@@ -46,9 +46,9 @@ public class UserDaoImpl implements IUserDao
       Criteria criteria = session.createCriteria(User.class);
 
       criteria.add(Restrictions.eq("email", email));
-      User user2 = (User) criteria.uniqueResult();
+      User userObj = (User) criteria.uniqueResult();
 
-      return user2;
+      return userObj;
    }
 
    @Override

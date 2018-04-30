@@ -2,7 +2,6 @@ package com.fundoonotes.noteservice;
 
 public class LabelDto
 {
-
    private int labelId;
    private String labelTitle;
 

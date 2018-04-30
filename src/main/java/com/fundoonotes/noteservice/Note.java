@@ -58,12 +58,13 @@ public class Note
    private User user;
 
    @JsonIgnore
-   @ManyToMany(targetEntity = Note.class)
-   @JoinTable(name = "Label", joinColumns = @JoinColumn(name = "noteId"), inverseJoinColumns = @JoinColumn(name = "labelId"))
+   @ManyToMany
+   @JoinTable(name = "Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
+         @JoinColumn(name = "labelId") })
    private Set<Label> label;
 
    @JsonIgnore
-   @OneToMany(mappedBy="note")
+   @OneToMany(mappedBy = "note")
    private Set<Collaborator> collaborators;
 
    public int getnoteId()

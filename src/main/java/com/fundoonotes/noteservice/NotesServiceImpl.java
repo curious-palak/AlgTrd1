@@ -3,7 +3,6 @@ package com.fundoonotes.noteservice;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -71,18 +70,18 @@ public class NotesServiceImpl implements INotesService
    public List<NoteDto> getNotes(int id)
    {
       User user = userDao.getUserById(id);
-      //user.setUserId(id);
-      
-      List<Note> note=notesDao.getNotes(user);
-      List<NoteDto> noteDto=new ArrayList<NoteDto>();
-      
-      for(Note noteObject: note) {
-  
-         NoteDto noteDtObject=new NoteDto(noteObject);
+      // user.setUserId(id);
+
+      List<Note> note = notesDao.getNotes(user);
+      List<NoteDto> noteDto = new ArrayList<NoteDto>();
+
+      for (Note noteObject : note) {
+
+         NoteDto noteDtObject = new NoteDto(noteObject);
          noteDto.add(noteDtObject);
       }
       return noteDto;
-      
+
    }
 
    @Transactional
@@ -151,19 +150,33 @@ public class NotesServiceImpl implements INotesService
    @Override
    public void createCollaborator(CollaboratorDTO collaboratorDto, int userId)
    {
-    
-      Collaborator collaborator=new Collaborator();
+
+      Collaborator collaborator = new Collaborator();
       collaborator.setOwner(userDao.getUserById(userId));
-      
+
       collaborator.setSharedUser(userDao.getUserByEmail(collaboratorDto.getEmail()));
+
+      /*
+       * Check here if shared user there in DB then throw exception user exist
+       */
       collaborator.setNote(notesDao.getNoteById(collaboratorDto.getNoteId()));
-      
+
       notesDao.createCollaborator(collaborator);
    }
 
    @Transactional
    @Override
-   public List<User> getCollaborator(Note note) {
-      return notesDao.getCollaborator(note);
+   public boolean deletecollborator(CollaboratorDTO collaboratordto)
+   {
+      Collaborator collaborator=new Collaborator();
+      Note note = collaborator.getNote();
+      User sharedUser = collaborator.getSharedUser();
+      int id = notesDao.deleteCollaborator(note, sharedUser);
+      if (id > 0) {
+         return true;
+      } else {
+         return false;
+      }
+
    }
 }

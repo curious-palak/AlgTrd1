@@ -79,7 +79,5 @@ public interface INotesDao {
 
    boolean createCollaborator(Collaborator collaborator);
 
-   List<User> getCollaborator(Note note);
-
-   void getLabelByNoteId(int getnoteId);
+   int deleteCollaborator(Note note, User shareUser);
 }

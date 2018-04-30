@@ -77,5 +77,5 @@ public interface INotesService
 
    void createCollaborator(CollaboratorDTO collaboratorDto, int userId);
 
-   List<User> getCollaborator(Note note);
+   boolean deletecollborator(CollaboratorDTO collaboratorDto);
 }

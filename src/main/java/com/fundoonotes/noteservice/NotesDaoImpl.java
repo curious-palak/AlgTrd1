@@ -1,18 +1,18 @@
 package com.fundoonotes.noteservice;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import com.fundoonotes.userservice.User;
 
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Purpose:This class contains implementation of notesDao interface and contains
@@ -37,7 +37,7 @@ public class NotesDaoImpl implements INotesDao
       session.save(notes);
       return true;
    }
-   
+
    @Override
    public boolean deleteNotes(int noteId)
    {
@@ -62,9 +62,8 @@ public class NotesDaoImpl implements INotesDao
 
       try {
          String updateNotes = "update Note set title= :title, inTrash=:inTrash, "
-                                + "isArchive=:isArchive, isPin=:isPin, color=:color,"
-                                + " reminder=:reminder where noteId= :noteId";
-         
+               + "isArchive=:isArchive, isPin=:isPin, color=:color," + " reminder=:reminder where noteId= :noteId";
+
          Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
          query.setParameter("inTrash", notes.getInTrash());
@@ -73,13 +72,13 @@ public class NotesDaoImpl implements INotesDao
          query.setParameter("isPin", notes.getIsPin());
          query.setParameter("color", notes.getColor());
          query.setParameter("reminder", notes.getReminder());
-         /*query.setParameter("label", notes.getLabel());*/   
-         
-         System.out.println("Title->>"+notes.getTitle()+".."+"Desc.->>"+notes.getDescription()+".."
-                            +"In Trash->>"+notes.getInTrash()+".."+"IsArchiev->>"+notes.getIsArchive()+".."
-                            +"IsPin->>"+notes.getIsPin()+".."+"color->>"+notes.getColor()+".."+
-                            "reminder->>"+notes.getReminder()+"..");
-          
+         /* query.setParameter("label", notes.getLabel()); */
+
+         System.out.println("Title->>" + notes.getTitle() + ".." + "Desc.->>" + notes.getDescription() + ".."
+               + "In Trash->>" + notes.getInTrash() + ".." + "IsArchiev->>" + notes.getIsArchive() + ".." + "IsPin->>"
+               + notes.getIsPin() + ".." + "color->>" + notes.getColor() + ".." + "reminder->>" + notes.getReminder()
+               + "..");
+
          query.executeUpdate();
 
       } catch (Exception e) {
@@ -121,10 +120,10 @@ public class NotesDaoImpl implements INotesDao
    @Override
    public void createLabel(Label label)
    {
-     System.out.println("In label dao..");
-     session= sessionFactory.getCurrentSession();
-     session.save(label);
-   
+      System.out.println("In label dao..");
+      session = sessionFactory.getCurrentSession();
+      session.save(label);
+
    }
 
    @Override
@@ -139,13 +138,13 @@ public class NotesDaoImpl implements INotesDao
       List<Label> label = criteria.list();
       return label;
    }
-   
+
    @Override
    public boolean deleteLabel(int labelId)
    {
-      session= sessionFactory.getCurrentSession();
-      String deleteNote="delete from Label where labelId=:labelId";
-      Query query= session.createQuery(deleteNote);
+      session = sessionFactory.getCurrentSession();
+      String deleteNote = "delete from Label where labelId=:labelId";
+      Query query = session.createQuery(deleteNote);
       query.setParameter("labelId", labelId);
       query.executeUpdate();
       return true;
@@ -154,11 +153,11 @@ public class NotesDaoImpl implements INotesDao
    @Override
    public void updateLabel(int labelId, Label label)
    {
-     session= sessionFactory.getCurrentSession();
-     String updateLabel = "update Label set labelTitle= :labelTitle";
-     Query query=session.createQuery(updateLabel);
-     query.setParameter("labelTitle", label.getLabelTitle());
-     query.executeUpdate();
+      session = sessionFactory.getCurrentSession();
+      String updateLabel = "update Label set labelTitle= :labelTitle";
+      Query query = session.createQuery(updateLabel);
+      query.setParameter("labelTitle", label.getLabelTitle());
+      query.executeUpdate();
    }
 
    @Override
@@ -167,29 +166,24 @@ public class NotesDaoImpl implements INotesDao
       System.out.println("In Label Dao..");
       return (Label) sessionFactory.getCurrentSession().get(Label.class, labelId);
    }
-   
+
    @Override
-   public boolean createCollaborator(Collaborator collaborator) {
+   public boolean createCollaborator(Collaborator collaborator)
+   {
       session = sessionFactory.getCurrentSession();
       session.save(collaborator);
       return true;
    }
 
    @Override
-   public List<User> getCollaborator(Note note) {
-      
-      session = sessionFactory.getCurrentSession();
-      Criteria criteria = session.createCriteria(Collaborator.class);
-      criteria.setProjection(Projections.property("sharedUser")).add(Restrictions.eq("note", note));
-      List<User> collaborator = criteria.list();
-      return collaborator;
-   }
-
-   @Override
-   public void getLabelByNoteId(int getnoteId)
+   public int deleteCollaborator(Note note, User sharedUser)
    {
-     
-      
+      int id = 0;
+      session = sessionFactory.getCurrentSession();
+      String deleteQuery = "delete from Collaborator where note = :note and sharedUser = :sharedUser";
+      Query query = session.createQuery(deleteQuery);
+      query.setParameter("sharedUser", sharedUser);
+      id = query.executeUpdate();
+      return id;
    }
-
 }

@@ -129,7 +129,7 @@ public class NotesController
     * @param noteId
     * @return ResponseEntity with HTTP status and message.
     */
-   @RequestMapping(value = "getnotes", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+   @RequestMapping(value = "getnotes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getNotes(HttpServletRequest request)
    {
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
@@ -138,11 +138,11 @@ public class NotesController
       List<NoteDto> noteDto = notesService.getNotes(id);
 
       if (noteDto.size() != 0) {
-         
+
          response.setMessage("Notes fetched successfully..");
          response.setStatusCode(200);
          return new ResponseEntity<List>(noteDto, HttpStatus.OK);
-         
+
       } else {
          response.setMessage("No content  available of notes..");
          response.setStatusCode(204);
@@ -266,18 +266,14 @@ public class NotesController
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
-   @RequestMapping(value = "getcollaborator", method = RequestMethod.POST)
-   public ResponseEntity<List<User>> getCollaborator(@RequestBody Note note, HttpServletRequest request)
+   @RequestMapping(value = "deletecollborator", method = RequestMethod.POST)
+   public ResponseEntity<Void> removeCollaborator(@RequestBody CollaboratorDTO collaboratorDto, HttpServletRequest request)
    {
 
-      List<User> users = notesService.getCollaborator(note);
-      if (users.size() != 0) {
-         for (int i = 0; i < users.size(); i++) {
-            System.out.println(users.get(i).getEmail());
-         }
-         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-      } else {
-         return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-      }
+      int userId= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      
+      
+      notesService.deletecollborator(collaboratorDto);
+      return new ResponseEntity<Void>(HttpStatus.OK);
    }
 }
