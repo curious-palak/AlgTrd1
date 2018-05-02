@@ -11,30 +11,37 @@ import com.fundoonotes.userservice.User;
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
-public interface INotesDao {
+public interface INotesDao
+{
 
-	/**For creating user
-	 * @param notes
-	 * @return
-	 */
-	boolean createNotes(Note notes);
-	
-	//boolean deleteNotes(Notes noteId);
-	
-	/**For updating notes
-	 * @param noteId
-	 * @param notes
-	 * @return
-	 */
-	boolean updateNotes(int noteId,Note notes);
+   /**
+    * For creating user
+    * 
+    * @param notes
+    * @return
+    */
+   boolean createNotes(Note notes);
 
-	//Notes getNotesById(int noteId);
+   // boolean deleteNotes(Notes noteId);
 
-	/**For fetching notes
-	 * @param user
-	 * @return
-	 */
-	List<Note> getNotes(User user);
+   /**
+    * For updating notes
+    * 
+    * @param noteId
+    * @param notes
+    * @return
+    */
+   boolean updateNotes(int noteId, Note notes);
+
+   // Notes getNotesById(int noteId);
+
+   /**
+    * For fetching notes
+    * 
+    * @param user
+    * @return
+    */
+   List<Note> getNotes(User user);
 
    /**
     * @param id
@@ -42,42 +49,69 @@ public interface INotesDao {
     */
    Note getNote(int id);
 
-   /**for fetching notes by Id
+   /**
+    * for fetching notes by Id
+    * 
     * @param noteId
     * @return
     */
    Note getNoteById(int noteId);
 
-   /**For deleting notes by Id
+   /**
+    * For deleting notes by Id
+    * 
     * @param noteId
     * @return
     */
    boolean deleteNotes(int noteId);
 
-   /**For creating Label
+   /**
+    * For creating Label
+    * 
     * @param label
     */
    void createLabel(Label label);
 
-   /**For fetching Label
+   /**
+    * For fetching Label
+    * 
     * @param user
     * @return
     */
    List<Label> getLabel(User user);
 
-   /**For deleting label
+   /**
+    * For deleting label
+    * 
     * @param labelId
     * @return
     */
    boolean deleteLabel(int labelId);
 
+   /**For updating  label
+    * @param labelId
+    * @param label
+    */
    void updateLabel(int labelId, Label label);
 
+   /**For getting label by Id
+    * @param labelId
+    * @return
+    */
    Label getLabelById(int labelId);
-   
-   //List<Notes> getNotesById(User user);
 
+   // List<Notes> getNotesById(User user);
+
+   /**For creating label
+    * @param collaborator
+    * @return
+    */
    boolean createCollaborator(Collaborator collaborator);
 
-   int deleteCollaborator(Note note, User shareUser);
+   /**For removing collaborator
+    * @param note
+    * @param shareUser
+    * @return
+    */
+   int deleteCollaborator(Collaborator collaborator);
 }

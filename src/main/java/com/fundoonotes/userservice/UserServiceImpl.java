@@ -1,12 +1,17 @@
 package com.fundoonotes.userservice;
 
+import java.io.IOException;
 import java.util.logging.Logger;
+
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.utility.JwtTokenUtility;
 import com.fundoonotes.utility.SendEmail;
@@ -63,7 +68,7 @@ public class UserServiceImpl implements IUserService
    {
       logger.info("Get token to activate account->>" + token);
       int id = JwtTokenUtility.verifyToken(token);
-      
+
       User user = userDao.getUserById(id);
       user.setStatus(true);
       User userUpdate = userDao.activateStatus(user);
@@ -156,8 +161,24 @@ public class UserServiceImpl implements IUserService
       String newPassword = userDto.getPassword();
       user.setPassword(newPassword);
 
-      // user.setPassword(encoder.encode(userDto.getPassword())); --for reset password encryption
+      // user.setPassword(encoder.encode(userDto.getPassword())); --for reset
+      // password encryption
       userDao.updatePassword(user);
       return true;
+   }
+
+   @Transactional
+   @Override
+   public void uploadImage(MultipartFile uploadProfileImage, int userId)
+   {
+      User user = userDao.getUserById(userId);
+      System.out.println("User->>" + user);
+
+      try {
+         user.setUserProfile(uploadProfileImage.getBytes());
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      userDao.updatePassword(user);
    }
 }

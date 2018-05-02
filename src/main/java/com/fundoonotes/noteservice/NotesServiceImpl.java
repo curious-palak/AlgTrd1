@@ -169,9 +169,12 @@ public class NotesServiceImpl implements INotesService
    public boolean deletecollborator(CollaboratorDTO collaboratordto)
    {
       Collaborator collaborator=new Collaborator();
-      Note note = collaborator.getNote();
-      User sharedUser = collaborator.getSharedUser();
-      int id = notesDao.deleteCollaborator(note, sharedUser);
+      collaborator.setNote(notesDao.getNoteById(collaboratordto.getNoteId()));
+      collaborator.setSharedUser(userDao.getUserByEmail(collaboratordto.getEmail()));
+
+      //Note note = collaboratordto.getNoteId();
+      //User sharedUser = collaborator.getSharedUser();
+      int id = notesDao.deleteCollaborator(collaborator);
       if (id > 0) {
          return true;
       } else {

@@ -176,14 +176,16 @@ public class NotesDaoImpl implements INotesDao
    }
 
    @Override
-   public int deleteCollaborator(Note note, User sharedUser)
+   public int deleteCollaborator(Collaborator collaborator)
    {
-      int id = 0;
-      session = sessionFactory.getCurrentSession();
-      String deleteQuery = "delete from Collaborator where note = :note and sharedUser = :sharedUser";
-      Query query = session.createQuery(deleteQuery);
-      query.setParameter("sharedUser", sharedUser);
-      id = query.executeUpdate();
+      int id=0;
+      session= sessionFactory.getCurrentSession();
+      String deleteQuery="delete from Collaborator where note=:note and sharedUser = :sharedUser";
+      Query query=session.createQuery(deleteQuery);
+      query.setParameter("note", collaborator.getNote());
+      query.setParameter("sharedUser", collaborator.getSharedUser());
+      
+      id= query.executeUpdate();
       return id;
    }
 }

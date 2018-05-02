@@ -272,7 +272,6 @@ public class NotesController
 
       int userId= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       
-      
       notesService.deletecollborator(collaboratorDto);
       return new ResponseEntity<Void>(HttpStatus.OK);
    }

@@ -1,6 +1,10 @@
 package com.fundoonotes.userservice;
 
+import java.io.IOException;
 import java.util.logging.Logger;
+
+import javax.mail.Multipart;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmailIdNotExists;
 import com.fundoonotes.exception.IncorrectEmailException;
@@ -44,6 +51,7 @@ import com.fundoonotes.utility.RegistrationValidation;
  */
 
 @RestController
+@MultipartConfig
 public class UserController
 {
 
@@ -184,19 +192,21 @@ public class UserController
     * @param randomUUId to get user details
     * @param userDto object
     * @return Response Entity with HTTP status and our custom message.
+    * @throws IOException 
     */
 
    @RequestMapping(value = "/validateforresetpassword/{token:.+}", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> resetPassword(@PathVariable("token") String token,
-         @RequestBody UserDTO userDto, HttpServletRequest request)
+         @RequestBody UserDTO userDto, HttpServletRequest request,HttpServletResponse response) throws IOException
    {
       User userData = userService.getEmailByToken(token);
       if (userData != null) {
 
          if (userService.resetPassword(userData, userDto) == true) {
 
-            customResponse.setMessage("Password reset successfully");
+            //customResponse.setMessage("Password reset successfully");
             customResponse.setStatusCode(200);
+            response.sendRedirect("http://localhost:4200/resetpassword");
             return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
          } else {
             throw new RuntimeException();
@@ -224,6 +234,24 @@ public class UserController
       System.out.println(userId);
       User user = userService.getUserById(userId);
       return new ResponseEntity<User>(user, HttpStatus.OK);
+   }
+   
+   @RequestMapping(value="uploadProfileImage", method=RequestMethod.POST)
+   public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("image") MultipartFile uploadProfileImage, @RequestParam("userId") int userId, HttpServletRequest request){
+      
+      int getUid= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      
+      if(getUid == 0) {
+         customResponse.setMessage("Error uploading");
+         customResponse.setStatusCode(300);
+         return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.BAD_REQUEST);
+      }
+      else {
+         userService.uploadImage(uploadProfileImage, userId);
+         customResponse.setMessage("Upload image successfully..");
+         customResponse.setStatusCode(200);
+         return new ResponseEntity<CustomResponse>(customResponse,HttpStatus.ACCEPTED);
+      }
    }
 }
 

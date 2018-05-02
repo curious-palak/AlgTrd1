@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -52,6 +53,10 @@ public class User
 
    @Column
    private boolean status;
+   
+   @Lob
+   @Column
+   private byte[] userProfile;
 
    /*@JsonIgnore
    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
@@ -140,4 +145,14 @@ public class User
       this.status = status;
    }
 
+   public byte[] getUserProfile()
+   {
+      return userProfile;
+   }
+
+   public void setUserProfile(byte[] bs)
+   {
+      this.userProfile = bs;
+   }
+ 
 }

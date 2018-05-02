@@ -4,6 +4,7 @@ public class CollaboratorDTO
 {
    private int noteId;
    private String email;
+   
    public int getNoteId()
    {
       return noteId;

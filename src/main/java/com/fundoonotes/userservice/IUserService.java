@@ -1,6 +1,9 @@
 package com.fundoonotes.userservice;
 
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Purpose: This is UserService Interface,contains defined methods, This layer
@@ -26,4 +29,6 @@ public interface IUserService
    User getEmailByToken(String token);
 
    boolean resetPassword(User user, UserDTO userDTO);
+
+   void uploadImage(MultipartFile uploadProfileImage, int userId);
 }
