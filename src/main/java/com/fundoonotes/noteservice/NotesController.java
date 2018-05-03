@@ -1,7 +1,7 @@
 package com.fundoonotes.noteservice;
 
+import java.io.IOException;
 import java.util.List;
-
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmptyToken;
@@ -267,12 +269,35 @@ public class NotesController
    }
 
    @RequestMapping(value = "deletecollborator", method = RequestMethod.POST)
-   public ResponseEntity<Void> removeCollaborator(@RequestBody CollaboratorDTO collaboratorDto, HttpServletRequest request)
+   public ResponseEntity<Void> removeCollaborator(@RequestBody CollaboratorDTO collaboratorDto,
+         HttpServletRequest request)
    {
 
-      int userId= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
       notesService.deletecollborator(collaboratorDto);
       return new ResponseEntity<Void>(HttpStatus.OK);
+   }
+
+   @RequestMapping(value = "uploadNoteImage", method = RequestMethod.PUT, headers = { "content-type: multipart/*" })
+   public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("image") MultipartFile uploadNoteImage,
+         @RequestParam("noteId") int noteId, HttpServletRequest request) throws IOException
+   {
+
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
+      System.out.println("Check image->>" + uploadNoteImage.getOriginalFilename());
+
+      if (userId == 0) {
+         response.setMessage("Error uploading");
+         response.setStatusCode(300);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
+      } else {
+         notesService.uploadImage(uploadNoteImage, userId, noteId);
+         response.setMessage("Upload image successfully..");
+         response.setStatusCode(200);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.ACCEPTED);
+
+      }
    }
 }

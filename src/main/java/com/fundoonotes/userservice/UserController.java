@@ -3,8 +3,6 @@ package com.fundoonotes.userservice;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import javax.mail.Multipart;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +49,7 @@ import com.fundoonotes.utility.RegistrationValidation;
  */
 
 @RestController
-@MultipartConfig
+//@MultipartConfig
 public class UserController
 {
 
@@ -95,7 +93,7 @@ public class UserController
 
       String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
       String token = userService.registerUser(userDto, url);
-      
+
       if (token != null) {
          response.setHeader("Authorization", token);
          logger.info("Successfully Registered..");
@@ -141,13 +139,13 @@ public class UserController
     * @return Response Entity with HTTP status our custom message.
     */
 
-   @RequestMapping(value = "login", method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
+   @RequestMapping(value = "login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDto, HttpServletRequest request,
          HttpServletResponse resp)
    {
       logger.info("In login after CORS filter");
       String token = userService.loginUser(userDto);
-      
+
       if (token != null) {
          resp.setHeader("Authorization", token);
          customResponse.setMessage("Login successfully");
@@ -174,11 +172,11 @@ public class UserController
    public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request)
    {
       if (userService.forgotPass(userDto, request) == true) {
-         
+
          customResponse.setMessage("Link sent to your mail to reset password..");
          customResponse.setStatusCode(1);
          return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
-         
+
       } else {
          throw new IncorrectEmailException();
       }
@@ -192,19 +190,19 @@ public class UserController
     * @param randomUUId to get user details
     * @param userDto object
     * @return Response Entity with HTTP status and our custom message.
-    * @throws IOException 
+    * @throws IOException
     */
 
    @RequestMapping(value = "/validateforresetpassword/{token:.+}", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> resetPassword(@PathVariable("token") String token,
-         @RequestBody UserDTO userDto, HttpServletRequest request,HttpServletResponse response) throws IOException
+         @RequestBody UserDTO userDto, HttpServletRequest request, HttpServletResponse response) throws IOException
    {
       User userData = userService.getEmailByToken(token);
       if (userData != null) {
 
          if (userService.resetPassword(userData, userDto) == true) {
 
-            //customResponse.setMessage("Password reset successfully");
+            // customResponse.setMessage("Password reset successfully");
             customResponse.setStatusCode(200);
             response.sendRedirect("http://localhost:4200/resetpassword");
             return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
@@ -230,29 +228,36 @@ public class UserController
    @RequestMapping(value = "getuser", method = RequestMethod.GET)
    public ResponseEntity<User> getUser(HttpServletRequest request)
    {
-      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
       System.out.println(userId);
       User user = userService.getUserById(userId);
       return new ResponseEntity<User>(user, HttpStatus.OK);
    }
-   
-   @RequestMapping(value="uploadProfileImage", method=RequestMethod.POST)
-   public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("image") MultipartFile uploadProfileImage, @RequestParam("userId") int userId, HttpServletRequest request){
+
+   @RequestMapping(value = "/upload", method = RequestMethod.POST)
+   public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("file") MultipartFile uploadProfileImage,
+         @RequestParam("userId") int userId, HttpServletRequest request) throws IOException
+   {
+
+      //int getUid = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
+      System.out.println("Check image->>" +uploadProfileImage.getOriginalFilename());
       
-      int getUid= JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      
-      if(getUid == 0) {
+      /*if (getUid == 0) {
          customResponse.setMessage("Error uploading");
          customResponse.setStatusCode(300);
          return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.BAD_REQUEST);
-      }
-      else {
+      } else {*/
          userService.uploadImage(uploadProfileImage, userId);
          customResponse.setMessage("Upload image successfully..");
          customResponse.setStatusCode(200);
-         return new ResponseEntity<CustomResponse>(customResponse,HttpStatus.ACCEPTED);
-      }
+         return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.ACCEPTED);
+      
+   }
+   
+   @RequestMapping(value = "/uploadImage", method = RequestMethod.PUT)
+   public ResponseEntity<String> get(){
+      return new ResponseEntity<String>("hii",HttpStatus.ACCEPTED);
+      
    }
 }
-
-

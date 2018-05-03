@@ -15,10 +15,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "ToDoNotes")
@@ -66,6 +69,10 @@ public class Note
    @JsonIgnore
    @OneToMany(mappedBy = "note")
    private Set<Collaborator> collaborators;
+   
+  @Lob
+   @Column
+   private MultipartFile noteImage;
 
    public int getnoteId()
    {
@@ -186,4 +193,15 @@ public class Note
    {
       this.collaborators = collaborators;
    }
+
+   public MultipartFile getNoteImage()
+   {
+      return noteImage;
+   }
+
+   public void setNoteImage(MultipartFile uploadNoteImage)
+   {
+      this.noteImage = uploadNoteImage;
+   }
+  
 }

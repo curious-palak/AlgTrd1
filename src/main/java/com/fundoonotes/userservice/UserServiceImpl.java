@@ -172,10 +172,13 @@ public class UserServiceImpl implements IUserService
    public void uploadImage(MultipartFile uploadProfileImage, int userId)
    {
       User user = userDao.getUserById(userId);
+      user.setUserId(userId);
       System.out.println("User->>" + user);
 
       try {
-         user.setUserProfile(uploadProfileImage.getBytes());
+         if (uploadProfileImage.getBytes() != null) {
+            user.setUserProfile(uploadProfileImage.getBytes());
+         }
       } catch (IOException e) {
          e.printStackTrace();
       }

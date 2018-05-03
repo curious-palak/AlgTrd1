@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fundoonotes.userservice.IUserDao;
 import com.fundoonotes.userservice.User;
@@ -181,5 +182,18 @@ public class NotesServiceImpl implements INotesService
          return false;
       }
 
+   }
+
+   @Transactional
+   @Override
+   public void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId)
+   {
+     User user=userDao.getUserById(userId);
+     user.setUserId(userId);
+     
+     Note note=notesDao.getNoteById(noteId);
+     note.setNoteImage(uploadNoteImage);
+     note.setUser(user);
+      
    }
 }

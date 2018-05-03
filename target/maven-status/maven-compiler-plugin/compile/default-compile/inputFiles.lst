@@ -20,7 +20,6 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Note.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/UserController.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/INotesDao.java
-/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/Test.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesController.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesDaoImpl.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesServiceImpl.java
@@ -29,5 +28,7 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/RegistrationValidation.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/CustomResponse.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/User.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/CollaboratorDtoRes.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/LabelDto.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/UnAuthorizedAccess.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NoteResponseDto.java

@@ -2,6 +2,8 @@ package com.fundoonotes.noteservice;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Purpose: This is NotesService Interface,contains defined methods, This layer
  * interact with controller.
@@ -89,4 +91,7 @@ public interface INotesService
     * @return
     */
    boolean deletecollborator(CollaboratorDTO collaboratorDto);
+   
+   void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId);
+   
 }
