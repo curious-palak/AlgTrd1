@@ -1,9 +1,14 @@
 package com.fundoonotes.noteservice;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,12 +174,12 @@ public class NotesServiceImpl implements INotesService
    @Override
    public boolean deletecollborator(CollaboratorDTO collaboratordto)
    {
-      Collaborator collaborator=new Collaborator();
+      Collaborator collaborator = new Collaborator();
       collaborator.setNote(notesDao.getNoteById(collaboratordto.getNoteId()));
       collaborator.setSharedUser(userDao.getUserByEmail(collaboratordto.getEmail()));
 
-      //Note note = collaboratordto.getNoteId();
-      //User sharedUser = collaborator.getSharedUser();
+      // Note note = collaboratordto.getNoteId();
+      // User sharedUser = collaborator.getSharedUser();
       int id = notesDao.deleteCollaborator(collaborator);
       if (id > 0) {
          return true;
@@ -186,14 +191,20 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId)
+   public void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException
    {
-     User user=userDao.getUserById(userId);
-     user.setUserId(userId);
-     
-     Note note=notesDao.getNoteById(noteId);
-     note.setNoteImage(uploadNoteImage);
-     note.setUser(user);
-      
+      User user = userDao.getUserById(userId);
+      user.setUserId(userId);
+
+      Note note = notesDao.getNoteById(noteId);
+      note.setnoteId(noteId);
+      if (uploadNoteImage.getBytes() != null) {
+         byte[] noteImg = uploadNoteImage.getBytes();
+         //Blob blob = new SerialBlob(noteImg);
+         note.setNoteImage(noteImg);
+
+         notesDao.updateNotes(noteId, note);
+
+      }
    }
 }

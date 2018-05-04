@@ -23,5 +23,5 @@ public interface IUserDao
 
    User fetchEmailByUUID(String randomUUId);
 
-   User updatePassword(User user);
+   User updateRecord(User user);
 }

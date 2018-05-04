@@ -3,6 +3,7 @@ package com.fundoonotes.noteservice;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoonotes.userservice.User;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.Set;
 
@@ -69,10 +70,10 @@ public class Note
    @JsonIgnore
    @OneToMany(mappedBy = "note")
    private Set<Collaborator> collaborators;
-   
-  @Lob
-   @Column
-   private MultipartFile noteImage;
+
+   @Lob
+   @Column(columnDefinition="Blob", name="noteImage")
+   private byte[] noteImage;
 
    public int getnoteId()
    {
@@ -194,14 +195,14 @@ public class Note
       this.collaborators = collaborators;
    }
 
-   public MultipartFile getNoteImage()
+   public byte[] getNoteImage()
    {
       return noteImage;
    }
 
-   public void setNoteImage(MultipartFile uploadNoteImage)
+   public void setNoteImage(byte[] noteImage)
    {
-      this.noteImage = uploadNoteImage;
+      this.noteImage = noteImage;
    }
-  
+
 }

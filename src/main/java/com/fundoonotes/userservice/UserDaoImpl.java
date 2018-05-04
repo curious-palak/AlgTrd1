@@ -97,7 +97,7 @@ public class UserDaoImpl implements IUserDao
    }
 
    @Override
-   public User updatePassword(User user)
+   public User updateRecord(User user)
    {
       session = sessionFactory.getCurrentSession();
       session.update(user);

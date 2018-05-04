@@ -1,7 +1,10 @@
 package com.fundoonotes.userservice;
 
+import java.sql.SQLException;
+
 import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,5 +33,5 @@ public interface IUserService
 
    boolean resetPassword(User user, UserDTO userDTO);
 
-   void uploadImage(MultipartFile uploadProfileImage, int userId);
+   void uploadImage(MultipartFile uploadProfileImage, int userId) throws SerialException, SQLException;
 }

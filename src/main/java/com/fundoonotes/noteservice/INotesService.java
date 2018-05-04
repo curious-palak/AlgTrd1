@@ -1,6 +1,10 @@
 package com.fundoonotes.noteservice;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -92,6 +96,6 @@ public interface INotesService
     */
    boolean deletecollborator(CollaboratorDTO collaboratorDto);
    
-   void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId);
+   void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException;
    
 }

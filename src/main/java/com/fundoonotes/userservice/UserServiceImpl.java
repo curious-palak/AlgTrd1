@@ -1,20 +1,24 @@
 package com.fundoonotes.userservice;
 
+import com.fundoonotes.exception.CustomResponse;
+import com.fundoonotes.utility.JwtTokenUtility;
+import com.fundoonotes.utility.SendEmail;
+
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fundoonotes.exception.CustomResponse;
-import com.fundoonotes.utility.JwtTokenUtility;
-import com.fundoonotes.utility.SendEmail;
 
 /**
  * Purpose: This class contains implementation of userService interface and
@@ -163,25 +167,28 @@ public class UserServiceImpl implements IUserService
 
       // user.setPassword(encoder.encode(userDto.getPassword())); --for reset
       // password encryption
-      userDao.updatePassword(user);
+      userDao.updateRecord(user);
       return true;
    }
 
    @Transactional
    @Override
-   public void uploadImage(MultipartFile uploadProfileImage, int userId)
+   public void uploadImage(MultipartFile uploadProfileImage, int userId) throws SerialException, SQLException
    {
       User user = userDao.getUserById(userId);
       user.setUserId(userId);
-      System.out.println("User->>" + user);
 
       try {
          if (uploadProfileImage.getBytes() != null) {
-            user.setUserProfile(uploadProfileImage.getBytes());
+            byte[] userProfile = uploadProfileImage.getBytes();
+            Blob blob = new SerialBlob(userProfile);
+
+            user.setUserProfile(blob);
+       
          }
       } catch (IOException e) {
          e.printStackTrace();
       }
-      userDao.updatePassword(user);
+      userDao.updateRecord(user);
    }
 }

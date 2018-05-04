@@ -1,9 +1,11 @@
 package com.fundoonotes.noteservice;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -279,9 +281,9 @@ public class NotesController
       return new ResponseEntity<Void>(HttpStatus.OK);
    }
 
-   @RequestMapping(value = "uploadNoteImage", method = RequestMethod.PUT, headers = { "content-type: multipart/*" })
+   @RequestMapping(value = "uploadNoteImage", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("image") MultipartFile uploadNoteImage,
-         @RequestParam("noteId") int noteId, HttpServletRequest request) throws IOException
+         @RequestParam("noteId") int noteId, HttpServletRequest request) throws IOException, SerialException, SQLException
    {
 
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));

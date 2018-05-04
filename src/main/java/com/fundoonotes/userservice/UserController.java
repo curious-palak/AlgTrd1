@@ -1,10 +1,13 @@
 package com.fundoonotes.userservice;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.rowset.serial.SerialException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -234,25 +237,25 @@ public class UserController
       return new ResponseEntity<User>(user, HttpStatus.OK);
    }
 
-   @RequestMapping(value = "/upload", method = RequestMethod.POST)
+   @RequestMapping(value = "upload", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("file") MultipartFile uploadProfileImage,
-         @RequestParam("userId") int userId, HttpServletRequest request) throws IOException
+        HttpServletRequest request) throws IOException, SerialException, SQLException
    {
 
-      //int getUid = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      int getUid = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
       System.out.println("Check image->>" +uploadProfileImage.getOriginalFilename());
       
-      /*if (getUid == 0) {
+      if (getUid == 0) {
          customResponse.setMessage("Error uploading");
          customResponse.setStatusCode(300);
          return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.BAD_REQUEST);
-      } else {*/
-         userService.uploadImage(uploadProfileImage, userId);
+      } else {
+         userService.uploadImage(uploadProfileImage, getUid);
          customResponse.setMessage("Upload image successfully..");
          customResponse.setStatusCode(200);
          return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.ACCEPTED);
-      
+      }
    }
    
    @RequestMapping(value = "/uploadImage", method = RequestMethod.PUT)
