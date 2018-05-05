@@ -1,6 +1,7 @@
 package com.fundoonotes.noteservice;
 
 import java.io.IOException;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmptyToken;
-import com.fundoonotes.userservice.User;
 import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
@@ -298,7 +298,7 @@ public class NotesController
          notesService.uploadImage(uploadNoteImage, userId, noteId);
          response.setMessage("Upload image successfully..");
          response.setStatusCode(200);
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.ACCEPTED);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
 
       }
    }

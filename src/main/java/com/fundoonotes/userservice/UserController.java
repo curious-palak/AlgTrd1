@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ import com.fundoonotes.utility.RegistrationValidation;
  */
 
 @RestController
-//@MultipartConfig
+// @MultipartConfig
 public class UserController
 {
 
@@ -185,6 +186,25 @@ public class UserController
       }
    }
 
+   @RequestMapping(value = "/resetpassword/{token:.+}", method = RequestMethod.GET)
+   public void resetPassword(@PathVariable("token") String token, HttpServletRequest request,
+         HttpServletResponse response) throws IOException
+   {
+      int validateToken = JwtTokenUtility.verifyToken(token);
+
+      if (validateToken == 0) {
+         response.sendRedirect("http://localhost:4200/error");
+         return;
+      }
+
+      /*HttpSession session = request.getSession();
+       session.setAttribute("name","sana");*/
+      
+      response.sendRedirect("http://localhost:4200/resetpassword?token=" + token);
+      return;
+
+   }
+
    /**
     * <p>
     * This is simple API or resetting password
@@ -196,18 +216,26 @@ public class UserController
     * @throws IOException
     */
 
-   @RequestMapping(value = "/validateforresetpassword/{token:.+}", method = RequestMethod.POST)
-   public ResponseEntity<CustomResponse> resetPassword(@PathVariable("token") String token,
+   //@RequestMapping(value = "/resetnewpassword/{token:.+}", method =RequestMethod.POST)
+   @RequestMapping(value = "/resetnewpassword", method = RequestMethod.POST)
+   public ResponseEntity<CustomResponse> resetPassword(@RequestParam("token") String token,
          @RequestBody UserDTO userDto, HttpServletRequest request, HttpServletResponse response) throws IOException
    {
-      User userData = userService.getEmailByToken(token);
+      /*HttpSession session = request.getSession();
+        String name= (String) session.getAttribute("name");*/
+
+      System.out.println("Checkk-> " + token);
+
+      int uId = JwtTokenUtility.verifyToken(token);
+
+      User userData = userService.getUserById(uId);
       if (userData != null) {
 
          if (userService.resetPassword(userData, userDto) == true) {
 
-            // customResponse.setMessage("Password reset successfully");
+            customResponse.setMessage("Password reset successfully");
             customResponse.setStatusCode(200);
-            response.sendRedirect("http://localhost:4200/resetpassword");
+
             return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
          } else {
             throw new RuntimeException();
@@ -239,13 +267,13 @@ public class UserController
 
    @RequestMapping(value = "upload", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("file") MultipartFile uploadProfileImage,
-        HttpServletRequest request) throws IOException, SerialException, SQLException
+         HttpServletRequest request) throws IOException, SerialException, SQLException
    {
 
       int getUid = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
-      System.out.println("Check image->>" +uploadProfileImage.getOriginalFilename());
-      
+      System.out.println("Check image->>" + uploadProfileImage.getOriginalFilename());
+
       if (getUid == 0) {
          customResponse.setMessage("Error uploading");
          customResponse.setStatusCode(300);
@@ -256,11 +284,5 @@ public class UserController
          customResponse.setStatusCode(200);
          return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.ACCEPTED);
       }
-   }
-   
-   @RequestMapping(value = "/uploadImage", method = RequestMethod.PUT)
-   public ResponseEntity<String> get(){
-      return new ResponseEntity<String>("hii",HttpStatus.ACCEPTED);
-      
    }
 }
