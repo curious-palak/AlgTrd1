@@ -8,6 +8,8 @@ import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fundoonotes.utility.FetchUrlData;
+
 /**
  * Purpose: This is NotesService Interface,contains defined methods, This layer
  * interact with controller.
@@ -96,6 +98,14 @@ public interface INotesService
     */
    boolean deletecollborator(CollaboratorDTO collaboratorDto);
    
+   /**For uploading note Image
+    * @param uploadNoteImage
+    * @param userId
+    * @param noteId
+    * @throws SerialException
+    * @throws IOException
+    * @throws SQLException
+    */
    void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException;
    
 }

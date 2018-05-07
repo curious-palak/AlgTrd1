@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fundoonotes.userservice.IUserDao;
 import com.fundoonotes.userservice.User;
+import com.fundoonotes.utility.FetchUrlData;
 
 /**
  * Purpose: This class contains implementation of notesService interface and

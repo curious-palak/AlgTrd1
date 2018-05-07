@@ -22,7 +22,7 @@ public interface INotesDao
     */
    boolean createNotes(Note notes);
 
-   // boolean deleteNotes(Notes noteId);
+   //boolean deleteNotes(Notes noteId);
 
    /**
     * For updating notes
@@ -33,7 +33,7 @@ public interface INotesDao
     */
    boolean updateNotes(int noteId, Note notes);
 
-   // Notes getNotesById(int noteId);
+   //Notes getNotesById(int noteId);
 
    /**
     * For fetching notes

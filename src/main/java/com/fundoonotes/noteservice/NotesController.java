@@ -1,8 +1,9 @@
 package com.fundoonotes.noteservice;
 
 import java.io.IOException;
-
+import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fundoonotes.exception.CustomResponse;
 import com.fundoonotes.exception.EmptyToken;
+import com.fundoonotes.utility.FetchUrlData;
+import com.fundoonotes.utility.Jsoup;
 import com.fundoonotes.utility.JwtTokenUtility;
 
 /**
@@ -283,7 +286,8 @@ public class NotesController
 
    @RequestMapping(value = "uploadNoteImage", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("image") MultipartFile uploadNoteImage,
-         @RequestParam("noteId") int noteId, HttpServletRequest request) throws IOException, SerialException, SQLException
+         @RequestParam("noteId") int noteId, HttpServletRequest request)
+         throws IOException, SerialException, SQLException
    {
 
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
@@ -301,5 +305,40 @@ public class NotesController
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
 
       }
+   }
+
+   /**
+    * <p>
+    * This is simple rest API to fetch urlData using Jsoup
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * 
+    * @param data
+    * @param request
+    * @return
+    * @throws IOException
+    * @throws URISyntaxException
+    */
+   @RequestMapping(value = "geturldata", method = RequestMethod.POST)
+   public List<FetchUrlData> fetchUrlData(@RequestBody List<String> urls, HttpServletRequest request)
+         throws URISyntaxException, IOException
+   {
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
+      if (userId == 0) {
+         throw new EmptyToken();
+      }
+
+      Jsoup jsoupData = new Jsoup();
+      FetchUrlData fetchUrlData = null;
+      List<FetchUrlData> fetchData = new ArrayList<>();
+
+      for (String url : urls) {
+         System.out.println(urls);
+         
+            fetchUrlData = jsoupData.getUrlData(url);
+            fetchData.add(fetchUrlData);
+      }
+      return fetchData;
    }
 }
