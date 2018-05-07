@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
+
 @Service
 public class UserServiceImpl implements IUserService
 {
@@ -165,8 +166,7 @@ public class UserServiceImpl implements IUserService
       String newPassword = userDto.getPassword();
       user.setPassword(newPassword);
 
-      // user.setPassword(encoder.encode(userDto.getPassword())); --for reset
-      // password encryption
+      user.setPassword(encoder.encode(userDto.getPassword())); //for reset password encryption
       userDao.updateRecord(user);
       return true;
    }
@@ -184,7 +184,7 @@ public class UserServiceImpl implements IUserService
             Blob blob = new SerialBlob(userProfile);
 
             user.setUserProfile(blob);
-       
+
          }
       } catch (IOException e) {
          e.printStackTrace();

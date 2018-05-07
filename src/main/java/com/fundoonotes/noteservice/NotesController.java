@@ -104,6 +104,7 @@ public class NotesController
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
       notesService.deleteNotes(note, id);
+      
       response.setMessage("Note deleted..");
       response.setStatusCode(200);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
@@ -157,7 +158,8 @@ public class NotesController
       }
    }
 
-   /* APIs for Label Controller.. */
+   /** APIs for Label.. */
+   
    /**
     * <p>
     * This rest API for creating labels With
@@ -185,6 +187,14 @@ public class NotesController
       return new ResponseEntity<CustomResponse>(response, HttpStatus.ACCEPTED);
    }
 
+   /**
+    * <p>
+    * This rest API for fetching labels With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param request
+    * @return labels
+    */
    @RequestMapping(value = "getlabels", method = RequestMethod.GET)
    public ResponseEntity<List<Label>> getLabels(HttpServletRequest request)
    {
@@ -206,6 +216,15 @@ public class NotesController
       }
    }
 
+   /**
+    * <p>
+    * This rest API for deleting labels With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param label
+    * @param request
+    * @return
+    */
    @PostMapping(value = "deletelabel")
    public ResponseEntity<CustomResponse> deleteLabel(@RequestBody Label label, HttpServletRequest request)
    {
@@ -219,6 +238,15 @@ public class NotesController
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
+   /**
+    * <p>
+    * This rest API for updating labels With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param label
+    * @param request
+    * @return
+    */
    @RequestMapping(value = "updatelabel", method = RequestMethod.PUT)
    public ResponseEntity<?> updateLabel(@RequestBody Label label, HttpServletRequest request)
    {
@@ -231,6 +259,16 @@ public class NotesController
       return new ResponseEntity<>(response, HttpStatus.OK);
    }
 
+   /**
+    * <p>
+    * This rest API for adding as well as deleting labels With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param noteId
+    * @param labelId
+    * @param status
+    * @return
+    */
    @PutMapping(value = "/addremovelabel/{noteId}/{labelId}/{status}")
    public ResponseEntity<CustomResponse> addRemoveLabel(@PathVariable("noteId") int noteId,
          @PathVariable("labelId") int labelId, @PathVariable("status") boolean status)

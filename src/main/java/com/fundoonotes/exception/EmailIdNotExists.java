@@ -9,6 +9,4 @@ public class EmailIdNotExists extends RuntimeException
       super("Email not exists..");
      
    }
-
-   
 }

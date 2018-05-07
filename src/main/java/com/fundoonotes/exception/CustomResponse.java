@@ -10,14 +10,16 @@ import java.io.Serializable;
  * @since 21Mar 2018
  *
  */
-//@Component("customResponse")
-//@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+
+// @Component("customResponse")
+// @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode =
+// ScopedProxyMode.TARGET_CLASS)
 // Not working as of now
 
-public class CustomResponse implements Serializable 
+public class CustomResponse implements Serializable
 {
    private static final long serialVersionUID = 1L;
-   
+
    private String errorMessage;
    private int statusCode;
 

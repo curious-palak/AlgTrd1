@@ -212,7 +212,6 @@ public class UserController
       
       response.sendRedirect("http://localhost:4200/resetpassword?token=" + token);
       return;
-
    }
 
    /**
