@@ -53,7 +53,7 @@ import com.fundoonotes.utility.RegistrationValidation;
  */
 
 @RestController
-// @MultipartConfig
+//@MultipartConfig
 public class UserController
 {
 
@@ -186,6 +186,17 @@ public class UserController
       }
    }
 
+   /**
+    * <p>
+    * This is simple reset password rest API where we confirm token
+    * And redirect to Reset password web page {@link RequestMapping @RequestMapping}
+    * to mapped rest address.
+    * </p>
+    * @param token
+    * @param request
+    * @param response
+    * @throws IOException
+    */
    @RequestMapping(value = "/resetpassword/{token:.+}", method = RequestMethod.GET)
    public void resetPassword(@PathVariable("token") String token, HttpServletRequest request,
          HttpServletResponse response) throws IOException
@@ -210,8 +221,9 @@ public class UserController
     * This is simple API or resetting password
     * </p>
     * 
-    * @param randomUUId to get user details
+    * @param token to get user details
     * @param userDto object
+    * @param response
     * @return Response Entity with HTTP status and our custom message.
     * @throws IOException
     */
@@ -265,6 +277,17 @@ public class UserController
       return new ResponseEntity<User>(user, HttpStatus.OK);
    }
 
+   /**
+    * <p> This is simple rest API to upload user profile image
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param uploadProfileImage
+    * @param request
+    * @return
+    * @throws IOException
+    * @throws SerialException
+    * @throws SQLException
+    */
    @RequestMapping(value = "upload", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("file") MultipartFile uploadProfileImage,
          HttpServletRequest request) throws IOException, SerialException, SQLException
