@@ -58,7 +58,7 @@ public class NotesServiceImpl implements INotesService
       System.out.println("In delete service..");
 
       // Notes note=notesDao.getNoteById(noteId);
-      if (userId == note.getUser().getUserId()) {
+      if (userId != 0) {
          return notesDao.deleteNotes(note.getnoteId());
       }
       return false;

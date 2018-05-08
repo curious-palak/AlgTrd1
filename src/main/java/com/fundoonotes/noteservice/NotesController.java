@@ -279,7 +279,8 @@ public class NotesController
          response.setMessage("Added label on notes..");
          response.setStatusCode(100);
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
-      } else if (!status) {
+      } 
+      else if (!status) {
          // deleting label
          notesService.deleteLabelOnNote(noteId, labelId);
          response.setMessage("Removed label on notes..");

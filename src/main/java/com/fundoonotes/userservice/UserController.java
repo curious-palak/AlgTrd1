@@ -80,11 +80,12 @@ public class UserController
     * @param bindingResult binds the error message
     * @param request
     * @return ResponseEntity with HTTP status and message.
+    * @throws IOException 
     */
 
    @PostMapping(value = "register")
    public ResponseEntity<CustomResponse> registerUser(@RequestBody UserDTO userDto, BindingResult bindingResult,
-         HttpServletRequest request, HttpServletResponse response)
+         HttpServletRequest request, HttpServletResponse response) throws IOException
    {
       logger.info("In register after filter...");
       registrationValidation.validate(userDto, bindingResult);
@@ -96,11 +97,14 @@ public class UserController
 
       String url = request.getRequestURL().toString().substring(0, request.getRequestURL().lastIndexOf("/"));
       String token = userService.registerUser(userDto, url);
-
+   
       if (token != null) {
          response.setHeader("Authorization", token);
+        
          logger.info("Successfully Registered..");
+         //response.sendRedirect("http://localhost:4200/login");
       }
+     
       customResponse.setMessage("Successfully registered.");
       customResponse.setStatusCode(1);
       return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
@@ -115,14 +119,16 @@ public class UserController
     * @param randomUUId to get user
     * @param request HttpServletRequest
     * @return ResponseEntity with HTTP status and message.
+    * @throws IOException 
     */
 
    @RequestMapping(value = "/activateaccount/{token:.+}", method = RequestMethod.GET)
    public ResponseEntity<CustomResponse> activateAccount(@PathVariable("token") String token,
-         HttpServletRequest request)
+         HttpServletRequest request,HttpServletResponse response) throws IOException
    {
 
       userService.activateAccount(token, request);
+      response.sendRedirect("http://localhost:4200/login");
 
       customResponse.setMessage("Account activated successfully..");
       customResponse.setStatusCode(1);
@@ -203,7 +209,7 @@ public class UserController
       int validateToken = JwtTokenUtility.verifyToken(token);
 
       if (validateToken == 0) {
-         response.sendRedirect("http://localhost:4200/error");
+         response.sendRedirect("http://localhost:4200/errorpage");
          return;
       }
 
