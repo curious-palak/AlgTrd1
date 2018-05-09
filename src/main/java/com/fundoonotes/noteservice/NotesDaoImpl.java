@@ -154,9 +154,11 @@ public class NotesDaoImpl implements INotesDao
    public void updateLabel(int labelId, Label label)
    {
       session = sessionFactory.getCurrentSession();
-      String updateLabel = "update Label set labelTitle= :labelTitle";
+      String updateLabel = "update Label set labelTitle=:labelTitle where labelId=:labelId";
+      
       Query query = session.createQuery(updateLabel);
       query.setParameter("labelTitle", label.getLabelTitle());
+      query.setParameter("labelId", labelId);
       query.executeUpdate();
    }
 
