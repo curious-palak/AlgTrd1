@@ -27,6 +27,7 @@ import com.fundoonotes.exception.EmailIdNotExists;
 import com.fundoonotes.exception.IncorrectEmailException;
 import com.fundoonotes.exception.InvalidCredentialsException;
 import com.fundoonotes.exception.RegistrationValidationException;
+import com.fundoonotes.utility.Dev;
 import com.fundoonotes.utility.JwtTokenUtility;
 import com.fundoonotes.utility.RegistrationValidation;
 
@@ -58,6 +59,9 @@ public class UserController
 
    @Autowired
    IUserService userService;
+   
+/*   @Autowired
+   Dev devproperties;*/
 
    @Autowired
    RegistrationValidation registrationValidation;

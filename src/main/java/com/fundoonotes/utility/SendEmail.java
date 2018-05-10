@@ -1,5 +1,7 @@
 package com.fundoonotes.utility;
 
+import com.fundoonotes.utility.Dev;
+
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -11,6 +13,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 /**
  * Purpose: This class is to send Email using java mail API
  * 
@@ -19,12 +24,14 @@ import javax.mail.internet.MimeMessage;
  */
 public class SendEmail
 {
-
+   /*@Autowired
+   Dev devproperties;*/
+   
    private static Logger logger = Logger.getLogger(SendEmail.class.getName());
 
    public static void sendEmail(String to, String subject, String message)
    {
-      String user = "bridgelabzsolutions@gmail.com";
+      String user ="bridgelabzsolutions@gmail.com";
       String password = "bridgelabz";
 
       Properties properties = new Properties();

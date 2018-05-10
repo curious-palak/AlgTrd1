@@ -292,6 +292,15 @@ public class NotesController
 
    /** Collaborator Api's */
 
+   /**
+    * <p>
+    * This rest API for adding collaborator With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param collaboratorDto
+    * @param request
+    * @return
+    */
    @PutMapping(value = "addCollaborator")
    public ResponseEntity<CustomResponse> createCollaborator(@RequestBody CollaboratorDTO collaboratorDto,
          HttpServletRequest request)
@@ -312,6 +321,15 @@ public class NotesController
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
+   /**
+    * <p>
+    * This rest API for deleting collaborator With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param collaboratorDto
+    * @param request
+    * @return
+    */
    @RequestMapping(value = "deletecollborator", method = RequestMethod.POST)
    public ResponseEntity<Void> removeCollaborator(@RequestBody CollaboratorDTO collaboratorDto,
          HttpServletRequest request)
@@ -323,6 +341,19 @@ public class NotesController
       return new ResponseEntity<Void>(HttpStatus.OK);
    }
 
+   /**
+    * <p>
+    * This rest API for uploading Image With
+    * {@link RequestMapping @RequestMapping} to mapped rest address.
+    * </p>
+    * @param uploadNoteImage
+    * @param noteId
+    * @param request
+    * @return
+    * @throws IOException
+    * @throws SerialException
+    * @throws SQLException
+    */
    @RequestMapping(value = "uploadNoteImage", method = RequestMethod.POST)
    public ResponseEntity<CustomResponse> uploadProfileImage(@RequestParam("image") MultipartFile uploadNoteImage,
          @RequestParam("noteId") int noteId, HttpServletRequest request)

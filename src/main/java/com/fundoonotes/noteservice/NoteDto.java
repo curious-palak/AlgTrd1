@@ -18,6 +18,8 @@ public class NoteDto
    private Date reminder;
    private List<LabelDto> labels = new ArrayList();
    private List<CollaboratorDtoRes> collaborators = new ArrayList();
+   
+   private byte[] noteImage;
 
    public NoteDto(Note noteObj)
    {
@@ -30,6 +32,7 @@ public class NoteDto
       this.isArchive = noteObj.getIsArchive();
       this.color = noteObj.getColor();
       this.reminder = noteObj.getReminder();
+      this.noteImage=noteObj.getNoteImage();
 
       for (Label labelObj : noteObj.getLabel()) {
          labels.add(new LabelDto(labelObj));
@@ -150,4 +153,13 @@ public class NoteDto
       this.collaborators = collaborators;
    }
 
+   public byte[] getNoteImage()
+   {
+      return noteImage;
+   }
+
+   public void setNoteImage(byte[] noteImage)
+   {
+      this.noteImage = noteImage;
+   }
 }

@@ -62,7 +62,8 @@ public class NotesDaoImpl implements INotesDao
 
       try {
          String updateNotes = "update Note set title= :title, inTrash=:inTrash, "
-               + "isArchive=:isArchive, isPin=:isPin, color=:color," + " reminder=:reminder where noteId= :noteId";
+                              + "isArchive=:isArchive, isPin=:isPin, color=:color," + 
+                              " reminder=:reminder where noteId= :noteId";
 
          Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
@@ -72,6 +73,7 @@ public class NotesDaoImpl implements INotesDao
          query.setParameter("isPin", notes.getIsPin());
          query.setParameter("color", notes.getColor());
          query.setParameter("reminder", notes.getReminder());
+        
          /* query.setParameter("label", notes.getLabel()); */
 
          System.out.println("Title->>" + notes.getTitle() + ".." + "Desc.->>" + notes.getDescription() + ".."
