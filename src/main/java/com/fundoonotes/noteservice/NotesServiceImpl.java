@@ -208,4 +208,14 @@ public class NotesServiceImpl implements INotesService
 
       }
    }
+
+   @Transactional
+   @Override
+   public void deleteImage(int noteId)
+   {
+      System.out.println("In delete Service..");
+     Note note=notesDao.getNoteById(noteId);
+     notesDao.deleteImage(note);
+      
+   }
 }

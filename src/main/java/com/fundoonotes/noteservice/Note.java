@@ -1,6 +1,7 @@
 package com.fundoonotes.noteservice;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fundoonotes.userservice.User;
 
 import java.sql.Blob;

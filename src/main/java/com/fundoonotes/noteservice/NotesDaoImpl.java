@@ -192,4 +192,18 @@ public class NotesDaoImpl implements INotesDao
       id= query.executeUpdate();
       return id;
    }
+
+   @Override
+   public void deleteImage(Note note)
+   {
+      System.out.println("in dlete dao..");
+     session=sessionFactory.getCurrentSession();
+     String deleteImage="delete from Note where noteImage=:noteImage";
+     Query query=session.createQuery(deleteImage);
+     System.out.println("after create query..");
+     query.setParameter("noteImage", note.getNoteImage());
+     System.out.println("Set param->");
+     query.executeUpdate();
+     return;
+     }
 }

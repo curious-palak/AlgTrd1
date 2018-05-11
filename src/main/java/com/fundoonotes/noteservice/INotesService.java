@@ -107,5 +107,7 @@ public interface INotesService
     * @throws SQLException
     */
    void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException;
+
+   void deleteImage(int noteId);
    
 }

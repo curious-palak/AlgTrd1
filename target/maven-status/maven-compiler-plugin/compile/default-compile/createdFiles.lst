@@ -11,7 +11,6 @@ com/fundoonotes/utility/CorsFilter.class
 com/fundoonotes/utility/RegistrationValidation.class
 com/fundoonotes/userservice/IUserService.class
 com/fundoonotes/utility/FetchUrlData.class
-com/fundoonotes/noteservice/UrlDataDto.class
 com/fundoonotes/exception/InvalidCredentialsException.class
 com/fundoonotes/noteservice/LabelDto.class
 com/fundoonotes/exception/UnAuthorizedAccess.class
@@ -26,6 +25,7 @@ com/fundoonotes/exception/GlobalExceptionHandler.class
 com/fundoonotes/exception/EmptyToken.class
 com/fundoonotes/userservice/UserDaoImpl.class
 com/fundoonotes/noteservice/NoteResponseDto.class
+com/fundoonotes/utility/Dev.class
 com/fundoonotes/utility/SendEmail$1.class
 com/fundoonotes/noteservice/NotesDaoImpl.class
 com/fundoonotes/noteservice/CollaboratorDTO.class

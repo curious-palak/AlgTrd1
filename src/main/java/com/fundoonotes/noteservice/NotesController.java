@@ -376,6 +376,22 @@ public class NotesController
 
       }
    }
+   
+   @RequestMapping(value="deleteImage",method=RequestMethod.POST)
+   public ResponseEntity<CustomResponse> deleteImage(@RequestBody int noteId,HttpServletRequest request){
+      
+      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+      
+      if(userId == 0) {
+         response.setMessage("Cannot delete image");
+         response.setStatusCode(400);
+         return new ResponseEntity<CustomResponse>(response,HttpStatus.BAD_REQUEST);
+      }
+      notesService.deleteImage(noteId);
+      response.setMessage("Image deleted successfully..");
+      response.setStatusCode(200);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
+   }
 
    /**
     * <p>

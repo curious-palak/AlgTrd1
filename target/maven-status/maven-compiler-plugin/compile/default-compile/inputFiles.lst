@@ -6,7 +6,6 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/DatabaseException.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Collaborator.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/CorsFilter.java
-/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/UrlDataDto.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/IUserDao.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/IncorrectEmailException.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/exception/RegistrationValidationException.java
@@ -23,6 +22,7 @@
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/Note.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/userservice/UserController.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/INotesDao.java
+/home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/utility/Dev.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesController.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesDaoImpl.java
 /home/bridgelabz/Documents/FundooNotes/ToDo-App/ToDo-App/src/main/java/com/fundoonotes/noteservice/NotesServiceImpl.java

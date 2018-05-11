@@ -114,4 +114,6 @@ public interface INotesDao
     * @return
     */
    int deleteCollaborator(Collaborator collaborator);
+
+   void deleteImage(Note note);
 }
