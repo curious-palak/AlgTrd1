@@ -331,14 +331,16 @@ public class NotesController
     * @return
     */
    @RequestMapping(value = "deletecollborator", method = RequestMethod.POST)
-   public ResponseEntity<Void> removeCollaborator(@RequestBody CollaboratorDTO collaboratorDto,
+   public ResponseEntity<CustomResponse> removeCollaborator(@RequestBody CollaboratorDTO collaboratorDto,
          HttpServletRequest request)
    {
 
       int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
+      response.setMessage("Collaborator removed successfully..");
+      response.setStatusCode(200);
       notesService.deletecollborator(collaboratorDto);
-      return new ResponseEntity<Void>(HttpStatus.OK);
+      return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);
    }
 
    /**
