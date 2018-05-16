@@ -59,12 +59,11 @@ public interface INotesService
    List<Label> getLabel(int userId);
 
    /**For deleting label
-    * @param label
-    * @param id
+    * @param labelId
     * @return 
     */
-   boolean deleteLabel(Label label, int id);
-
+   boolean deleteLabel(int id);
+   
    /**For updating label
     * @param labelId
     * @param label
@@ -109,5 +108,6 @@ public interface INotesService
    void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException;
 
    void deleteImage(int noteId);
+
    
 }

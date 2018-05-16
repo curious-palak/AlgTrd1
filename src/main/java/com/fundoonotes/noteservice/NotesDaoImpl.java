@@ -61,12 +61,13 @@ public class NotesDaoImpl implements INotesDao
       session = sessionFactory.getCurrentSession();
 
       try {
-         String updateNotes = "update Note set title= :title, inTrash=:inTrash, "
-                              + "isArchive=:isArchive, isPin=:isPin, color=:color," + 
-                              " reminder=:reminder where noteId= :noteId";
+         String updateNotes = "update Note set title= :title, description= :description,"
+                              + "inTrash=:inTrash, " + "isArchive=:isArchive, isPin=:isPin,"
+                              + "color=:color," + " reminder=:reminder where noteId= :noteId";
 
          Query query = session.createQuery(updateNotes);
          query.setParameter("title", notes.getTitle());
+         query.setParameter("description", notes.getDescription());
          query.setParameter("inTrash", notes.getInTrash());
          query.setParameter("noteId", noteId);
          query.setParameter("isArchive", notes.getIsArchive());
@@ -192,18 +193,4 @@ public class NotesDaoImpl implements INotesDao
       id= query.executeUpdate();
       return id;
    }
-
-   @Override
-   public void deleteImage(Note note)
-   {
-      System.out.println("in dlete dao..");
-     session=sessionFactory.getCurrentSession();
-     String deleteImage="delete from Note where noteImage=:noteImage";
-     Query query=session.createQuery(deleteImage);
-     System.out.println("after create query..");
-     query.setParameter("noteImage", note.getNoteImage());
-     System.out.println("Set param->");
-     query.executeUpdate();
-     return;
-     }
 }

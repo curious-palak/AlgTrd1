@@ -104,7 +104,7 @@ public class NotesController
       int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
 
       notesService.deleteNotes(note, id);
-      
+
       response.setMessage("Note deleted..");
       response.setStatusCode(200);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
@@ -159,7 +159,7 @@ public class NotesController
    }
 
    /** APIs for Label.. */
-   
+
    /**
     * <p>
     * This rest API for creating labels With
@@ -192,6 +192,7 @@ public class NotesController
     * This rest API for fetching labels With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param request
     * @return labels
     */
@@ -221,6 +222,7 @@ public class NotesController
     * This rest API for deleting labels With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param label
     * @param request
     * @return
@@ -228,11 +230,9 @@ public class NotesController
    @PostMapping(value = "deletelabel")
    public ResponseEntity<CustomResponse> deleteLabel(@RequestBody Label label, HttpServletRequest request)
    {
+      int labelId = label.getLabelId();
 
-      int id = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      System.out.println("In delete controllerr.." + id);
-
-      notesService.deleteLabel(label, id);
+      notesService.deleteLabel(labelId);
       response.setMessage("Label deleted successfully..");
       response.setStatusCode(100);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
@@ -243,6 +243,7 @@ public class NotesController
     * This rest API for updating labels With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param label
     * @param request
     * @return
@@ -264,6 +265,7 @@ public class NotesController
     * This rest API for adding as well as deleting labels With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param noteId
     * @param labelId
     * @param status
@@ -279,8 +281,7 @@ public class NotesController
          response.setMessage("Added label on notes..");
          response.setStatusCode(100);
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
-      } 
-      else if (!status) {
+      } else if (!status) {
          // deleting label
          notesService.deleteLabelOnNote(noteId, labelId);
          response.setMessage("Removed label on notes..");
@@ -297,6 +298,7 @@ public class NotesController
     * This rest API for adding collaborator With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param collaboratorDto
     * @param request
     * @return
@@ -326,6 +328,7 @@ public class NotesController
     * This rest API for deleting collaborator With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param collaboratorDto
     * @param request
     * @return
@@ -340,7 +343,7 @@ public class NotesController
       response.setMessage("Collaborator removed successfully..");
       response.setStatusCode(200);
       notesService.deletecollborator(collaboratorDto);
-      return new ResponseEntity<CustomResponse>(response,HttpStatus.OK);
+      return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
    }
 
    /**
@@ -348,6 +351,7 @@ public class NotesController
     * This rest API for uploading Image With
     * {@link RequestMapping @RequestMapping} to mapped rest address.
     * </p>
+    * 
     * @param uploadNoteImage
     * @param noteId
     * @param request
@@ -378,16 +382,17 @@ public class NotesController
 
       }
    }
-   
-   @RequestMapping(value="deleteImage",method=RequestMethod.POST)
-   public ResponseEntity<CustomResponse> deleteImage(@RequestBody int noteId,HttpServletRequest request){
-      
-      int userId=JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
-      
-      if(userId == 0) {
+
+   @RequestMapping(value = "deleteImage", method = RequestMethod.POST)
+   public ResponseEntity<CustomResponse> deleteImage(@RequestBody int noteId, HttpServletRequest request)
+   {
+
+      int userId = JwtTokenUtility.verifyToken(request.getHeader("Authorization"));
+
+      if (userId == 0) {
          response.setMessage("Cannot delete image");
          response.setStatusCode(400);
-         return new ResponseEntity<CustomResponse>(response,HttpStatus.BAD_REQUEST);
+         return new ResponseEntity<CustomResponse>(response, HttpStatus.BAD_REQUEST);
       }
       notesService.deleteImage(noteId);
       response.setMessage("Image deleted successfully..");
@@ -423,9 +428,9 @@ public class NotesController
 
       for (String url : urls) {
          System.out.println(urls);
-         
-            fetchUrlData = jsoupData.getUrlData(url);
-            fetchData.add(fetchUrlData);
+
+         fetchUrlData = jsoupData.getUrlData(url);
+         fetchData.add(fetchUrlData);
       }
       return fetchData;
    }

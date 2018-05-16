@@ -116,12 +116,12 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public boolean deleteLabel(Label label, int id)
+   public boolean deleteLabel(int labelId)
    {
       System.out.println("In delete LAbel service...");
-      if (id == label.getUser().getUserId()) {
-         return notesDao.deleteLabel(label.getLabelId());
-      }
+     if(labelId != 0) {
+        notesDao.deleteLabel(labelId);
+     }
       return false;
    }
 
@@ -215,7 +215,9 @@ public class NotesServiceImpl implements INotesService
    {
       System.out.println("In delete Service..");
      Note note=notesDao.getNoteById(noteId);
-     notesDao.deleteImage(note);
+     note.setNoteImage(null);
+     //System.out.println("Note" +note );
+     notesDao.updateNotes(noteId, note);
       
    }
 }
