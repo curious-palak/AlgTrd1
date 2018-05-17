@@ -42,7 +42,7 @@ public class UserServiceImpl implements IUserService
    private static Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
    @Transactional
-   public String registerUser(UserDTO userdto, String url)
+   public String registerUser(UserDTO userdto, String url) throws IOException
    {
       User userModel = new User(userdto);
 
@@ -119,7 +119,7 @@ public class UserServiceImpl implements IUserService
 
    @Transactional
    @Override
-   public boolean forgotPass(UserDTO userDto, HttpServletRequest request)
+   public boolean forgotPass(UserDTO userDto, HttpServletRequest request) throws IOException
    {
       User userFetch = userDao.getUserByEmail(userDto.getEmail());
 

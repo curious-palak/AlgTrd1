@@ -60,7 +60,10 @@ public class UserController
    @Autowired
    IUserService userService;
    
-/*   @Autowired
+   @Autowired
+   Dev mailProp;
+   
+   /*@Autowired
    Dev devproperties;*/
 
    @Autowired
@@ -132,7 +135,8 @@ public class UserController
    {
 
       userService.activateAccount(token, request);
-      response.sendRedirect("http://localhost:4200/login");
+      //response.sendRedirect("http://localhost:4200/login");
+      response.sendRedirect(mailProp.getFrontendHost());
 
       customResponse.setMessage("Account activated successfully..");
       customResponse.setStatusCode(1);
@@ -179,10 +183,11 @@ public class UserController
     * @param userDto
     * @param request
     * @return Response Entity with HTTP status and our custom message.
+    * @throws IOException 
     */
 
    @RequestMapping(value = "forgetpassword", method = RequestMethod.POST)
-   public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request)
+   public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request) throws IOException
    {
       if (userService.forgotPass(userDto, request) == true) {
 

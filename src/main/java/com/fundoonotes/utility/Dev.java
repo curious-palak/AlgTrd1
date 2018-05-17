@@ -1,18 +1,23 @@
 package com.fundoonotes.utility;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * Purpose: This class is to set and get development properties
  * 
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
+
 public class Dev
 {
    private String frontendHost;
-   
-   private String email;
-   
-   private String password;
+
+   @Value("${mail.user}")
+   private String mailuser;
+
+   private String mailpassword;
 
    public String getFrontendHost()
    {
@@ -24,23 +29,30 @@ public class Dev
       this.frontendHost = frontendHost;
    }
 
-   public String getEmail()
+   public String getMailuser()
    {
-      return email;
+      return mailuser;
    }
 
-   public void setEmail(String email)
+   public void setMailuser(String mailuser)
    {
-      this.email = email;
+      this.mailuser = mailuser;
    }
 
-   public String getPassword()
+   public String getMailpassword()
    {
-      return password;
+      return mailpassword;
    }
 
-   public void setPassword(String password)
+   public void setMailpassword(String mailpassword)
    {
-      this.password = password;
+      this.mailpassword = mailpassword;
    }
+
+   @Override
+   public String toString()
+   {
+      return "Dev [ mailuser=" + mailuser + ", mailpassword=" + mailpassword + "]";
+   }
+
 }
