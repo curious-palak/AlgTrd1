@@ -1,8 +1,10 @@
 package com.fundoonotes.noteservice;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fundoonotes.userservice.User;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,10 +17,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "ToDoNotes")
@@ -58,13 +63,18 @@ public class Note
    private User user;
 
    @JsonIgnore
-   @ManyToMany(targetEntity = Note.class)
-   @JoinTable(name = "Label", joinColumns = @JoinColumn(name = "noteId"), inverseJoinColumns = @JoinColumn(name = "labelId"))
+   @ManyToMany
+   @JoinTable(name = "Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
+         @JoinColumn(name = "labelId") })
    private Set<Label> label;
 
    @JsonIgnore
-   @OneToMany(mappedBy="note")
+   @OneToMany(mappedBy = "note")
    private Set<Collaborator> collaborators;
+
+   @Lob
+   @Column(columnDefinition="Blob", name="noteImage")
+   private byte[] noteImage;
 
    public int getnoteId()
    {
@@ -185,4 +195,15 @@ public class Note
    {
       this.collaborators = collaborators;
    }
+
+   public byte[] getNoteImage()
+   {
+      return noteImage;
+   }
+
+   public void setNoteImage(byte[] noteImage)
+   {
+      this.noteImage = noteImage;
+   }
+
 }

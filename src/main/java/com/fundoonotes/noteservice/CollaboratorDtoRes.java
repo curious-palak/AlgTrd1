@@ -1,35 +1,23 @@
 package com.fundoonotes.noteservice;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.fundoonotes.userservice.User;
 
-@Entity
-@Table(name = "ToDoCollaborator")
-public class Collaborator
+public class CollaboratorDtoRes
 {
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
    private int collaboratorId;
-
-   //@OneToMany
-   @ManyToOne
-   @JoinColumn(name = "owner",nullable = false)
+   
    private User owner;
-
-   @ManyToOne
-   @JoinColumn(name = "sharedUser",unique= true)
+   
    private User sharedUser;
-
-   @ManyToOne
-   @JoinColumn(name="noteId",nullable=false)
+   
    private Note note;
+
+   public CollaboratorDtoRes(Collaborator collObj)
+   {
+      this.owner=collObj.getOwner();
+      this.sharedUser=collObj.getSharedUser();
+      this.note=collObj.getNote();
+   }
 
    public int getCollaboratorId()
    {
@@ -70,4 +58,5 @@ public class Collaborator
    {
       this.note = note;
    }
+  
 }

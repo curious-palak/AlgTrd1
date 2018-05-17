@@ -1,6 +1,14 @@
 package com.fundoonotes.noteservice;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fundoonotes.utility.FetchUrlData;
 
 /**
  * Purpose: This is NotesService Interface,contains defined methods, This layer
@@ -22,7 +30,7 @@ public interface INotesService
     * @param id
     * @return
     */
-   List<Note> getNotes(int id);
+   List<NoteDto> getNotes(int id);
 
    /**For updating the notes
     * @param noteId
@@ -51,12 +59,11 @@ public interface INotesService
    List<Label> getLabel(int userId);
 
    /**For deleting label
-    * @param label
-    * @param id
+    * @param labelId
     * @return 
     */
-   boolean deleteLabel(Label label, int id);
-
+   boolean deleteLabel(int id);
+   
    /**For updating label
     * @param labelId
     * @param label
@@ -71,7 +78,36 @@ public interface INotesService
     */
    void addLabelOnNote(int noteId, int labelId);
 
+   /**Fr deleting labels from Note
+    * @param noteId
+    * @param labelId
+    * @return
+    */
    boolean deleteLabelOnNote(int noteId, int labelId);
 
-   void createCollaborator(Collaborator collaborator, int userId);
+   /**For creating collaborator
+    * @param collaboratorDto
+    * @param userId
+    */
+   void createCollaborator(CollaboratorDTO collaboratorDto, int userId);
+
+   /**For deleting collaborator
+    * @param collaboratorDto
+    * @return
+    */
+   boolean deletecollborator(CollaboratorDTO collaboratorDto);
+   
+   /**For uploading note Image
+    * @param uploadNoteImage
+    * @param userId
+    * @param noteId
+    * @throws SerialException
+    * @throws IOException
+    * @throws SQLException
+    */
+   void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException;
+
+   void deleteImage(int noteId);
+
+   
 }

@@ -19,7 +19,7 @@ public class JwtTokenUtility
       long currentTime = System.currentTimeMillis();
       Date startDate = new Date(currentTime);
 
-      /*Token active One hour from now*/
+      /*Token active 24 hour from now*/
       Date expireDate = new Date(currentTime + 24 * 60 * 60 * 1000);
 
       /*Let's set the JWT Claim*/

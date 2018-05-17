@@ -23,6 +23,8 @@ public class CorsFilter extends OncePerRequestFilter
       response.addHeader("Access-Control-Allow-Headers", "Authorization");
       response.addHeader("Access-Control-Expose-Headers", "Authorization, Content-Type");
       response.addHeader("Access-Control-Max-Age", "3600");
+      response.addHeader("Access-Control-Allow-Headers", "JSESSIONID" );
+      
 
       if(request.getMethod().equals("OPTIONS")) {
          return ;

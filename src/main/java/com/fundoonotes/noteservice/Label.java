@@ -17,23 +17,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoonotes.userservice.User;
 
 @Entity
-@Table(name="ToDoLabels")
+@Table(name = "ToDoLabels")
 public class Label
 {
    @Id
-   @GeneratedValue(strategy=GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.AUTO)
    private int labelId;
-   
+
    @Column
    private String labelTitle;
-   
-   @ManyToOne(cascade=CascadeType.DETACH)
-   @JoinColumn(name="userId")
+
+   @ManyToOne(cascade = CascadeType.DETACH)
+   @JoinColumn(name = "userId")
    private User user;
-   
+
    @JsonIgnore
    @ManyToMany(mappedBy = "label")
    private Set<Note> note;
+
+   public Label()
+   {
+
+   }
+
+   public Label(int labelId)
+   {
+      this.labelId = labelId;
+   }
 
    public int getLabelId()
    {

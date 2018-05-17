@@ -1,16 +1,23 @@
 package com.fundoonotes.noteservice;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fundoonotes.userservice.IUserDao;
 import com.fundoonotes.userservice.User;
+import com.fundoonotes.utility.FetchUrlData;
 
 /**
  * Purpose: This class contains implementation of notesService interface and
@@ -51,7 +58,7 @@ public class NotesServiceImpl implements INotesService
       System.out.println("In delete service..");
 
       // Notes note=notesDao.getNoteById(noteId);
-      if (userId == note.getUser().getUserId()) {
+      if (userId != 0) {
          return notesDao.deleteNotes(note.getnoteId());
       }
       return false;
@@ -67,12 +74,21 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public List<Note> getNotes(int id)
+   public List<NoteDto> getNotes(int id)
    {
-      User user = new User();
-      user.setUserId(id);
-      // userDao.getUserById(id);
-      return notesDao.getNotes(user);
+      User user = userDao.getUserById(id);
+      // user.setUserId(id);
+
+      List<Note> note = notesDao.getNotes(user);
+      List<NoteDto> noteDto = new ArrayList<NoteDto>();
+
+      for (Note noteObject : note) {
+
+         NoteDto noteDtObject = new NoteDto(noteObject);
+         noteDto.add(noteDtObject);
+      }
+      return noteDto;
+
    }
 
    @Transactional
@@ -100,12 +116,12 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public boolean deleteLabel(Label label, int id)
+   public boolean deleteLabel(int labelId)
    {
       System.out.println("In delete LAbel service...");
-      if (id == label.getUser().getUserId()) {
-         return notesDao.deleteLabel(label.getLabelId());
-      }
+     if(labelId != 0) {
+        notesDao.deleteLabel(labelId);
+     }
       return false;
    }
 
@@ -139,15 +155,69 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public void createCollaborator(Collaborator collaborator, int userId)
+   public void createCollaborator(CollaboratorDTO collaboratorDto, int userId)
    {
 
-      System.out.println(collaborator.getOwner()+""+collaborator.getSharedUser());
-     
-      User user = userDao.getUserByEmail(collaborator.getSharedUser().getEmail());
-      System.out.println(user.getEmail() + " " + user.getUserId());
-      collaborator.setSharedUser(user);
+      Collaborator collaborator = new Collaborator();
+      collaborator.setOwner(userDao.getUserById(userId));
+
+      collaborator.setSharedUser(userDao.getUserByEmail(collaboratorDto.getEmail()));
+
+      /*
+       * Check here if shared user there in DB then throw exception user exist
+       */
+      collaborator.setNote(notesDao.getNoteById(collaboratorDto.getNoteId()));
+
+      notesDao.createCollaborator(collaborator);
+   }
+
+   @Transactional
+   @Override
+   public boolean deletecollborator(CollaboratorDTO collaboratordto)
+   {
+      Collaborator collaborator = new Collaborator();
+      collaborator.setNote(notesDao.getNoteById(collaboratordto.getNoteId()));
+      collaborator.setSharedUser(userDao.getUserByEmail(collaboratordto.getEmail()));
+
+      // Note note = collaboratordto.getNoteId();
+      // User sharedUser = collaborator.getSharedUser();
+      int id = notesDao.deleteCollaborator(collaborator);
+      if (id > 0) {
+         return true;
+      } else {
+         return false;
+      }
+
+   }
+
+   @Transactional
+   @Override
+   public void uploadImage(MultipartFile uploadNoteImage, int userId, int noteId) throws SerialException, IOException, SQLException
+   {
+      User user = userDao.getUserById(userId);
+      user.setUserId(userId);
+
+      Note note = notesDao.getNoteById(noteId);
+      note.setnoteId(noteId);
+      if (uploadNoteImage.getBytes() != null) {
+         byte[] noteImg = uploadNoteImage.getBytes();
+         //Blob blob = new SerialBlob(noteImg);
+         note.setNoteImage(noteImg);
+
+         notesDao.updateNotes(noteId, note);
+
+      }
+   }
+
+   @Transactional
+   @Override
+   public void deleteImage(int noteId)
+   {
+      System.out.println("In delete Service..");
+     Note note=notesDao.getNoteById(noteId);
+     note.setNoteImage(null);
+     //System.out.println("Note" +note );
+     notesDao.updateNotes(noteId, note);
       
-      notesDao.saveCollaborator(collaborator);
    }
 }

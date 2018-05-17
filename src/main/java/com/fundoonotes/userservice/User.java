@@ -1,12 +1,22 @@
 package com.fundoonotes.userservice;
 
+import java.sql.Blob;
+
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.type.LongType;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -52,6 +62,11 @@ public class User
 
    @Column
    private boolean status;
+  
+   @JsonIgnore
+   @Lob
+   @Column(name = "userProfile", columnDefinition="BLOB")
+   private Blob userProfile;
 
    /*@JsonIgnore
    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
@@ -138,6 +153,16 @@ public class User
    public void setStatus(boolean status)
    {
       this.status = status;
+   }
+
+   public Blob getUserProfile()
+   {
+      return userProfile;
+   }
+
+   public void setUserProfile(Blob userProfile)
+   {
+      this.userProfile = userProfile;
    }
 
 }
