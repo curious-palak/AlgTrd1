@@ -179,10 +179,11 @@ public class UserController
     * @param userDto
     * @param request
     * @return Response Entity with HTTP status and our custom message.
+    * @throws IOException 
     */
 
    @RequestMapping(value = "forgetpassword", method = RequestMethod.POST)
-   public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request)
+   public ResponseEntity<?> forgotPassword(@RequestBody UserDTO userDto, HttpServletRequest request) throws IOException
    {
       if (userService.forgotPass(userDto, request) == true) {
 
