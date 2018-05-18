@@ -19,9 +19,10 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
-	<!-- <context:property-placeholder location="classpath:development.properties" /> -->
-	 <context:property-placeholder location="classpath:development.properties"
-            ignore-unresolvable="true" />
+	<!-- <context:property-placeholder location="classpath:development.properties" 
+		/> -->
+	<context:property-placeholder location="classpath:development.properties"
+		ignore-unresolvable="true" />
 
 	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -29,16 +30,14 @@
 		<property name="url" value="${db.url}" />
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}"></property>
-
-		<!-- <property name="frontend" value="${frontend.hosturl}"></property> 
-			<property name="mailuser" value="${mail.user}"></property> <property name="mailpassword" 
-			value="${mail.password}"></property> -->
 	</bean>
 
 	<bean id="mailProp" class="com.fundoonotes.utility.Dev">
-		<property name="mailuser" value="${mail.user}"></property>
-		<property name="mailpassword" value="${mail.password}"></property>
-		 <property name="frontend" value="${frontend.hosturl}"></property> 
+		<!-- <property name="mailuser" value="${mail.user}"></property>
+		<property name="mailpassword" value="${mail.password}"></property> -->
+		<property name="frontendHost" value="${frontend.hosturl}"></property>
+		<property name="frontendErr" value="${frontendErr}"></property>
+		<property name="resetPassUrl" value="${resetPassUrl}"></property>
 	</bean>
 
 
@@ -87,75 +86,9 @@
 
 </beans>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Not working <mvc:annotation-driven> <mvc:message-converters> <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
 	<property name="objectMapper" ref="myObjectMapper" /> </bean> </mvc:message-converters> 
 	</mvc:annotation-driven> <bean id="myObjectMapper" class="com.fundoonotes.bean.util.MyObjectMapper"></bean> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!-- SETting default mail properties -->
 <!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
