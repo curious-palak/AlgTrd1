@@ -1,5 +1,6 @@
 package com.fundoonotes.userservice;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +21,9 @@ public interface IUserService
     * @param user
     * @param url
     * @return
+    * @throws IOException 
     */
-   String registerUser(UserDTO user,String url);
+   String registerUser(UserDTO user,String url) throws IOException;
 
    /** Service to login user
     * @param userDto
@@ -51,8 +53,9 @@ public interface IUserService
     * @param userDto
     * @param request
     * @return
+    * @throws IOException 
     */
-   boolean forgotPass(UserDTO userDto, HttpServletRequest request);
+   boolean forgotPass(UserDTO userDto, HttpServletRequest request) throws IOException;
 
    /** Service to get email of user by token
     * @param token

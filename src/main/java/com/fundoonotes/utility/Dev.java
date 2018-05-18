@@ -1,18 +1,25 @@
 package com.fundoonotes.utility;
 
+
 /**
  * Purpose: This class is to set and get development properties
  * 
  * @author SANA SHAIKH
  * @since 21Mar 2018
  */
+
 public class Dev
 {
    private String frontendHost;
    
-   private String email;
+   private String frontendErr;
    
-   private String password;
+   private String resetPassUrl;
+
+   /*@Value("${mail.user}")
+   private String mailuser;
+
+   private String mailpassword;*/
 
    public String getFrontendHost()
    {
@@ -24,23 +31,31 @@ public class Dev
       this.frontendHost = frontendHost;
    }
 
-   public String getEmail()
+   public String getFrontendErr()
    {
-      return email;
+      return frontendErr;
    }
 
-   public void setEmail(String email)
+   public void setFrontendErr(String frontendErr)
    {
-      this.email = email;
+      this.frontendErr = frontendErr;
    }
 
-   public String getPassword()
+   public String getResetPassUrl()
    {
-      return password;
+      return resetPassUrl;
    }
 
-   public void setPassword(String password)
+   public void setResetPassUrl(String resetPassUrl)
    {
-      this.password = password;
+      this.resetPassUrl = resetPassUrl;
    }
+
+   @Override
+   public String toString()
+   {
+      return "Dev [frontendHost=" + frontendHost + ", frontendErr=" + frontendErr + ", resetPassUrl=" + resetPassUrl
+            + "]";
+   }
+   
 }

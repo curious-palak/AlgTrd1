@@ -56,13 +56,12 @@ import com.fundoonotes.utility.RegistrationValidation;
 //@MultipartConfig
 public class UserController
 {
-
    @Autowired
    IUserService userService;
    
-/*   @Autowired
-   Dev devproperties;*/
-
+   @Autowired
+   Dev mailProp;
+  
    @Autowired
    RegistrationValidation registrationValidation;
 
@@ -132,7 +131,8 @@ public class UserController
    {
 
       userService.activateAccount(token, request);
-      response.sendRedirect("http://localhost:4200/login");
+      //response.sendRedirect("http://localhost:4200/login");
+      response.sendRedirect(mailProp.getFrontendHost());
 
       customResponse.setMessage("Account activated successfully..");
       customResponse.setStatusCode(1);
@@ -179,7 +179,12 @@ public class UserController
     * @param userDto
     * @param request
     * @return Response Entity with HTTP status and our custom message.
+<<<<<<< HEAD
     * @throws IOException 
+=======
+    * @throws anas@2825
+    *  
+>>>>>>> master
     */
 
    @RequestMapping(value = "forgetpassword", method = RequestMethod.POST)
@@ -214,7 +219,8 @@ public class UserController
       int validateToken = JwtTokenUtility.verifyToken(token);
 
       if (validateToken == 0) {
-         response.sendRedirect("http://localhost:4200/errorpage");
+         //response.sendRedirect("http://localhost:4200/errorpage");
+         response.sendRedirect(mailProp.getFrontendErr());
          return;
       }
 
