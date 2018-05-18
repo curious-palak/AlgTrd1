@@ -12,6 +12,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<!-- <failOnMissingWebXml>false</failOnMissingWebXml> -->
 	</properties>
 
 	<dependencies>
@@ -80,16 +81,6 @@
 			<artifactId>spring-tx</artifactId>
 			<version>4.3.10.RELEASE</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>4.3.10.RELEASE</version>
-			<scope>test</scope>
-		</dependency>
-
-
 
 		<!-- HIBERNATE -->
 
@@ -190,7 +181,16 @@
 
 	<build>
 		<finalName>ToDo-App</finalName>
+		<!-- <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins> -->
 	</build>
 </project>
-
-
