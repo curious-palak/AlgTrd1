@@ -1,7 +1,5 @@
 package com.fundoonotes.utility;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  * Purpose: This class is to set and get development properties
@@ -13,11 +11,15 @@ import org.springframework.stereotype.Component;
 public class Dev
 {
    private String frontendHost;
+   
+   private String frontendErr;
+   
+   private String resetPassUrl;
 
-   @Value("${mail.user}")
+   /*@Value("${mail.user}")
    private String mailuser;
 
-   private String mailpassword;
+   private String mailpassword;*/
 
    public String getFrontendHost()
    {
@@ -29,30 +31,31 @@ public class Dev
       this.frontendHost = frontendHost;
    }
 
-   public String getMailuser()
+   public String getFrontendErr()
    {
-      return mailuser;
+      return frontendErr;
    }
 
-   public void setMailuser(String mailuser)
+   public void setFrontendErr(String frontendErr)
    {
-      this.mailuser = mailuser;
+      this.frontendErr = frontendErr;
    }
 
-   public String getMailpassword()
+   public String getResetPassUrl()
    {
-      return mailpassword;
+      return resetPassUrl;
    }
 
-   public void setMailpassword(String mailpassword)
+   public void setResetPassUrl(String resetPassUrl)
    {
-      this.mailpassword = mailpassword;
+      this.resetPassUrl = resetPassUrl;
    }
 
    @Override
    public String toString()
    {
-      return "Dev [ mailuser=" + mailuser + ", mailpassword=" + mailpassword + "]";
+      return "Dev [frontendHost=" + frontendHost + ", frontendErr=" + frontendErr + ", resetPassUrl=" + resetPassUrl
+            + "]";
    }
-
+   
 }
