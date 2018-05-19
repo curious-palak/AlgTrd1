@@ -15,6 +15,7 @@ import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements IUserService
 
    @Autowired
    private IUserDao userDao;
+   
+   @Autowired
+   SendEmail sendEmail;
 
    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -62,7 +66,7 @@ public class UserServiceImpl implements IUserService
          String to = userDb.getEmail();
          String subject = ("Link to confirm registration..");
          String message = url + "/activateaccount/" + token;
-         SendEmail.sendEmail(to, subject, message);
+         sendEmail.sendEmail(to, subject, message);
       }
       return null;
    }
@@ -137,7 +141,7 @@ public class UserServiceImpl implements IUserService
          String subject = "Link to Reset password";
          String message = "Visit the link to reset your password  \n" + url;
 
-         SendEmail.sendEmail(mailTo, subject, message);
+         sendEmail.sendEmail(mailTo, subject, message);
          return true;
       }
       return false;

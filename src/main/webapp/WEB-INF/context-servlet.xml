@@ -16,7 +16,8 @@
 	<!-- bean definitions here -->
 	<context:component-scan base-package="com.fundoonotes" />
 	<mvc:annotation-driven />
-
+	<context:annotation-config/>
+	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- <context:property-placeholder location="classpath:development.properties" /> -->
@@ -30,15 +31,28 @@
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}"></property>
 
-		<!-- <property name="frontend" value="${frontend.hosturl}"></property> 
-			<property name="mailuser" value="${mail.user}"></property> <property name="mailpassword" 
-			value="${mail.password}"></property> -->
 	</bean>
-
+<!-- 
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">  
+	  <property name="host" value="smtp.gmail.com" />  
+	    <property name="username" value="${mail.user}" />  
+	    <property name="password" value="${mail.password}" />  
+	    <property name="javaMailProperties">  
+	       <props>  
+	              <prop key="mail.smtp.auth">true</prop>  
+	              <prop key="mail.smtp.socketFactory.port">465</prop>  
+	              <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>  
+	              <prop key="mail.smtp.port">465</prop>  
+	        </props>  
+	    </property>  
+	</bean>
+ -->	
 	<bean id="mailProp" class="com.fundoonotes.utility.Dev">
 		<property name="mailuser" value="${mail.user}"></property>
 		<property name="mailpassword" value="${mail.password}"></property>
-		 <property name="frontend" value="${frontend.hosturl}"></property> 
+		 <property name="frontendHost" value="${frontend.hosturl}"></property>
+		 <property name="frontendErr" value="${frontendErr}"></property> 
+		 <property name="resetPassUrl" value="${resetPassUrl}"></property>
 	</bean>
 
 
@@ -74,14 +88,14 @@
 	</bean>
 
 	<bean id="userDao" class="com.fundoonotes.userservice.UserDaoImpl"></bean>
-
+	
 	<bean id="userService" class="com.fundoonotes.userservice.UserServiceImpl"></bean>
 
 	<bean id="registrationValidation" class="com.fundoonotes.utility.RegistrationValidation"></bean>
 
-	<bean id="notesDao" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
+	<bean id="notesService" class="com.fundoonotes.noteservice.NotesServiceImpl"></bean> 
 
-	<bean id="notesService" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
+	<bean id="notesDao" class="com.fundoonotes.noteservice.NotesDaoImpl"></bean>
 
 	<bean id="corsFilter" class="com.fundoonotes.utility.CorsFilter"></bean>
 

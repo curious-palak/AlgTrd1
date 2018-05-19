@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -227,12 +228,13 @@ public class NotesController
     * @param request
     * @return
     */
-   @PostMapping(value = "deletelabel")
-   public ResponseEntity<CustomResponse> deleteLabel(@RequestBody Label label, HttpServletRequest request)
+   @DeleteMapping(value = "deletelabel/{labelId}/{noteId}")
+   public ResponseEntity<CustomResponse> deleteLabel(@PathVariable("noteId") int noteId,
+         @PathVariable("labelId") int labelId,HttpServletRequest request)
    {
-      int labelId = label.getLabelId();
-
-      notesService.deleteLabel(labelId);
+      //int labelId = label.getLabelId();
+      
+      notesService.deleteLabel(labelId,noteId);
       response.setMessage("Label deleted successfully..");
       response.setStatusCode(100);
       return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
@@ -281,13 +283,7 @@ public class NotesController
          response.setMessage("Added label on notes..");
          response.setStatusCode(100);
          return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
-      } else if (!status) {
-         // deleting label
-         notesService.deleteLabelOnNote(noteId, labelId);
-         response.setMessage("Removed label on notes..");
-         response.setStatusCode(100);
-         return new ResponseEntity<CustomResponse>(response, HttpStatus.OK);
-      }
+      } 
       return null;
    }
 

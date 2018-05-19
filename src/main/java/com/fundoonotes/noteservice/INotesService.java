@@ -59,10 +59,11 @@ public interface INotesService
    List<Label> getLabel(int userId);
 
    /**For deleting label
+    * @param noteId 
     * @param labelId
     * @return 
     */
-   boolean deleteLabel(int id);
+   boolean deleteLabel(int labelId, int noteId);
    
    /**For updating label
     * @param labelId

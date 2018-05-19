@@ -27,7 +27,7 @@ import com.fundoonotes.utility.FetchUrlData;
  * @since 21Mar 2018
  */
 
-@Service
+// @Service - since configure in XML file so annotation is not required
 public class NotesServiceImpl implements INotesService
 {
 
@@ -116,15 +116,25 @@ public class NotesServiceImpl implements INotesService
 
    @Transactional
    @Override
-   public boolean deleteLabel(int labelId)
+   public boolean deleteLabel(int labelId,int noteId)
    {
-      System.out.println("In delete LAbel service...");
-     if(labelId != 0) {
+      Note note=notesDao.getNoteById(noteId);
+      for (Label labelObj : note.getLabel()) {
+         
+         if(labelObj.getLabelId() == labelId) {
+            note.getLabel().remove(labelObj);
+            break;
+      }
+      }
+      return notesDao.updateNoteLabel(note);
+      
+      /*System.out.println("In delete Label service...");
+      if(labelId != 0) {
         notesDao.deleteLabel(labelId);
-     }
-      return false;
+     }*/
+      
    }
-
+  
    @Transactional
    @Override
    public void updateLabel(int labelId, Label label, int userId)

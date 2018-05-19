@@ -114,5 +114,7 @@ public interface INotesDao
     * @return
     */
    int deleteCollaborator(Collaborator collaborator);
+   
+   boolean updateNoteLabel(Note note);
 
 }

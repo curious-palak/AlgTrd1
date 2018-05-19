@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +64,12 @@ public class UserController
    @Autowired
    Dev mailProp;
   
+   @Value("#{environment.JAVA_HOME}")
+   String testEnvJavaHome;
+   
+   @Autowired
+   Environment env;
+   
    @Autowired
    RegistrationValidation registrationValidation;
 
@@ -73,6 +81,13 @@ public class UserController
 
    private CustomResponse customResponse = new CustomResponse();
 
+   @RequestMapping("/test")
+   public void test()
+   {
+      System.out.println( testEnvJavaHome );
+      //env.getProperty("JAVA_HOME")
+   }
+   
    /**
     * <p>
     * This rest API for new user registration With
@@ -179,12 +194,8 @@ public class UserController
     * @param userDto
     * @param request
     * @return Response Entity with HTTP status and our custom message.
-<<<<<<< HEAD
     * @throws IOException 
-=======
-    * @throws anas@2825
     *  
->>>>>>> master
     */
 
    @RequestMapping(value = "forgetpassword", method = RequestMethod.POST)

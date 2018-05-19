@@ -193,4 +193,14 @@ public class NotesDaoImpl implements INotesDao
       id= query.executeUpdate();
       return id;
    }
+
+   @Override
+   public boolean updateNoteLabel(Note note)
+   {
+      session = sessionFactory.getCurrentSession();
+      session.update(note);
+      System.out.println("Note updated");
+      return true;
+      
+   }
 }
